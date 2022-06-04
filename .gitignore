@@ -1,3 +1,14 @@
+*cmake-build-debug
+*.cmake
+*.ninja
+*.ninja_deps
+*.ninja_log
+*log
+
+*.MAP
+*.OBJ
+*.idea/
+
 # Prerequisites
 *.d
 
