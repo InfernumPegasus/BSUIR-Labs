@@ -1,196 +1,151 @@
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <pthread.h>
+#include <semaphore.h>
+#include <sys/shm.h>
 #include <sys/mman.h>
 
-struct message {
-    char name[20];
-    char message[100];
-};
+#define KEY 0x15
 
-static int fd = 0;
-struct message msg;
+#define BUFFER_SIZE 128
+
+typedef struct message_struct {
+    char message[BUFFER_SIZE];
+    int current_index;
+} message_t;
+
+typedef struct counter_struct {
+    int read_counter;
+    int process_counter;
+} count_t;
 
 
-void *write_m(void * arg);
-bool unique(struct message * msg1, struct message * msg2);
-
-static pthread_mutex_t mutex_write;
-
-int main() {
-
-    pthread_t thread;
-    struct message empty_msg = {""};
-
-    fd = open("buffer", O_RDWR);
-    if (fd < 0) {
-        perror("File opened error..");
-        exit(EXIT_FAILURE);
+static char *rand_string(char *str, size_t size) {
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if (size) {
+        --size;
+        for (size_t n = 0; n < size; n++) {
+            int key = rand() % (int) (sizeof charset - 1);
+            str[n] = charset[key];
+        }
+        str[size] = '\0';
     }
+    return str;
+}
 
-//    printf("Enter name: ");
-//    fgets(msg.name, 20, stdin);
+message_t *message_struct;
+count_t *data_count_struct;
 
-    ftruncate (fd, sizeof(struct message)); //обрезка файла до нужного размера
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
 
-    void * shared_memory = NULL;
-    shared_memory = mmap(0, sizeof(struct message), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+_Noreturn void * read_handler(void *arg) {
+    int temp_index = 0;
 
-    pthread_create(&thread, NULL, write_m, shared_memory);
+    while (1) {
+        pthread_mutex_lock(&mutex);
 
-    struct message temp_msg;
+        if (message_struct->current_index != temp_index) {
 
-    while (true) {
-        memcpy(&temp_msg, shared_memory, sizeof(struct message));
-        if (unique((struct message *) &msg, (struct message *) &temp_msg) == true)
-            continue;
-
-        while (!strcmp(temp_msg.message, "")) {
-            memcpy(&temp_msg, shared_memory, sizeof(struct message));
+            printf("Read message: %s\n", message_struct->message);
+            temp_index = message_struct->current_index;
+            data_count_struct->read_counter++;
+            printf("Local counter: %d\n", data_count_struct->read_counter);
+            printf("Process counter: %d\n\n", data_count_struct->process_counter);
         }
 
-        printf("\nMessage: %s\n", temp_msg.message);
-        memcpy(shared_memory, &empty_msg, sizeof(struct message));
+        pthread_mutex_unlock(&mutex);
+        pthread_cond_signal(&condition);
     }
 }
 
-void *write_m(void * arg) {
-    while(true) {
-        pthread_mutex_lock(&mutex_write);
+int main() {
+    int shared_memory_id;
 
-        fflush(stdin);
-        fgets(msg.name, 20, stdin);
+    int fd = open("./shared_memory",O_RDWR);
 
-        memcpy(arg, &msg, sizeof(struct message));
-        pthread_mutex_unlock(&mutex_write);
+    message_struct = mmap(NULL,
+                          sizeof(message_t),
+                          PROT_WRITE | PROT_READ,
+                          MAP_SHARED,
+                          fd,
+                          0);
+
+    if (message_struct == MAP_FAILED) {
+        perror("mmap failed");
+        exit(1);
     }
+
+    message_struct->current_index = 0;
+    close(fd);
+
+    if ((shared_memory_id = shmget(KEY, sizeof(int), 0644 | IPC_CREAT)) == -1) {
+        perror("shmget error");
+        exit(1);
+    }
+
+    if ((data_count_struct = shmat(shared_memory_id, NULL, 0)) == (void *) -1) {
+        perror("shmat error");
+        exit(1);
+    }
+
+    if (data_count_struct->process_counter == 1) {
+        message_struct->current_index = 0;
+        bzero(message_struct->message, BUFFER_SIZE);
+    }
+
+    // Create new thread for listen from virtual memory
+    pthread_t listener;
+    pthread_create(&listener, NULL, read_handler, NULL);
+
+    pthread_mutex_lock(&mutex);
+    data_count_struct->process_counter++;
+    pthread_mutex_unlock(&mutex);
+
+    char *to_write = (char *) malloc(BUFFER_SIZE * sizeof(char));
+    for (int i = 0; i < 10; i++) {
+
+        puts("Enter data to write:");
+//        fgets(to_write, BUFFER_SIZE, stdin);
+//        to_write[strlen(to_write) - 1] = 0;
+//        if (strlen(to_write) >= BUFFER_SIZE - 2)
+//            while ((getchar()) != '\n');
+//        rewind(stdin);
+
+        to_write = rand_string(to_write, BUFFER_SIZE / 2);
+
+        printf("Writing: %s\n", to_write);
+
+        if (strcmp(to_write, "exit") == 0) {
+            pthread_mutex_destroy(&mutex);
+            pthread_cond_destroy(&condition);
+
+            shmdt(data_count_struct);
+            shmctl(shared_memory_id, IPC_RMID, NULL);
+
+            data_count_struct->process_counter--;
+
+            exit(EXIT_SUCCESS);
+        }
+
+        pthread_mutex_lock(&mutex);
+        if (data_count_struct->read_counter < data_count_struct->process_counter) {
+            pthread_cond_wait(&condition, &mutex);
+        }
+
+        strcpy(message_struct->message, to_write);
+        message_struct->current_index++;
+        data_count_struct->read_counter = 0;
+        pthread_mutex_unlock(&mutex);
+    }
+
+    data_count_struct->process_counter--;
+    if (data_count_struct->process_counter < 1) {
+        data_count_struct->process_counter = 0;
+    }
+
+    return EXIT_SUCCESS;
 }
-
-
-bool unique(struct message * msg1, struct message * msg2) {
-    if (!strcmp(msg2 -> name, ""))
-        return true;
-
-    if (strcmp(msg1 -> name, msg2 -> name))
-        return false;
-    return true;
-}
-
-
-
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <errno.h>
-//#include <unistd.h>
-//#include <string.h>
-//#include <fcntl.h>
-//#include <sys/mman.h>
-//#include <sys/shm.h>
-//#include <semaphore.h>
-//#include <pthread.h>
-//
-//#define SEM1_NAME    "/sem1"
-//#define SEM2_NAME    "/sem2"
-//#define BUFFER_SIZE 100
-//
-//typedef struct message {
-//    char message[BUFFER_SIZE];
-//    int counter;
-//} message_t;
-//
-//sem_t *sem1;
-//sem_t *sem2;
-//message_t *msg;
-//
-//
-//_Noreturn void* read_handler() {
-//    int bufCounter = 0;
-//    while (1) {
-//        sem_post(sem1);
-//        sem_wait(sem2);
-//        if (msg->counter != bufCounter) {
-//            printf("Message: %s\n", msg->message);
-//            bufCounter = msg->counter;
-//        }
-//        sem_post(sem2);
-//    }
-//}
-//
-//
-//int main() {
-//
-//    sem_unlink(SEM1_NAME);
-//    sem_unlink(SEM2_NAME);
-//
-//    const char *filepath = "./memory";
-//    char buffer[BUFFER_SIZE];
-//    int fd;
-////
-////    int shm_id = 0;
-////    int *processes = shmat(shm_id, NULL, 0);
-////    if (processes == NULL) {
-////        puts("NULL!");
-////        exit(1);
-////    }
-////    *processes = *processes + 1;
-////    printf("Processes: %d\n", *processes);
-//
-//    pthread_t thread;
-//
-//    sem1 = sem_open(SEM1_NAME, O_RDWR | O_CREAT, 0777, 1);
-//    if (sem1 == SEM_FAILED) {
-//        fputs("Semaphore1 can not be opened", stderr);
-//        exit(errno);
-//    }
-//
-//    sem2 = sem_open(SEM2_NAME, O_RDWR | O_CREAT, 0777, 1);
-//    if (sem2 == SEM_FAILED) {
-//        fputs("Semaphore2 can not be opened", stderr);
-//        exit(errno);
-//    }
-//
-//    fd = open(filepath, O_RDWR);
-//    if (fd < 0) {
-//        fprintf(stderr, "File '%s' can not be opened\n", filepath);
-//        exit(errno);
-//    }
-//
-//    msg = mmap(NULL, sizeof(message_t), PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
-//    if (msg == MAP_FAILED) {
-//        printf("Mapping failed\n");
-//        exit(errno);
-//    }
-//    msg->counter = 0;
-//    close(fd);
-//
-//    pthread_create(&thread, NULL, read_handler, NULL);
-//    while (1) {
-//        sem_wait(sem1);
-//        fgets(buffer, BUFFER_SIZE, stdin);
-//
-//        sem_wait(sem2);
-//
-//        if (strcmp(buffer, "q\n") == 0) {
-//            sem_post(sem2);
-//            sem_unlink(SEM1_NAME);
-//            return EXIT_SUCCESS;
-//        }
-//
-//        memcpy(msg->message, buffer, BUFFER_SIZE);
-//        msg->counter++;
-//
-//        bzero(buffer, BUFFER_SIZE);
-//        sem_post(sem2);
-//    }
-//
-//    sem_unlink(SEM1_NAME);
-//    sem_unlink(SEM2_NAME);
-//
-//    return EXIT_SUCCESS;
-//}

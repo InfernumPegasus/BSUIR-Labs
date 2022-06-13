@@ -29,19 +29,18 @@ void check_read(int i) {
     int temp_fd = read_cb[i].aio_fildes;
     while (true) {
         while (aio_error(&read_cb[i]) == EINPROGRESS) {
+            usleep(1);
             printf("Reading file with descriptor %d is in process...\n", temp_fd);
-//            usleep(5000);
         }
 
         if (aio_return(&read_cb[i]) == -1) {
             printf("Error in %d file!\n", i);
             exit(1);
         } else {
-            printf("Successfully read %d file!\n", i);
+            printf("Successfully read %d fd file!\n", i);
             puts("File contains:");
 
-            printf("\n///////// CONTENT OF FILE %d /////////\n", i);
-//            puts((char *) read_cb[i].aio_buf);
+            puts((char *) read_cb[i].aio_buf);
 
             fdatasync(temp_fd);
             close(temp_fd);
@@ -56,11 +55,11 @@ void check_write(int i) {
     while (true) {
         while (aio_error(&write_cb[i]) == EINPROGRESS) {
             printf("Writing file with descriptor %d is in process...\n", temp_fd);
-//            usleep(5000);
+            usleep(1);
         }
 
         if (aio_return(&write_cb[0]) == -1) {
-            printf("Error in %d file!\n", i);
+            printf("Error in %d fd file!\n", temp_fd);
             exit(1);
         } else {
             puts("Write success");
@@ -75,7 +74,6 @@ void check_write(int i) {
 
 void * read_handler(void *arg) {
     int i = *(int *)arg;
-//    printf("Reader thread number [%lu] started!\n", pthread_self());
 
     if (aio_read(&read_cb[i]) == -1) {
         perror("Reading error");
@@ -83,13 +81,11 @@ void * read_handler(void *arg) {
     }
 
     check_read(i);
-//    pthread_exit(NULL);
 }
 
 
 void * write_handler(void *arg) {
     int i = *(int *)arg;
-//    printf("Writer thread number [%lu] started!\n", pthread_self());
 
     if (aio_write(&write_cb[i]) == -1) {
         perror("Write error!");
@@ -97,7 +93,6 @@ void * write_handler(void *arg) {
     }
 
     check_write(i);
-//    pthread_exit(NULL);
 }
 
 
@@ -127,8 +122,6 @@ int main() {
         pthread_create(&threads[i], NULL, read_handler, &i);
         pthread_join(threads[i], NULL);
 
-        printf("\nAfter reading: %d\n", i);
-
         write_cb[i].aio_nbytes = strlen(buf[i]);
         write_cb[i].aio_fildes = open(res_file, O_CREAT | O_WRONLY | O_APPEND);
         write_cb[i].aio_offset = (long)offset;
@@ -138,15 +131,13 @@ int main() {
         pthread_join(threads[i], NULL);
 
         offset += strlen(buf[i]);
-
-        printf("\nAfter writing: %d\n", i);
     }
 
     // Closing
     for (int i = 0; i < FILES_AMOUNT; i++) {
         close(read_cb[i].aio_fildes);
         close(write_cb[i].aio_fildes);
-        printf("Descriptor %d closed!\n", read_cb[i].aio_fildes);
+        printf("File descriptor %d closed!\n", read_cb[i].aio_fildes);
     }
 
     return 0;
