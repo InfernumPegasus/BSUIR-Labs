@@ -97,7 +97,10 @@ int main() {
         bzero(message_struct->message, BUFFER_SIZE);
     }
 
-    // Create new thread for listen from virtual memory
+//    message_struct->current_index = 0;
+//    bzero(message_struct->message, BUFFER_SIZE);
+//    sleep(10);
+
     pthread_t listener;
     pthread_create(&listener, NULL, read_handler, NULL);
 
@@ -106,30 +109,30 @@ int main() {
     pthread_mutex_unlock(&mutex);
 
     char *to_write = (char *) malloc(BUFFER_SIZE * sizeof(char));
-    for (int i = 0; i < 10; i++) {
+    for (;;) {
 
         puts("Enter data to write:");
-//        fgets(to_write, BUFFER_SIZE, stdin);
-//        to_write[strlen(to_write) - 1] = 0;
-//        if (strlen(to_write) >= BUFFER_SIZE - 2)
-//            while ((getchar()) != '\n');
-//        rewind(stdin);
+        fgets(to_write, BUFFER_SIZE, stdin);
+        to_write[strlen(to_write) - 1] = 0;
+        if (strlen(to_write) >= BUFFER_SIZE - 2)
+            while ((getchar()) != '\n');
+        rewind(stdin);
 
-        to_write = rand_string(to_write, BUFFER_SIZE / 2);
-
-        printf("Writing: %s\n", to_write);
+//        puts("String generated randomly!");
+//        to_write = rand_string(to_write, BUFFER_SIZE / 2);
 
         if (strcmp(to_write, "exit") == 0) {
             pthread_mutex_destroy(&mutex);
             pthread_cond_destroy(&condition);
 
-            shmdt(data_count_struct);
-            shmctl(shared_memory_id, IPC_RMID, NULL);
-
             data_count_struct->process_counter--;
+            if (data_count_struct->process_counter < 1) {
+                data_count_struct->process_counter = 0;
+            }
 
             exit(EXIT_SUCCESS);
         }
+        printf("Writing: %s\n", to_write);
 
         pthread_mutex_lock(&mutex);
         if (data_count_struct->read_counter < data_count_struct->process_counter) {
