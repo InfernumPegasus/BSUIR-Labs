@@ -1,0 +1,7 @@
+D:\Development\CSharp\Labs\COM_Port\bin\Debug\COM_Port.exe
+D:\Development\CSharp\Labs\COM_Port\bin\Debug\COM_Port.pdb
+D:\Development\CSharp\Labs\COM_Port\obj\Debug\COM_Port.csproj.AssemblyReference.cache
+D:\Development\CSharp\Labs\COM_Port\obj\Debug\COM_Port.csproj.SuggestedBindingRedirects.cache
+D:\Development\CSharp\Labs\COM_Port\obj\Debug\COM_Port.csproj.CoreCompileInputs.cache
+D:\Development\CSharp\Labs\COM_Port\obj\Debug\COM_Port.exe
+D:\Development\CSharp\Labs\COM_Port\obj\Debug\COM_Port.pdb
