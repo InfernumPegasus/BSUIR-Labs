@@ -7,8 +7,6 @@ namespace COM_Port
     public class SerialPortWrapper
     {
         private readonly SerialPort _serialPort;
-        
-        private const int MaxRate = 268435456;
 
         public bool Synchronized { get; set; }
 
@@ -18,22 +16,13 @@ namespace COM_Port
             Synchronized = true;
         }
 
-        private void SetRate(int rate)
-        {
-            if (rate > MaxRate || rate <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rate));
-            }
-            _serialPort.BaudRate = rate;
-        }
-
         public void InitializePort()
         {
             _serialPort.Open();
 
             if (!_serialPort.IsOpen)
             {
-                throw new ArgumentException("Cannot initialize port!");
+                throw new NotSupportedException("Cannot initialize port!");
             }
 
             _serialPort.DataReceived += ReceiveData;
@@ -41,21 +30,16 @@ namespace COM_Port
             _serialPort.ErrorReceived += ReceiveError;
         }
 
-        private static void ReceiveError(object sender, SerialErrorReceivedEventArgs e)
-        {
-            Console.WriteLine("Receive error!");
-        }
-
         private void ReceiveData(object sender, SerialDataReceivedEventArgs serialDataReceivedEventArgs)
         {
             var data = new char[_serialPort.BytesToRead];
             _serialPort.Read(data, 0, data.Length);
 
-            Console.WriteLine($"{_serialPort.PortName} read:");
+            Console.Write($"{_serialPort.PortName} read: ");
             Console.WriteLine(data);
         }
 
-        public void Send(string str)
+        public void SendData(string str)
         {
             if (str.Length == 0)
             {
@@ -68,29 +52,40 @@ namespace COM_Port
 
             // Request To Send - enable
             _serialPort.RtsEnable = true;
-            
+
             _serialPort.Write(str.ToCharArray(), 0, str.Length);
 
             if (Synchronized)
             {
                 Thread.Sleep(100);
             }
-            
+
             _serialPort.RtsEnable = false;
         }
 
-        public static void ChangeRate(ref SerialPortWrapper port, int rate)
+        private void SetRate(int rate)
         {
             try
             {
-                port.SetRate(rate);
+                _serialPort.BaudRate = rate;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
         }
+        
+        private static void ReceiveError(object sender, SerialErrorReceivedEventArgs e)
+        {
+            Console.WriteLine("Receive error!");
+        }
 
+        public static void ChangeRate(ref SerialPortWrapper port, int rate)
+        {
+            var currentRate = port._serialPort.BaudRate;
+            port.SetRate(rate);
+            Console.WriteLine($"Baud rate changed from {currentRate} to {rate}");
+        }
     }
 
     internal static class Program
@@ -107,7 +102,7 @@ namespace COM_Port
 
             return choice;
         }
-        
+
         private static void GetAllPorts()
         {
             var ports = SerialPort.GetPortNames();
@@ -134,7 +129,7 @@ namespace COM_Port
 
             Console.WriteLine("Toggle?\n1 - yes");
             var choice = GetNumber();
-            
+
             var synchronized = port1.Synchronized == port2.Synchronized;
             switch (choice)
             {
@@ -168,6 +163,7 @@ namespace COM_Port
                 Console.Write("> ");
 
                 var choice = GetNumber();
+                Console.WriteLine();
 
                 switch (choice)
                 {
@@ -176,17 +172,17 @@ namespace COM_Port
                         break;
                     case 2:
                         Console.WriteLine("Enter data to send:");
-                        port1.Send(Console.ReadLine());
+                        port1.SendData(Console.ReadLine());
                         break;
                     case 3:
                         Console.WriteLine("Enter new rate:");
                         choice = GetNumber();
-                        SerialPortWrapper.ChangeRate(ref port1, choice); 
+                        SerialPortWrapper.ChangeRate(ref port1, choice);
                         break;
                     case 4:
                         Console.WriteLine("Enter new rate:");
                         choice = GetNumber();
-                        SerialPortWrapper.ChangeRate(ref port2, choice); 
+                        SerialPortWrapper.ChangeRate(ref port2, choice);
                         break;
                     case 5:
                         ToggleSynchronization(ref port1, ref port2);
@@ -194,7 +190,7 @@ namespace COM_Port
                     case 6:
                         return;
                     default:
-                        Console.WriteLine("Unknown option"); 
+                        Console.WriteLine("Unknown option");
                         break;
                 }
 
