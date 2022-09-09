@@ -1,0 +1,19 @@
+|Labus1
+Y0 <= inst.DB_MAX_OUTPUT_PORT_TYPE
+X1 => inst.IN0
+X5 => inst.IN1
+X5 => inst2.IN3
+X7 => inst.IN2
+X7 => inst1.IN2
+X7 => inst2.IN2
+X3 => inst.IN3
+X3 => inst1.IN3
+Y1 <= inst1.DB_MAX_OUTPUT_PORT_TYPE
+X2 => inst1.IN0
+X6 => inst1.IN1
+X6 => inst2.IN1
+Y2 <= inst2.DB_MAX_OUTPUT_PORT_TYPE
+X4 => inst2.IN0
+X0 => ~NO_FANOUT~
+
+
