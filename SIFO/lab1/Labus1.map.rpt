@@ -1,5 +1,5 @@
 Analysis & Synthesis report for Labus1
-Fri Sep 09 12:04:26 2022
+Fri Sep 09 15:31:36 2022
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Web Edition
 
 
@@ -40,7 +40,7 @@ applicable agreement for further details.
 +-------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                            ;
 +-------------------------------+-----------------------------------------+
-; Analysis & Synthesis Status   ; Successful - Fri Sep 09 12:04:26 2022   ;
+; Analysis & Synthesis Status   ; Successful - Fri Sep 09 15:31:36 2022   ;
 ; Quartus II Version            ; 9.1 Build 222 10/21/2009 SJ Web Edition ;
 ; Revision Name                 ; Labus1                                  ;
 ; Top-level Entity Name         ; Labus1                                  ;
@@ -49,7 +49,7 @@ applicable agreement for further details.
 ;     Combinational ALUTs       ; 3                                       ;
 ;     Dedicated logic registers ; 0                                       ;
 ; Total registers               ; 0                                       ;
-; Total pins                    ; 11                                      ;
+; Total pins                    ; 12                                      ;
 ; Total virtual pins            ; 0                                       ;
 ; Total block memory bits       ; 0                                       ;
 ; DSP block 9-bit elements      ; 0                                       ;
@@ -172,8 +172,8 @@ Parallel compilation was disabled, but you have multiple processors available. E
 ; Combinational ALUT usage by number of inputs  ;       ;
 ;     -- 7 input functions                      ; 0     ;
 ;     -- 6 input functions                      ; 0     ;
-;     -- 5 input functions                      ; 0     ;
-;     -- 4 input functions                      ; 3     ;
+;     -- 5 input functions                      ; 3     ;
+;     -- 4 input functions                      ; 0     ;
 ;     -- <=3 input functions                    ; 0     ;
 ;                                               ;       ;
 ; Combinational ALUTs by mode                   ;       ;
@@ -190,11 +190,11 @@ Parallel compilation was disabled, but you have multiple processors available. E
 ;                                               ;       ;
 ; Estimated ALMs:  partially or completely used ; 2     ;
 ;                                               ;       ;
-; I/O pins                                      ; 11    ;
-; Maximum fan-out node                          ; X7    ;
+; I/O pins                                      ; 12    ;
+; Maximum fan-out node                          ; S     ;
 ; Maximum fan-out                               ; 3     ;
-; Total fan-out                                 ; 15    ;
-; Average fan-out                               ; 1.07  ;
+; Total fan-out                                 ; 18    ;
+; Average fan-out                               ; 1.20  ;
 +-----------------------------------------------+-------+
 
 
@@ -203,7 +203,7 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +----------------------------+-------------------+--------------+-------------------+--------------+---------+-----------+-----------+------+--------------+---------------------+--------------+
 ; Compilation Hierarchy Node ; LC Combinationals ; LC Registers ; Block Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; DSP 36x36 ; Pins ; Virtual Pins ; Full Hierarchy Name ; Library Name ;
 +----------------------------+-------------------+--------------+-------------------+--------------+---------+-----------+-----------+------+--------------+---------------------+--------------+
-; |Labus1                    ; 3 (3)             ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 11   ; 0            ; |Labus1             ; work         ;
+; |Labus1                    ; 3 (3)             ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 12   ; 0            ; |Labus1             ; work         ;
 +----------------------------+-------------------+--------------+-------------------+--------------+---------+-----------+-----------+------+--------------+---------------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
@@ -229,7 +229,7 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 Info: *******************************************************************
 Info: Running Quartus II Analysis & Synthesis
     Info: Version 9.1 Build 222 10/21/2009 SJ Web Edition
-    Info: Processing started: Fri Sep 09 12:04:25 2022
+    Info: Processing started: Fri Sep 09 15:31:35 2022
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off Labus1 -c Labus1
 Info: Found 1 design units, including 1 entities, in source file labus1.bdf
     Info: Found entity 1: Labus1
@@ -237,14 +237,14 @@ Info: Elaborating entity "Labus1" for the top level hierarchy
 Warning: Pin "X0" not connected
 Warning: Design contains 1 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "X0"
-Info: Implemented 14 device resources after synthesis - the final resource count might be different
-    Info: Implemented 8 input pins
+Info: Implemented 15 device resources after synthesis - the final resource count might be different
+    Info: Implemented 9 input pins
     Info: Implemented 3 output pins
     Info: Implemented 3 logic cells
 Info: Quartus II Analysis & Synthesis was successful. 0 errors, 3 warnings
     Info: Peak virtual memory: 214 megabytes
-    Info: Processing ended: Fri Sep 09 12:04:26 2022
+    Info: Processing ended: Fri Sep 09 15:31:36 2022
     Info: Elapsed time: 00:00:01
-    Info: Total CPU time (on all processors): 00:00:01
+    Info: Total CPU time (on all processors): 00:00:00
 
 

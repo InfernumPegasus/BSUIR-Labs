@@ -1,5 +1,5 @@
 Classic Timing Analyzer report for Labus1
-Fri Sep 09 12:04:36 2022
+Fri Sep 09 15:31:42 2022
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Web Edition
 
 
@@ -39,7 +39,7 @@ applicable agreement for further details.
 +------------------------------+-------+---------------+-------------+------+----+------------+----------+--------------+
 ; Type                         ; Slack ; Required Time ; Actual Time ; From ; To ; From Clock ; To Clock ; Failed Paths ;
 +------------------------------+-------+---------------+-------------+------+----+------------+----------+--------------+
-; Worst-case tpd               ; N/A   ; None          ; 9.751 ns    ; X6   ; Y2 ; --         ; --       ; 0            ;
+; Worst-case tpd               ; N/A   ; None          ; 10.300 ns   ; X4   ; Y2 ; --         ; --       ; 0            ;
 ; Total number of failed paths ;       ;               ;             ;      ;    ;            ;          ; 0            ;
 +------------------------------+-------+---------------+-------------+------+----+------------+----------+--------------+
 
@@ -92,18 +92,21 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +-------+-------------------+-----------------+------+----+
 ; Slack ; Required P2P Time ; Actual P2P Time ; From ; To ;
 +-------+-------------------+-----------------+------+----+
-; N/A   ; None              ; 9.751 ns        ; X6   ; Y2 ;
-; N/A   ; None              ; 9.676 ns        ; X5   ; Y2 ;
-; N/A   ; None              ; 9.271 ns        ; X4   ; Y2 ;
-; N/A   ; None              ; 9.222 ns        ; X3   ; Y1 ;
-; N/A   ; None              ; 9.197 ns        ; X7   ; Y2 ;
-; N/A   ; None              ; 8.696 ns        ; X3   ; Y0 ;
-; N/A   ; None              ; 8.405 ns        ; X6   ; Y1 ;
-; N/A   ; None              ; 8.053 ns        ; X5   ; Y0 ;
-; N/A   ; None              ; 7.992 ns        ; X7   ; Y1 ;
-; N/A   ; None              ; 7.934 ns        ; X2   ; Y1 ;
-; N/A   ; None              ; 7.467 ns        ; X7   ; Y0 ;
-; N/A   ; None              ; 7.408 ns        ; X1   ; Y0 ;
+; N/A   ; None              ; 10.300 ns       ; X4   ; Y2 ;
+; N/A   ; None              ; 10.101 ns       ; X6   ; Y2 ;
+; N/A   ; None              ; 9.868 ns        ; X6   ; Y1 ;
+; N/A   ; None              ; 9.683 ns        ; X7   ; Y2 ;
+; N/A   ; None              ; 9.608 ns        ; S    ; Y2 ;
+; N/A   ; None              ; 9.519 ns        ; X5   ; Y2 ;
+; N/A   ; None              ; 9.461 ns        ; X7   ; Y1 ;
+; N/A   ; None              ; 9.278 ns        ; X3   ; Y1 ;
+; N/A   ; None              ; 9.237 ns        ; X2   ; Y1 ;
+; N/A   ; None              ; 9.149 ns        ; S    ; Y1 ;
+; N/A   ; None              ; 7.761 ns        ; X7   ; Y0 ;
+; N/A   ; None              ; 7.686 ns        ; S    ; Y0 ;
+; N/A   ; None              ; 7.593 ns        ; X5   ; Y0 ;
+; N/A   ; None              ; 7.513 ns        ; X3   ; Y0 ;
+; N/A   ; None              ; 7.399 ns        ; X1   ; Y0 ;
 +-------+-------------------+-----------------+------+----+
 
 
@@ -113,17 +116,17 @@ Parallel compilation was disabled, but you have multiple processors available. E
 Info: *******************************************************************
 Info: Running Quartus II Classic Timing Analyzer
     Info: Version 9.1 Build 222 10/21/2009 SJ Web Edition
-    Info: Processing started: Fri Sep 09 12:04:36 2022
+    Info: Processing started: Fri Sep 09 15:31:42 2022
 Info: Command: quartus_tan --read_settings_files=off --write_settings_files=off Labus1 -c Labus1 --timing_analysis_only
-Info: Longest tpd from source pin "X6" to destination pin "Y2" is 9.751 ns
-    Info: 1: + IC(0.000 ns) + CELL(0.809 ns) = 0.809 ns; Loc. = PIN_AB13; Fanout = 2; PIN Node = 'X6'
-    Info: 2: + IC(4.199 ns) + CELL(0.357 ns) = 5.365 ns; Loc. = LCCOMB_X27_Y1_N20; Fanout = 1; COMB Node = 'inst2'
-    Info: 3: + IC(2.340 ns) + CELL(2.046 ns) = 9.751 ns; Loc. = PIN_B9; Fanout = 0; PIN Node = 'Y2'
-    Info: Total cell delay = 3.212 ns ( 32.94 % )
-    Info: Total interconnect delay = 6.539 ns ( 67.06 % )
+Info: Longest tpd from source pin "X4" to destination pin "Y2" is 10.300 ns
+    Info: 1: + IC(0.000 ns) + CELL(0.817 ns) = 0.817 ns; Loc. = PIN_F14; Fanout = 1; PIN Node = 'X4'
+    Info: 2: + IC(4.738 ns) + CELL(0.225 ns) = 5.780 ns; Loc. = LCCOMB_X3_Y1_N16; Fanout = 1; COMB Node = 'inst5~0'
+    Info: 3: + IC(2.588 ns) + CELL(1.932 ns) = 10.300 ns; Loc. = PIN_G15; Fanout = 0; PIN Node = 'Y2'
+    Info: Total cell delay = 2.974 ns ( 28.87 % )
+    Info: Total interconnect delay = 7.326 ns ( 71.13 % )
 Info: Quartus II Classic Timing Analyzer was successful. 0 errors, 0 warnings
     Info: Peak virtual memory: 173 megabytes
-    Info: Processing ended: Fri Sep 09 12:04:36 2022
+    Info: Processing ended: Fri Sep 09 15:31:42 2022
     Info: Elapsed time: 00:00:00
     Info: Total CPU time (on all processors): 00:00:00
 

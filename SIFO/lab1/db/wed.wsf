@@ -20,13 +20,13 @@ Altera or its authorized distributors.  Please refer to the
 applicable agreement for further details.
 */
 
-VECTOR("d:/programs/quartus/quartus/projects/lab1/db/Labus1.sim.cvwf")
+VECTOR("d:/programs/quartus/quartus/projects/lab1/Labus1.vwf")
 {
 	ZOOM{
 		ZBEGIN = 0;
-		ZEND = 477938;
-		NUMERATOR = 745;
-		DENOMINATOR = 477938;
+		ZEND = 1000000;
+		NUMERATOR = 960;
+		DENOMINATOR = 1000000;
 		TOP_INDEX = 0;
 	}
 	CLOCK{
@@ -135,13 +135,13 @@ VECTOR("d:/programs/quartus/quartus/projects/lab1/db/Labus1.sim.cvwf")
 	}
 }
 
-VECTOR("D:/Programs/Quartus/quartus/projects/lab1/Labus1.vwf")
+VECTOR("d:/programs/quartus/quartus/projects/lab1/db/Labus1.sim.cvwf")
 {
 	ZOOM{
 		ZBEGIN = 0;
-		ZEND = 998941;
-		NUMERATOR = 945;
-		DENOMINATOR = 1000000;
+		ZEND = 499108;
+		NUMERATOR = 745;
+		DENOMINATOR = 477938;
 		TOP_INDEX = 0;
 	}
 	CLOCK{
@@ -225,7 +225,7 @@ VECTOR("D:/Programs/Quartus/quartus/projects/lab1/Labus1.vwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "Y0";
+		SIGNAL = "S";
 		INDEX = 9;
 		FORMAT = E;
 		SCALE = 1;
@@ -233,7 +233,7 @@ VECTOR("D:/Programs/Quartus/quartus/projects/lab1/Labus1.vwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "Y1";
+		SIGNAL = "Y0";
 		INDEX = 10;
 		FORMAT = E;
 		SCALE = 1;
@@ -241,8 +241,16 @@ VECTOR("D:/Programs/Quartus/quartus/projects/lab1/Labus1.vwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "Y2";
+		SIGNAL = "Y1";
 		INDEX = 11;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "Y2";
+		INDEX = 12;
 		FORMAT = E;
 		SCALE = 1;
 		VISIBLE = Y;

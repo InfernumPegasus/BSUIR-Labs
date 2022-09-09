@@ -1,5 +1,5 @@
 Simulator report for Labus1
-Fri Sep 09 12:13:32 2022
+Fri Sep 09 15:34:28 2022
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Web Edition
 
 
@@ -45,9 +45,9 @@ applicable agreement for further details.
 +-----------------------------+--------------+
 ; Simulation Start Time       ; 0 ps         ;
 ; Simulation End Time         ; 1.0 us       ;
-; Simulation Netlist Size     ; 14 nodes     ;
-; Simulation Coverage         ;     100.00 % ;
-; Total Number of Transitions ; 60           ;
+; Simulation Netlist Size     ; 18 nodes     ;
+; Simulation Coverage         ;      58.82 % ;
+; Total Number of Transitions ; 44           ;
 ; Simulation Breakpoints      ; 0            ;
 ; Family                      ; Stratix II   ;
 +-----------------------------+--------------+
@@ -93,13 +93,13 @@ Please use Quartus II to view the waveform report data.
 +-----------------------------------------------------+--------------+
 ; Type                                                ; Value        ;
 +-----------------------------------------------------+--------------+
-; Total coverage as a percentage                      ;     100.00 % ;
-; Total nodes checked                                 ; 14           ;
-; Total output ports checked                          ; 13           ;
-; Total output ports with complete 1/0-value coverage ; 13           ;
-; Total output ports with no 1/0-value coverage       ; 0            ;
-; Total output ports with no 1-value coverage         ; 0            ;
-; Total output ports with no 0-value coverage         ; 0            ;
+; Total coverage as a percentage                      ;      58.82 % ;
+; Total nodes checked                                 ; 18           ;
+; Total output ports checked                          ; 17           ;
+; Total output ports with complete 1/0-value coverage ; 10           ;
+; Total output ports with no 1/0-value coverage       ; 7            ;
+; Total output ports with no 1-value coverage         ; 7            ;
+; Total output ports with no 0-value coverage         ; 7            ;
 +-----------------------------------------------------+--------------+
 
 
@@ -109,36 +109,49 @@ The following table displays output ports that toggle between 1 and 0 during sim
 +---------------+------------------+------------------+
 ; Node Name     ; Output Port Name ; Output Port Type ;
 +---------------+------------------+------------------+
-; |Labus1|Y0    ; |Labus1|Y0       ; pin_out          ;
 ; |Labus1|inst  ; |Labus1|inst     ; out0             ;
 ; |Labus1|X1    ; |Labus1|X1       ; out              ;
 ; |Labus1|X5    ; |Labus1|X5       ; out              ;
 ; |Labus1|X7    ; |Labus1|X7       ; out              ;
 ; |Labus1|X3    ; |Labus1|X3       ; out              ;
-; |Labus1|Y1    ; |Labus1|Y1       ; pin_out          ;
 ; |Labus1|inst1 ; |Labus1|inst1    ; out0             ;
 ; |Labus1|X2    ; |Labus1|X2       ; out              ;
 ; |Labus1|X6    ; |Labus1|X6       ; out              ;
-; |Labus1|Y2    ; |Labus1|Y2       ; pin_out          ;
 ; |Labus1|inst2 ; |Labus1|inst2    ; out0             ;
 ; |Labus1|X4    ; |Labus1|X4       ; out              ;
 +---------------+------------------+------------------+
 
 
 The following table displays output ports that do not toggle to 1 during simulation.
-+-------------------------------------------------+
-; Missing 1-Value Coverage                        ;
-+-----------+------------------+------------------+
-; Node Name ; Output Port Name ; Output Port Type ;
-+-----------+------------------+------------------+
++-----------------------------------------------------+
+; Missing 1-Value Coverage                            ;
++---------------+------------------+------------------+
+; Node Name     ; Output Port Name ; Output Port Type ;
++---------------+------------------+------------------+
+; |Labus1|Y0    ; |Labus1|Y0       ; pin_out          ;
+; |Labus1|inst3 ; |Labus1|inst3    ; out0             ;
+; |Labus1|S     ; |Labus1|S        ; out              ;
+; |Labus1|Y1    ; |Labus1|Y1       ; pin_out          ;
+; |Labus1|inst4 ; |Labus1|inst4    ; out0             ;
+; |Labus1|Y2    ; |Labus1|Y2       ; pin_out          ;
+; |Labus1|inst5 ; |Labus1|inst5    ; out0             ;
++---------------+------------------+------------------+
 
 
 The following table displays output ports that do not toggle to 0 during simulation.
-+-------------------------------------------------+
-; Missing 0-Value Coverage                        ;
-+-----------+------------------+------------------+
-; Node Name ; Output Port Name ; Output Port Type ;
-+-----------+------------------+------------------+
++-----------------------------------------------------+
+; Missing 0-Value Coverage                            ;
++---------------+------------------+------------------+
+; Node Name     ; Output Port Name ; Output Port Type ;
++---------------+------------------+------------------+
+; |Labus1|Y0    ; |Labus1|Y0       ; pin_out          ;
+; |Labus1|inst3 ; |Labus1|inst3    ; out0             ;
+; |Labus1|S     ; |Labus1|S        ; out              ;
+; |Labus1|Y1    ; |Labus1|Y1       ; pin_out          ;
+; |Labus1|inst4 ; |Labus1|inst4    ; out0             ;
+; |Labus1|Y2    ; |Labus1|Y2       ; pin_out          ;
+; |Labus1|inst5 ; |Labus1|inst5    ; out0             ;
++---------------+------------------+------------------+
 
 
 +---------------------+
@@ -154,17 +167,17 @@ The following table displays output ports that do not toggle to 0 during simulat
 Info: *******************************************************************
 Info: Running Quartus II Simulator
     Info: Version 9.1 Build 222 10/21/2009 SJ Web Edition
-    Info: Processing started: Fri Sep 09 12:13:32 2022
+    Info: Processing started: Fri Sep 09 15:34:28 2022
 Info: Command: quartus_sim --read_settings_files=on --write_settings_files=off Labus1 -c Labus1
 Info: Using vector source file "d:/programs/quartus/quartus/projects/lab1/Labus1.vwf"
 Info: Option to preserve fewer signal transitions to reduce memory requirements is enabled
     Info: Simulation has been partitioned into sub-simulations according to the maximum transition count determined by the engine. Transitions from memory will be flushed out to disk at the end of each sub-simulation to reduce memory requirements.
 Info: Simulation partitioned into 1 sub-simulations
-Info: Simulation coverage is     100.00 %
-Info: Number of transitions in simulation is 60
+Info: Simulation coverage is      58.82 %
+Info: Number of transitions in simulation is 44
 Info: Quartus II Simulator was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 143 megabytes
-    Info: Processing ended: Fri Sep 09 12:13:32 2022
+    Info: Peak virtual memory: 142 megabytes
+    Info: Processing ended: Fri Sep 09 15:34:28 2022
     Info: Elapsed time: 00:00:00
     Info: Total CPU time (on all processors): 00:00:00
 

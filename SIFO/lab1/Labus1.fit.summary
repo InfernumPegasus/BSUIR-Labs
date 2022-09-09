@@ -1,4 +1,4 @@
-Fitter Status : Successful - Fri Sep 09 12:04:31 2022
+Fitter Status : Successful - Fri Sep 09 15:31:39 2022
 Quartus II Version : 9.1 Build 222 10/21/2009 SJ Web Edition
 Revision Name : Labus1
 Top-level Entity Name : Labus1
@@ -9,7 +9,7 @@ Logic utilization : < 1 %
     Combinational ALUTs : 3 / 12,480 ( < 1 % )
     Dedicated logic registers : 0 / 12,480 ( 0 % )
 Total registers : 0
-Total pins : 11 / 343 ( 3 % )
+Total pins : 12 / 343 ( 3 % )
 Total virtual pins : 0
 Total block memory bits : 0 / 419,328 ( 0 % )
 DSP block 9-bit elements : 0 / 96 ( 0 % )
