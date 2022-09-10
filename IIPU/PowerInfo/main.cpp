@@ -18,6 +18,7 @@ string get_parameter_value_str(const string& str, const string& delimiter = "=")
 }
 
 void print_remaining_time() {
+    cout << "Receiving battery info using acpi utility:" << endl;
     system("acpi --battery");
 }
 
@@ -45,6 +46,9 @@ void print_battery_info() {
         exit(1);
     }
 
+    float   POWER_SUPPLY_ENERGY_NOW,
+            POWER_SUPPLY_POWER_NOW;
+
     while (getline(ifs, line)) {
 
         if (!show_full_info) {
@@ -60,10 +64,23 @@ void print_battery_info() {
             if (strstr(line.c_str(), "POWER_SUPPLY_CAPACITY_LEVEL") != nullptr) {
                 cout << "Capacity level: " << get_parameter_value_str(line) << endl;
             }
+
+            if (strstr(line.c_str(), "POWER_SUPPLY_ENERGY_NOW=") != nullptr) {
+                POWER_SUPPLY_ENERGY_NOW = get_parameter_value(line);
+            }
+
+            if (strstr(line.c_str(), "POWER_SUPPLY_POWER_NOW=") != nullptr) {
+                POWER_SUPPLY_POWER_NOW = get_parameter_value(line);
+            }
+
         } else {
             cout << line << endl;
         }
     }
+    float hours = POWER_SUPPLY_ENERGY_NOW / POWER_SUPPLY_POWER_NOW;
+    int minutes = (int)((hours - (int)hours) * 60);
+
+    cout << "Battery time remaining: " << (int)hours << " hours " << minutes << " min" << endl;
     ifs.close();
 }
 
