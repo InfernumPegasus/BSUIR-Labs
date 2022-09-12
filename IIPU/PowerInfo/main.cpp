@@ -13,7 +13,7 @@ string get_parameter_value_str(const string& str, const string& delimiter = "=")
     return str.substr(str.find(delimiter) + delimiter.length(), str.length());
 }
 
-[[maybe_unused]] float get_parameter_value(const string& str, const string& delimiter = "=") {
+float get_parameter_value(const string& str, const string& delimiter = "=") {
     return stof(get_parameter_value_str(str, delimiter));
 }
 
@@ -97,10 +97,7 @@ void print_battery_info() {
 
 int main(int argc, char **argv) {
 
-    if (argc == 2 && strcmp(argv[1], "-f") == 0) {
-        show_full_info = true;
-        print_full_info();
-    } else if (argc == 2 && strcmp(argv[1], "-s") == 0) {
+    if (argc == 2 && strcmp(argv[1], "-s") == 0) {
         system("systemctl suspend");
     } else if (argc == 2 && strcmp(argv[1], "-h") == 0) {
         system("systemctl hibernate");
