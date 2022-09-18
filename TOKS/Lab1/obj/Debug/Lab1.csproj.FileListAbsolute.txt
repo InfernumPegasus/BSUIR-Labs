@@ -1,0 +1,7 @@
+D:\GitHub\BSUIR-Labs\TOKS\Lab1\bin\Debug\Lab1.exe
+D:\GitHub\BSUIR-Labs\TOKS\Lab1\bin\Debug\Lab1.pdb
+D:\GitHub\BSUIR-Labs\TOKS\Lab1\obj\Debug\Lab1.csproj.AssemblyReference.cache
+D:\GitHub\BSUIR-Labs\TOKS\Lab1\obj\Debug\Lab1.csproj.SuggestedBindingRedirects.cache
+D:\GitHub\BSUIR-Labs\TOKS\Lab1\obj\Debug\Lab1.csproj.CoreCompileInputs.cache
+D:\GitHub\BSUIR-Labs\TOKS\Lab1\obj\Debug\Lab1.exe
+D:\GitHub\BSUIR-Labs\TOKS\Lab1\obj\Debug\Lab1.pdb

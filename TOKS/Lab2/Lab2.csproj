@@ -5,11 +5,11 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{BDD0FBC8-D5FA-46D1-B99A-B4BE487F9540}</ProjectGuid>
+        <ProjectGuid>{EADBBEB0-FE92-478E-A067-1C13BBF4A73C}</ProjectGuid>
         <OutputType>Exe</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>COM_Port</RootNamespace>
-        <AssemblyName>COM_Port</AssemblyName>
+        <RootNamespace>Lab2</RootNamespace>
+        <AssemblyName>Lab2</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
