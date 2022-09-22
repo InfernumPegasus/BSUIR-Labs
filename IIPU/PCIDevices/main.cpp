@@ -1,10 +1,10 @@
-#include <iostream>
-#include <dirent.h>
 #include <string>
-#include <fstream>
 #include <cstring>
+#include <fstream>
 
 using namespace std;
+
+bool use_utility = false;
 
 string get_token_by_delimiter(const string& s, const string& delimiter) {
     return s.substr(0, s.find(delimiter));
@@ -14,58 +14,49 @@ string get_parameter_value_str(const string& str, const string& delimiter = "=")
     return str.substr(str.find(delimiter) + delimiter.length(), str.length());
 }
 
-[[maybe_unused]] float get_parameter_value(const string& str, const string& delimiter = "=") {
-    return stof(get_parameter_value_str(str, delimiter));
-}
+void print_pci_names() {
+    auto path = "/proc/bus/pci/devices"s;
+    string line;
 
-void print_pci_vendor() {
+    ifstream ifs(path);
+    if (!ifs.is_open()) {
+        printf("Cannot find 'devices' file!\n");
+        exit(1);
+    }
 
-    auto path = "/sys/bus/pci/devices"s;
+    while (getline(ifs, line)) {
+        auto device_slot = line.substr(0, 4);
+        printf("Device slot: %s\n", device_slot.c_str());
 
-    DIR *dir;
-    struct dirent *entry;
+        auto vendor_id = line.substr(device_slot.length() + 1, 4);
+        printf("Vendor Id: %s\n", vendor_id.c_str());
 
-    dir = opendir(path.c_str());
+        auto device_id = line.substr(device_slot.length() + vendor_id.length() + 1, 4);
+        printf("Device Id: %s\n", device_id.c_str());
 
-    while ((entry = readdir(dir))) {
+        ulong last_space_pos = line.find_last_of('0');
 
-        auto dirName = entry->d_name;
+        auto device_name = line.substr(last_space_pos + 2, line.length());
+        printf("Device name: %s\n", device_name.c_str());
 
-        if (dirName[0] != '.') {
-            cout << "Device: " << entry->d_name << endl;
-            auto uevent_path = path + "/" + dirName + "/uevent";
-
-            string line;
-
-            ifstream ifs(uevent_path);
-            if (!ifs.is_open()) {
-                cout << "Cannot find 'uevent' file!" << endl;
-                exit(1);
-            }
-
-            while (getline(ifs, line)) {
-
-                if (strstr(line.c_str(), "PCI_ID") != nullptr) {
-                    auto withoutToken = get_parameter_value_str(line, "=");
-                    auto vendorId = get_token_by_delimiter(withoutToken, ":");
-                    auto deviceId = get_parameter_value_str(withoutToken, ":");
-
-                    printf("VendorId: %s\n"
-                           "DeviceId: %s\n",
-                           vendorId.c_str(), deviceId.c_str());
-
-                    cout << "Searching for suitable device by [vendor:device] format:" << endl;
-                    auto command = "lspci -d "s.append(vendorId).append(":").append(deviceId);
-                    system(command.c_str());
-                }
-            }
-            cout << endl;
+        if (use_utility) {
+            printf("Searching for suitable device by [%s:%s] :\n",
+                   vendor_id.c_str(), device_id.c_str());
+            auto command = "lspci -d "s.append(vendor_id).append(":").append(device_id);
+            system(command.c_str());
         }
+
+        printf("\n");
     }
 }
 
-int main() {
-    print_pci_vendor();
+int main(int argc, char** argv) {
+
+    if (argc == 2 && strcmp(argv[1], "--util") == 0) {
+        use_utility = true;
+    }
+
+    print_pci_names();
 
     return 0;
 }
