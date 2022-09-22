@@ -6,14 +6,6 @@ using namespace std;
 
 bool use_utility = false;
 
-string get_token_by_delimiter(const string& s, const string& delimiter) {
-    return s.substr(0, s.find(delimiter));
-}
-
-string get_parameter_value_str(const string& str, const string& delimiter = "=") {
-    return str.substr(str.find(delimiter) + delimiter.length(), str.length());
-}
-
 void print_pci_names() {
     auto path = "/proc/bus/pci/devices"s;
     string line;
