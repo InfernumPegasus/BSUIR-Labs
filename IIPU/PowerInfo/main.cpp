@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <csignal>
 #include <cstring>
+#include <unistd.h>
 
 using namespace std;
 
