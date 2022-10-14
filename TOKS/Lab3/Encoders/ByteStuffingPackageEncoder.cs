@@ -1,20 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Lab3.Encoders
 {
-    public class ByteStuffingPackageEncoder : IPackageEncoder
+    public static class ByteStuffingPackageEncoder
     {
         private const char InsertChar = '#';
 
-        public string Encode(string toEncode)
+        public static string Encode(string toEncode)
         {
             if (toEncode.Length == 0)
-            {
-                Console.WriteLine("No data to encode! Returning empty string.");
                 return string.Empty;
-            }
-            
+
             var encoded = string.Empty;
             var first = toEncode[0];
             encoded += first;
@@ -29,14 +25,13 @@ namespace Lab3.Encoders
             return encoded;
         }
 
-        public string Decode(string encoded)
+        public static string Decode(string encoded)
         {
             if (encoded.Length != 0)
                 return encoded
                     .Where(t => t != InsertChar)
                     .Aggregate(string.Empty, (current, t) => current + t);
-
-            Console.WriteLine("No data to decode! Returning empty string.");
+            
             return string.Empty;
         }
     }

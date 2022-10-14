@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO.Ports;
-using Lab3.Encoders;
 
 namespace Lab3
 {
@@ -95,12 +94,12 @@ namespace Lab3
         
         public static void Main()
         {
-            var port1 = new SerialPortWrapper("COM1", 9600, new HammingPackageEncoder());
-            var port2 = new SerialPortWrapper("COM2", 9600, new HammingPackageEncoder());
-            
+            var port1 = new SerialPortWrapper("COM1", 9600);
+            var port2 = new SerialPortWrapper("COM2", 9600);
+
             port1.InitializePort();
             port2.InitializePort();
-            
+
             if (SerialPort.GetPortNames().Length < 2)
             {
                 Console.WriteLine("No available ports! Check your ports settings!");

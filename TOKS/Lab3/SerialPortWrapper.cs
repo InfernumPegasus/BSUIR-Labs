@@ -9,14 +9,11 @@ namespace Lab3
     {
         private readonly SerialPort _serialPort;
 
-        private readonly IPackageEncoder _packageEncoder;
-
         public bool Synchronized { get; set; }
 
-        public SerialPortWrapper(string portName, int rate, IPackageEncoder packageEncoder)
+        public SerialPortWrapper(string portName, int rate)
         {
             _serialPort = new SerialPort(portName, rate, Parity.None, 8, StopBits.One);
-            _packageEncoder = packageEncoder;
 
             Synchronized = true;
         }
@@ -32,33 +29,53 @@ namespace Lab3
             _serialPort.ErrorReceived += ReceiveError;
         }
 
-        public void SendData(string str)
+        public void SendData(string data)
         {
-            var encoded = _packageEncoder.Encode(str);
-            
-            if (encoded.Length == 0)
+            try
             {
-                Console.WriteLine("No data to send!");
-                return;
+                var bytes = Crc8Calculator.ConvertStringToBytes(data);
+                var checksum = Crc8Calculator.ComputeChecksum(bytes);
+                data += Crc8Calculator.ChecksumFieldName + checksum;
+                Console.WriteLine($"{_serialPort.PortName} write: " + data);
+
+                _serialPort.Write(data.ToCharArray(), 0, data.Length);
+
+                if (Synchronized)
+                    Thread.Sleep(100);
             }
-
-            Console.WriteLine($"{_serialPort.PortName} write: " + encoded);
-
-            _serialPort.Write(encoded.ToCharArray(), 0, encoded.Length);
-
-            if (Synchronized)
-                Thread.Sleep(100);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
         
         private void ReceiveData(object sender, SerialDataReceivedEventArgs serialDataReceivedEventArgs)
         {
-            var data = new char[_serialPort.BytesToRead];
-            _serialPort.Read(data, 0, data.Length);
+            var receivedData = new char[_serialPort.BytesToRead];
+            _serialPort.Read(receivedData, 0, receivedData.Length);
+            
+            var receiveDataStr = new string(receivedData);
+            Console.WriteLine($"{_serialPort.PortName} read: {receiveDataStr}");
+            
+            var checksumIndex = receiveDataStr.LastIndexOfAny(Crc8Calculator.ChecksumFieldName.ToCharArray());
 
-            Console.Write($"{_serialPort.PortName} read: ");
-            Console.WriteLine(_packageEncoder.Decode(new string(data)));
+            if (checksumIndex != -1)
+            {
+                var checksum = int.Parse(receiveDataStr.Substring(checksumIndex + 1));
+                var strBeforeChecksum = receiveDataStr.Substring(0, receiveDataStr.LastIndexOf(Crc8Calculator.ChecksumFieldName[0]));
+
+                Console.WriteLine($"Checksum: {checksum}");
+                Console.WriteLine($"Message: {strBeforeChecksum}");
+            }
+            else
+            {
+                Console.WriteLine("Cannot resolve checksum!");
+            }
         }
 
+        private static void ReceiveError(object sender, SerialErrorReceivedEventArgs e) =>
+            Console.WriteLine("Receive error!");
+        
         private void SetRate(int rate)
         {
             try
@@ -70,9 +87,6 @@ namespace Lab3
                 Console.WriteLine(e);
             }
         }
-        
-        private static void ReceiveError(object sender, SerialErrorReceivedEventArgs e) =>
-            Console.WriteLine("Receive error!");
 
         public static void ChangeRate(ref SerialPortWrapper port, int rate)
         {

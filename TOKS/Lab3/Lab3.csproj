@@ -39,9 +39,9 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="DataPackage.cs" />
         <Compile Include="Encoders\ByteStuffingPackageEncoder.cs" />
-        <Compile Include="Encoders\HammingPackageEncoder.cs" />
-        <Compile Include="Encoders\IPackageEncoder.cs" />
+        <Compile Include="Encoders\Crc8Calculator.cs" />
         <Compile Include="Extensions\StringExtension.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
