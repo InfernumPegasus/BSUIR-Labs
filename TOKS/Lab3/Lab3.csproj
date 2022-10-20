@@ -4,11 +4,11 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{EADBBEB0-FE92-478E-A067-1C13BBF4A73C}</ProjectGuid>
+        <ProjectGuid>{A33C7A82-4A20-484E-BE67-5504CE99AC60}</ProjectGuid>
         <OutputType>Exe</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>Lab2</RootNamespace>
-        <AssemblyName>Lab2</AssemblyName>
+        <RootNamespace>Lab3</RootNamespace>
+        <AssemblyName>Lab3</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,7 +39,10 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="PackageEncoder.cs" />
+        <Compile Include="DataPackage.cs" />
+        <Compile Include="Encoders\ByteStuffingPackageEncoder.cs" />
+        <Compile Include="Encoders\Crc8Calculator.cs" />
+        <Compile Include="Extensions\StringExtension.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SerialPortWrapper.cs" />
