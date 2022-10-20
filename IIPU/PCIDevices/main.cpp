@@ -155,7 +155,7 @@ void print_pci_devices_info() {
                     string device_name = find_device_name(vendor_id, device_id);
 //                    string device_class_name = get_device_class_name(bus, dev, fun);
 
-                    printf("%d:%d:%d Device name: %s\n"
+                    printf("%d:%d:%d %s\n"
 //                           "Device class: %s\n"
                            "\tVendorId: %04lx\n"
                            "\tDeviceId: %04lx\n\n",
