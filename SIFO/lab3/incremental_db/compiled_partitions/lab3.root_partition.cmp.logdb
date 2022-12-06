@@ -1,0 +1,9 @@
+v1
+RAM_PACKING,0,M512,18,18,SimpleDual,0,2,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a0,
+RAM_PACKING,0,M512,18,18,SimpleDual,0,5,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a1,
+RAM_PACKING,0,M512,18,18,SimpleDual,0,12,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a2,
+RAM_PACKING,0,M512,18,18,SimpleDual,0,9,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a3,
+RAM_PACKING,0,M512,18,18,SimpleDual,0,14,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a4,
+RAM_PACKING,0,M512,18,18,SimpleDual,0,11,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a5,
+RAM_PACKING,0,M512,18,18,SimpleDual,0,6,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a6,
+RAM_PACKING,0,M512,18,18,SimpleDual,0,7,10000000,lpm_dff0:inst|lpm_ff:lpm_ff_component|altshift_taps:dffs_rtl_0|shift_taps_h1m:auto_generated|altsyncram_q781:altsyncram2|ram_block3a7,
