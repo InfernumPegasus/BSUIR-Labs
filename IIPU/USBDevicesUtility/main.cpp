@@ -46,7 +46,10 @@ map<string, path> port_mount_map;
                     } while (mount_list_file);
 
                     istringstream iss {line };
-                    iss >> port_mount_map[port] >> port_mount_map[port];
+                    string name;
+                    iss >> name >> port_mount_map[port];
+
+                    cout << name << endl;
                     mount_path = port_mount_map[port];
                 }
             }
