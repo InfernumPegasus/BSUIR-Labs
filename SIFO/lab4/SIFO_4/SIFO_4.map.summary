@@ -1,0 +1,15 @@
+Analysis & Synthesis Status : Successful - Tue Nov 22 15:24:32 2022
+Quartus II Version : 9.1 Build 222 10/21/2009 SJ Web Edition
+Revision Name : SIFO_4
+Top-level Entity Name : SIFO_4
+Family : Stratix II
+Logic utilization : N/A
+    Combinational ALUTs : 52
+    Dedicated logic registers : 80
+Total registers : 80
+Total pins : 104
+Total virtual pins : 0
+Total block memory bits : 5,632
+DSP block 9-bit elements : 0
+Total PLLs : 0
+Total DLLs : 0

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="SIFO_4">
+		<CBX_INST_ENTRY INSTANCE_NAME="|SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component" CBX_FILE_NAME="cntr_qlh.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component" CBX_FILE_NAME="decode_e9f.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component" CBX_FILE_NAME="decode_p7f.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component" CBX_FILE_NAME="altsyncram_37a1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component" CBX_FILE_NAME="altsyncram_jk71.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component" CBX_FILE_NAME="cntr_qki.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|SIFO_4|lpm_decode0:inst27|lpm_decode:lpm_decode_component" CBX_FILE_NAME="decode_p7f.tdf"/>
+	</PROJECT>
+</LOG_ROOT>

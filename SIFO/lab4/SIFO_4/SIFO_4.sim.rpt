@@ -1,0 +1,654 @@
+Simulator report for SIFO_4
+Wed Dec 14 14:17:10 2022
+Quartus II Version 9.1 Build 222 10/21/2009 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Simulator Summary
+  3. Simulator Settings
+  4. Simulation Waveforms
+  5. |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ALTSYNCRAM
+  6. |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ALTSYNCRAM
+  7. Coverage Summary
+  8. Complete 1/0-Value Coverage
+  9. Missing 1-Value Coverage
+ 10. Missing 0-Value Coverage
+ 11. Simulator INI Usage
+ 12. Simulator Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2009 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++--------------------------------------------+
+; Simulator Summary                          ;
++-----------------------------+--------------+
+; Type                        ; Value        ;
++-----------------------------+--------------+
+; Simulation Start Time       ; 0 ps         ;
+; Simulation End Time         ; 1.0 us       ;
+; Simulation Netlist Size     ; 345 nodes    ;
+; Simulation Coverage         ;      52.25 % ;
+; Total Number of Transitions ; 4392         ;
+; Simulation Breakpoints      ; 0            ;
+; Family                      ; Stratix II   ;
++-----------------------------+--------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Simulator Settings                                                                                                      ;
++--------------------------------------------------------------------------------------------+------------+---------------+
+; Option                                                                                     ; Setting    ; Default Value ;
++--------------------------------------------------------------------------------------------+------------+---------------+
+; Simulation mode                                                                            ; Functional ; Timing        ;
+; Start time                                                                                 ; 0 ns       ; 0 ns          ;
+; Simulation results format                                                                  ; CVWF       ;               ;
+; Add pins automatically to simulation output waveforms                                      ; On         ; On            ;
+; Check outputs                                                                              ; Off        ; Off           ;
+; Report simulation coverage                                                                 ; On         ; On            ;
+; Display complete 1/0 value coverage report                                                 ; On         ; On            ;
+; Display missing 1-value coverage report                                                    ; On         ; On            ;
+; Display missing 0-value coverage report                                                    ; On         ; On            ;
+; Detect setup and hold time violations                                                      ; Off        ; Off           ;
+; Detect glitches                                                                            ; Off        ; Off           ;
+; Disable timing delays in Timing Simulation                                                 ; Off        ; Off           ;
+; Generate Signal Activity File                                                              ; Off        ; Off           ;
+; Generate VCD File for PowerPlay Power Analyzer                                             ; Off        ; Off           ;
+; Group bus channels in simulation results                                                   ; Off        ; Off           ;
+; Preserve fewer signal transitions to reduce memory requirements                            ; On         ; On            ;
+; Trigger vector comparison with the specified mode                                          ; INPUT_EDGE ; INPUT_EDGE    ;
+; Disable setup and hold time violations detection in input registers of bi-directional pins ; Off        ; Off           ;
+; Overwrite Waveform Inputs With Simulation Outputs                                          ; Off        ;               ;
+; Perform Glitch Filtering in Timing Simulation                                              ; Auto       ; Auto          ;
++--------------------------------------------------------------------------------------------+------------+---------------+
+
+
++----------------------+
+; Simulation Waveforms ;
++----------------------+
+Waveform report data cannot be output to ASCII.
+Please use Quartus II to view the waveform report data.
+
+
++---------------------------------------------------------------------------------------------------+
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ALTSYNCRAM ;
++---------------------------------------------------------------------------------------------------+
+Please refer to fitter text-based report (*.fit.rpt) to view logical memory report content in ASCII.
+
+
++-----------------------------------------------------------------------------------------------------+
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ALTSYNCRAM ;
++-----------------------------------------------------------------------------------------------------+
+Please refer to fitter text-based report (*.fit.rpt) to view logical memory report content in ASCII.
+
+
++--------------------------------------------------------------------+
+; Coverage Summary                                                   ;
++-----------------------------------------------------+--------------+
+; Type                                                ; Value        ;
++-----------------------------------------------------+--------------+
+; Total coverage as a percentage                      ;      52.25 % ;
+; Total nodes checked                                 ; 345          ;
+; Total output ports checked                          ; 356          ;
+; Total output ports with complete 1/0-value coverage ; 186          ;
+; Total output ports with no 1/0-value coverage       ; 124          ;
+; Total output ports with no 1-value coverage         ; 153          ;
+; Total output ports with no 0-value coverage         ; 141          ;
++-----------------------------------------------------+--------------+
+
+
+The following table displays output ports that toggle between 1 and 0 during simulation.
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Complete 1/0-Value Coverage                                                                                                                                                                                                                   ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+; Node Name                                                                                                  ; Output Port Name                                                                                              ; Output Port Type ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+; |SIFO_4|JMP                                                                                                ; |SIFO_4|JMP                                                                                                   ; pin_out          ;
+; |SIFO_4|controlREG1[10]                                                                                    ; |SIFO_4|controlREG1[10]                                                                                       ; pin_out          ;
+; |SIFO_4|controlREG1[9]                                                                                     ; |SIFO_4|controlREG1[9]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[8]                                                                                     ; |SIFO_4|controlREG1[8]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[7]                                                                                     ; |SIFO_4|controlREG1[7]                                                                                        ; pin_out          ;
+; |SIFO_4|inst7                                                                                              ; |SIFO_4|inst7                                                                                                 ; out0             ;
+; |SIFO_4|clk                                                                                                ; |SIFO_4|clk                                                                                                   ; out              ;
+; |SIFO_4|inst11                                                                                             ; |SIFO_4|inst11                                                                                                ; out0             ;
+; |SIFO_4|DCa[15]                                                                                            ; |SIFO_4|DCa[15]                                                                                               ; pin_out          ;
+; |SIFO_4|DCa[14]                                                                                            ; |SIFO_4|DCa[14]                                                                                               ; pin_out          ;
+; |SIFO_4|DCa[13]                                                                                            ; |SIFO_4|DCa[13]                                                                                               ; pin_out          ;
+; |SIFO_4|DCa[12]                                                                                            ; |SIFO_4|DCa[12]                                                                                               ; pin_out          ;
+; |SIFO_4|DCa[11]                                                                                            ; |SIFO_4|DCa[11]                                                                                               ; pin_out          ;
+; |SIFO_4|DCa[10]                                                                                            ; |SIFO_4|DCa[10]                                                                                               ; pin_out          ;
+; |SIFO_4|DCa[9]                                                                                             ; |SIFO_4|DCa[9]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[8]                                                                                             ; |SIFO_4|DCa[8]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[7]                                                                                             ; |SIFO_4|DCa[7]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[6]                                                                                             ; |SIFO_4|DCa[6]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[5]                                                                                             ; |SIFO_4|DCa[5]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[4]                                                                                             ; |SIFO_4|DCa[4]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[3]                                                                                             ; |SIFO_4|DCa[3]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[2]                                                                                             ; |SIFO_4|DCa[2]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[1]                                                                                             ; |SIFO_4|DCa[1]                                                                                                ; pin_out          ;
+; |SIFO_4|DCa[0]                                                                                             ; |SIFO_4|DCa[0]                                                                                                ; pin_out          ;
+; |SIFO_4|DATA[10]                                                                                           ; |SIFO_4|DATA[10]                                                                                              ; pin_out          ;
+; |SIFO_4|DATA[9]                                                                                            ; |SIFO_4|DATA[9]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[8]                                                                                            ; |SIFO_4|DATA[8]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[7]                                                                                            ; |SIFO_4|DATA[7]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[4]                                                                                            ; |SIFO_4|DATA[4]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[3]                                                                                            ; |SIFO_4|DATA[3]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[1]                                                                                            ; |SIFO_4|DATA[1]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[0]                                                                                            ; |SIFO_4|DATA[0]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA~0                                                                                             ; |SIFO_4|DATA~0                                                                                                ; out0             ;
+; |SIFO_4|DATA~1                                                                                             ; |SIFO_4|DATA~1                                                                                                ; out0             ;
+; |SIFO_4|DATA~2                                                                                             ; |SIFO_4|DATA~2                                                                                                ; out0             ;
+; |SIFO_4|DATA~3                                                                                             ; |SIFO_4|DATA~3                                                                                                ; out0             ;
+; |SIFO_4|DATA~6                                                                                             ; |SIFO_4|DATA~6                                                                                                ; out0             ;
+; |SIFO_4|DATA~7                                                                                             ; |SIFO_4|DATA~7                                                                                                ; out0             ;
+; |SIFO_4|DATA~9                                                                                             ; |SIFO_4|DATA~9                                                                                                ; out0             ;
+; |SIFO_4|DATA~10                                                                                            ; |SIFO_4|DATA~10                                                                                               ; out0             ;
+; |SIFO_4|ADDRESS[3]                                                                                         ; |SIFO_4|ADDRESS[3]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[2]                                                                                         ; |SIFO_4|ADDRESS[2]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[1]                                                                                         ; |SIFO_4|ADDRESS[1]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[0]                                                                                         ; |SIFO_4|ADDRESS[0]                                                                                            ; pin_out          ;
+; |SIFO_4|inst17                                                                                             ; |SIFO_4|inst17                                                                                                ; out0             ;
+; |SIFO_4|inst5                                                                                              ; |SIFO_4|inst5                                                                                                 ; out0             ;
+; |SIFO_4|controlREG2[10]                                                                                    ; |SIFO_4|controlREG2[10]                                                                                       ; pin_out          ;
+; |SIFO_4|controlREG2[9]                                                                                     ; |SIFO_4|controlREG2[9]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[8]                                                                                     ; |SIFO_4|controlREG2[8]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[7]                                                                                     ; |SIFO_4|controlREG2[7]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[4]                                                                                     ; |SIFO_4|controlREG2[4]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[3]                                                                                     ; |SIFO_4|controlREG2[3]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[1]                                                                                     ; |SIFO_4|controlREG2[1]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[0]                                                                                     ; |SIFO_4|controlREG2[0]                                                                                        ; pin_out          ;
+; |SIFO_4|inst8                                                                                              ; |SIFO_4|inst8                                                                                                 ; out0             ;
+; |SIFO_4|inst12                                                                                             ; |SIFO_4|inst12                                                                                                ; out0             ;
+; |SIFO_4|inst26                                                                                             ; |SIFO_4|inst26                                                                                                ; regout           ;
+; |SIFO_4|inst22                                                                                             ; |SIFO_4|inst22                                                                                                ; out0             ;
+; |SIFO_4|inst46                                                                                             ; |SIFO_4|inst46                                                                                                ; out0             ;
+; |SIFO_4|inst14                                                                                             ; |SIFO_4|inst14                                                                                                ; out0             ;
+; |SIFO_4|inst37                                                                                             ; |SIFO_4|inst37                                                                                                ; out0             ;
+; |SIFO_4|inst41                                                                                             ; |SIFO_4|inst41                                                                                                ; out0             ;
+; |SIFO_4|inst47                                                                                             ; |SIFO_4|inst47                                                                                                ; out0             ;
+; |SIFO_4|inst38                                                                                             ; |SIFO_4|inst38                                                                                                ; out0             ;
+; |SIFO_4|inst40                                                                                             ; |SIFO_4|inst40                                                                                                ; out0             ;
+; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode15w[2]         ; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode15w[2]            ; out0             ;
+; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode1w[2]          ; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode1w[2]             ; out0             ;
+; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode24w[2]         ; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode24w[2]            ; out0             ;
+; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode33w[2]         ; |SIFO_4|lpm_decode4:inst28|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode33w[2]            ; out0             ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[9]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[9]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[4]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[4]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[3]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[3]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[1]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[1]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[0]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[0]                                            ; out              ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a0        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[0]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a1        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[1]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a3        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[3]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a4        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[4]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a7        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[7]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a8        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[8]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a9        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[9]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a10       ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[10]                ; portadataout0    ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[10]                                        ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[10]                                           ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[9]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[9]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[8]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[8]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[7]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[7]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[4]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[4]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[3]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[3]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[1]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[1]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[0]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[0]                                            ; out              ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[10]                                                    ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[10]                                                       ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[9]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[9]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[8]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[8]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[7]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[7]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[4]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[4]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[3]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[3]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[1]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[1]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[0]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[0]                                                        ; regout           ;
+; |SIFO_4|lpm_bustri0:inst18|tridata[0]~0                                                                    ; |SIFO_4|lpm_bustri0:inst18|tridata[0]~0                                                                       ; out0             ;
+; |SIFO_4|lpm_bustri0:inst18|tridata[1]~1                                                                    ; |SIFO_4|lpm_bustri0:inst18|tridata[1]~1                                                                       ; out0             ;
+; |SIFO_4|lpm_bustri0:inst18|lpm_bustri:lpm_bustri_component|dout[1]                                         ; |SIFO_4|lpm_bustri0:inst18|lpm_bustri:lpm_bustri_component|dout[1]                                            ; out              ;
+; |SIFO_4|lpm_bustri0:inst18|lpm_bustri:lpm_bustri_component|dout[0]                                         ; |SIFO_4|lpm_bustri0:inst18|lpm_bustri:lpm_bustri_component|dout[0]                                            ; out              ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita0   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita0      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita0   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita0~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita1   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita1      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita1   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita1~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita2   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita2      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita2   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita2~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita3   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita3      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita3   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita3~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita4   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita4      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita4   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita4~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita5   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita5      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[3] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[3]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[2] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[2]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[1] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[1]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[0] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[0]               ; regout           ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[3]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[3]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[2]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[2]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[1]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[1]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[0]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[0]                                            ; out              ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita0     ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita0        ; sumout           ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita0     ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita0~COUT   ; cout             ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita1     ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita1        ; sumout           ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita1     ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita1~COUT   ; cout             ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita2     ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita2        ; sumout           ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita2     ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita2~COUT   ; cout             ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita3     ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_comb_bita3        ; sumout           ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_reg_bit1a[3]   ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|safe_q[3]                 ; regout           ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_reg_bit1a[2]   ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|safe_q[2]                 ; regout           ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_reg_bit1a[1]   ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|safe_q[1]                 ; regout           ;
+; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|counter_reg_bit1a[0]   ; |SIFO_4|lpm_counter0:inst|lpm_counter:lpm_counter_component|cntr_qlh:auto_generated|safe_q[0]                 ; regout           ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode102w[3]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode102w[3]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode102w[2]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode102w[2]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode102w[1]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode102w[1]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode112w[3]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode112w[3]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode112w[2]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode112w[2]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode112w[1]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode112w[1]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode122w[3]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode122w[3]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode122w[2]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode122w[2]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode122w[1]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode122w[1]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode132w[3]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode132w[3]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode132w[2]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode132w[2]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode132w[1]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode132w[1]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode142w[3]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode142w[3]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode142w[2]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode142w[2]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode142w[1]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode142w[1]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode152w[3]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode152w[3]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode152w[2]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode152w[2]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode152w[1]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode152w[1]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode162w[3]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode162w[3]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode162w[2]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode162w[2]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode162w[1]         ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode162w[1]            ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode21w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode21w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode21w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode21w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode21w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode21w[1]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode31w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode31w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode31w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode31w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode31w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode31w[1]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode41w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode41w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode41w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode41w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode41w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode41w[1]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode4w[3]           ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode4w[3]              ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode4w[2]           ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode4w[2]              ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode4w[1]           ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode4w[1]              ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode51w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode51w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode51w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode51w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode51w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode51w[1]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode61w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode61w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode61w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode61w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode61w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode61w[1]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode71w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode71w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode71w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode71w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode71w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode71w[1]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode81w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode81w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode81w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode81w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode81w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode81w[1]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode91w[3]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode91w[3]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode91w[2]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode91w[2]             ; out0             ;
+; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode91w[1]          ; |SIFO_4|lpm_decode3:inst1|lpm_decode:lpm_decode_component|decode_e9f:auto_generated|w_anode91w[1]             ; out0             ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[10]                                                    ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[10]                                                       ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[9]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[9]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[8]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[8]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[7]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[7]                                                        ; regout           ;
+; |SIFO_4|lpm_decode0:inst27|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode15w[2]         ; |SIFO_4|lpm_decode0:inst27|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode15w[2]            ; out0             ;
+; |SIFO_4|lpm_decode0:inst27|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode24w[2]         ; |SIFO_4|lpm_decode0:inst27|lpm_decode:lpm_decode_component|decode_p7f:auto_generated|w_anode24w[2]            ; out0             ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+
+
+The following table displays output ports that do not toggle to 1 during simulation.
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Missing 1-Value Coverage                                                                                                                                                                                                                      ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+; Node Name                                                                                                  ; Output Port Name                                                                                              ; Output Port Type ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+; |SIFO_4|controlREG1[6]                                                                                     ; |SIFO_4|controlREG1[6]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[5]                                                                                     ; |SIFO_4|controlREG1[5]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[4]                                                                                     ; |SIFO_4|controlREG1[4]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[3]                                                                                     ; |SIFO_4|controlREG1[3]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[2]                                                                                     ; |SIFO_4|controlREG1[2]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[1]                                                                                     ; |SIFO_4|controlREG1[1]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG1[0]                                                                                     ; |SIFO_4|controlREG1[0]                                                                                        ; pin_out          ;
+; |SIFO_4|DATA[6]                                                                                            ; |SIFO_4|DATA[6]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[5]                                                                                            ; |SIFO_4|DATA[5]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA[2]                                                                                            ; |SIFO_4|DATA[2]                                                                                               ; pin_out          ;
+; |SIFO_4|DATA~4                                                                                             ; |SIFO_4|DATA~4                                                                                                ; out0             ;
+; |SIFO_4|DATA~5                                                                                             ; |SIFO_4|DATA~5                                                                                                ; out0             ;
+; |SIFO_4|DATA~8                                                                                             ; |SIFO_4|DATA~8                                                                                                ; out0             ;
+; |SIFO_4|ADDRESS[8]                                                                                         ; |SIFO_4|ADDRESS[8]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[7]                                                                                         ; |SIFO_4|ADDRESS[7]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[6]                                                                                         ; |SIFO_4|ADDRESS[6]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[5]                                                                                         ; |SIFO_4|ADDRESS[5]                                                                                            ; pin_out          ;
+; |SIFO_4|controlREG2[6]                                                                                     ; |SIFO_4|controlREG2[6]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[5]                                                                                     ; |SIFO_4|controlREG2[5]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[2]                                                                                     ; |SIFO_4|controlREG2[2]                                                                                        ; pin_out          ;
+; |SIFO_4|AXR[10]                                                                                            ; |SIFO_4|AXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|AXR[8]                                                                                             ; |SIFO_4|AXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[7]                                                                                             ; |SIFO_4|AXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[6]                                                                                             ; |SIFO_4|AXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[5]                                                                                             ; |SIFO_4|AXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[4]                                                                                             ; |SIFO_4|AXR[4]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[3]                                                                                             ; |SIFO_4|AXR[3]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[2]                                                                                             ; |SIFO_4|AXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[1]                                                                                             ; |SIFO_4|AXR[1]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[0]                                                                                             ; |SIFO_4|AXR[0]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[10]                                                                                            ; |SIFO_4|BXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|BXR[9]                                                                                             ; |SIFO_4|BXR[9]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[8]                                                                                             ; |SIFO_4|BXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[7]                                                                                             ; |SIFO_4|BXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[6]                                                                                             ; |SIFO_4|BXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[5]                                                                                             ; |SIFO_4|BXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[2]                                                                                             ; |SIFO_4|BXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[10]                                                                                            ; |SIFO_4|CXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|CXR[9]                                                                                             ; |SIFO_4|CXR[9]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[8]                                                                                             ; |SIFO_4|CXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[7]                                                                                             ; |SIFO_4|CXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[6]                                                                                             ; |SIFO_4|CXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[5]                                                                                             ; |SIFO_4|CXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[4]                                                                                             ; |SIFO_4|CXR[4]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[3]                                                                                             ; |SIFO_4|CXR[3]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[2]                                                                                             ; |SIFO_4|CXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[1]                                                                                             ; |SIFO_4|CXR[1]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[0]                                                                                             ; |SIFO_4|CXR[0]                                                                                                ; pin_out          ;
+; |SIFO_4|inst39                                                                                             ; |SIFO_4|inst39                                                                                                ; out0             ;
+; |SIFO_4|DXR[10]                                                                                            ; |SIFO_4|DXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|DXR[9]                                                                                             ; |SIFO_4|DXR[9]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[8]                                                                                             ; |SIFO_4|DXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[7]                                                                                             ; |SIFO_4|DXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[6]                                                                                             ; |SIFO_4|DXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[5]                                                                                             ; |SIFO_4|DXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[4]                                                                                             ; |SIFO_4|DXR[4]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[3]                                                                                             ; |SIFO_4|DXR[3]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[2]                                                                                             ; |SIFO_4|DXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[9]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[9]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[4]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[4]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[3]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[3]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[9]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[9]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[4]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[4]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[3]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[3]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[1]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[1]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[0]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[0]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[9]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[9]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[4]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[4]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[3]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[3]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[1]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[1]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[0]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[0]                                                             ; regout           ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[10]                                        ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[10]                                           ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[8]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[8]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[7]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[7]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[6]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[6]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[5]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[5]                                            ; out              ;
+; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[2]                                         ; |SIFO_4|lpm_bustri2:inst29|lpm_bustri:lpm_bustri_component|dout[2]                                            ; out              ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a2        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[2]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a5        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[5]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a6        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[6]                 ; portadataout0    ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[6]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[6]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[5]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[5]                                            ; out              ;
+; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[2]                                         ; |SIFO_4|lpm_bustri4:inst23|lpm_bustri:lpm_bustri_component|dout[2]                                            ; out              ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[6]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[6]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[5]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[5]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[2]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[2]                                                        ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita5   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita5~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita8   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita8      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[8] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[8]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[7] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[7]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[6] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[6]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[5] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[5]               ; regout           ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[8]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[8]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[7]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[7]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[6]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[6]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[5]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[5]                                            ; out              ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a0      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[0]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a1      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[1]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a2      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[2]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a3      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[3]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a4      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[4]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a5      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[5]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a6      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[6]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a7      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[7]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a8      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[8]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a9      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[9]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a10     ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[10]              ; portadataout0    ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[10]                                         ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[10]                                            ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[9]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[9]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[8]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[8]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[7]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[7]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[6]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[6]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[5]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[5]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[4]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[4]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[3]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[3]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[2]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[2]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[1]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[1]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[0]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[0]                                             ; out              ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[6]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[6]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[5]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[5]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[4]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[4]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[3]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[3]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[2]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[2]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[1]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[1]                                                        ; regout           ;
+; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[0]                                                     ; |SIFO_4|lpm_dff0:inst3|lpm_ff:lpm_ff_component|dffs[0]                                                        ; regout           ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+
+
+The following table displays output ports that do not toggle to 0 during simulation.
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Missing 0-Value Coverage                                                                                                                                                                                                                      ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+; Node Name                                                                                                  ; Output Port Name                                                                                              ; Output Port Type ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+; |SIFO_4|ADDRESS[8]                                                                                         ; |SIFO_4|ADDRESS[8]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[7]                                                                                         ; |SIFO_4|ADDRESS[7]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[6]                                                                                         ; |SIFO_4|ADDRESS[6]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[5]                                                                                         ; |SIFO_4|ADDRESS[5]                                                                                            ; pin_out          ;
+; |SIFO_4|ADDRESS[4]                                                                                         ; |SIFO_4|ADDRESS[4]                                                                                            ; pin_out          ;
+; |SIFO_4|controlREG2[6]                                                                                     ; |SIFO_4|controlREG2[6]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[5]                                                                                     ; |SIFO_4|controlREG2[5]                                                                                        ; pin_out          ;
+; |SIFO_4|controlREG2[2]                                                                                     ; |SIFO_4|controlREG2[2]                                                                                        ; pin_out          ;
+; |SIFO_4|AXR[10]                                                                                            ; |SIFO_4|AXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|AXR[9]                                                                                             ; |SIFO_4|AXR[9]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[8]                                                                                             ; |SIFO_4|AXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[7]                                                                                             ; |SIFO_4|AXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[6]                                                                                             ; |SIFO_4|AXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[5]                                                                                             ; |SIFO_4|AXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[4]                                                                                             ; |SIFO_4|AXR[4]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[3]                                                                                             ; |SIFO_4|AXR[3]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[2]                                                                                             ; |SIFO_4|AXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[1]                                                                                             ; |SIFO_4|AXR[1]                                                                                                ; pin_out          ;
+; |SIFO_4|AXR[0]                                                                                             ; |SIFO_4|AXR[0]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[10]                                                                                            ; |SIFO_4|BXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|BXR[9]                                                                                             ; |SIFO_4|BXR[9]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[8]                                                                                             ; |SIFO_4|BXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[7]                                                                                             ; |SIFO_4|BXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[6]                                                                                             ; |SIFO_4|BXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[5]                                                                                             ; |SIFO_4|BXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[4]                                                                                             ; |SIFO_4|BXR[4]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[3]                                                                                             ; |SIFO_4|BXR[3]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[2]                                                                                             ; |SIFO_4|BXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[1]                                                                                             ; |SIFO_4|BXR[1]                                                                                                ; pin_out          ;
+; |SIFO_4|BXR[0]                                                                                             ; |SIFO_4|BXR[0]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[10]                                                                                            ; |SIFO_4|CXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|CXR[9]                                                                                             ; |SIFO_4|CXR[9]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[8]                                                                                             ; |SIFO_4|CXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[7]                                                                                             ; |SIFO_4|CXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[6]                                                                                             ; |SIFO_4|CXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[5]                                                                                             ; |SIFO_4|CXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[4]                                                                                             ; |SIFO_4|CXR[4]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[3]                                                                                             ; |SIFO_4|CXR[3]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[2]                                                                                             ; |SIFO_4|CXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[1]                                                                                             ; |SIFO_4|CXR[1]                                                                                                ; pin_out          ;
+; |SIFO_4|CXR[0]                                                                                             ; |SIFO_4|CXR[0]                                                                                                ; pin_out          ;
+; |SIFO_4|inst39                                                                                             ; |SIFO_4|inst39                                                                                                ; out0             ;
+; |SIFO_4|DXR[10]                                                                                            ; |SIFO_4|DXR[10]                                                                                               ; pin_out          ;
+; |SIFO_4|DXR[9]                                                                                             ; |SIFO_4|DXR[9]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[8]                                                                                             ; |SIFO_4|DXR[8]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[7]                                                                                             ; |SIFO_4|DXR[7]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[6]                                                                                             ; |SIFO_4|DXR[6]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[5]                                                                                             ; |SIFO_4|DXR[5]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[4]                                                                                             ; |SIFO_4|DXR[4]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[3]                                                                                             ; |SIFO_4|DXR[3]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[2]                                                                                             ; |SIFO_4|DXR[2]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[1]                                                                                             ; |SIFO_4|DXR[1]                                                                                                ; pin_out          ;
+; |SIFO_4|DXR[0]                                                                                             ; |SIFO_4|DXR[0]                                                                                                ; pin_out          ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[9]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[9]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[4]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[4]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[3]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[3]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[1]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[1]                                                             ; regout           ;
+; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[0]                                                          ; |SIFO_4|DX:inst33|lpm_ff:lpm_ff_component|dffs[0]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[9]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[9]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[4]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[4]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[3]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[3]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[1]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[1]                                                             ; regout           ;
+; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[0]                                                          ; |SIFO_4|CX:inst32|lpm_ff:lpm_ff_component|dffs[0]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[9]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[9]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[4]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[4]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[3]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[3]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[1]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[1]                                                             ; regout           ;
+; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[0]                                                          ; |SIFO_4|BX:inst31|lpm_ff:lpm_ff_component|dffs[0]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[10]                                                         ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[10]                                                            ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[9]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[9]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[8]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[8]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[7]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[7]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[6]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[6]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[5]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[5]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[4]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[4]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[3]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[3]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[2]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[2]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[1]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[1]                                                             ; regout           ;
+; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[0]                                                          ; |SIFO_4|AX:inst30|lpm_ff:lpm_ff_component|dffs[0]                                                             ; regout           ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a2        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[2]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a5        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[5]                 ; portadataout0    ;
+; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|ram_block1a6        ; |SIFO_4|lpm_rom1:inst21|altsyncram:altsyncram_component|altsyncram_jk71:auto_generated|q_a[6]                 ; portadataout0    ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[6]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[6]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[5]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[5]                                                        ; regout           ;
+; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[2]                                                     ; |SIFO_4|lpm_dff1:inst4|lpm_ff:lpm_ff_component|dffs[2]                                                        ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita5   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita5~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita6~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita7~COUT ; cout             ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita8   ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_comb_bita8      ; sumout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[8] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[8]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[7] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[7]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[6] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[6]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[5] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[5]               ; regout           ;
+; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|counter_reg_bit1a[4] ; |SIFO_4|lpm_counter1:inst15|lpm_counter:lpm_counter_component|cntr_qki:auto_generated|safe_q[4]               ; regout           ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[8]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[8]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[7]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[7]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[6]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[6]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[5]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[5]                                            ; out              ;
+; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[4]                                         ; |SIFO_4|lpm_bustri1:inst24|lpm_bustri:lpm_bustri_component|dout[4]                                            ; out              ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a0      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[0]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a1      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[1]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a2      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[2]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a3      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[3]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a4      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[4]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a5      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[5]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a6      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[6]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a7      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[7]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a8      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[8]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a9      ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[9]               ; portadataout0    ;
+; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|ram_block1a10     ; |SIFO_4|lpm_ram_dq0:inst2|altsyncram:altsyncram_component|altsyncram_37a1:auto_generated|q_a[10]              ; portadataout0    ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[10]                                         ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[10]                                            ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[9]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[9]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[8]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[8]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[7]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[7]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[6]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[6]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[5]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[5]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[4]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[4]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[3]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[3]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[2]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[2]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[1]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[1]                                             ; out              ;
+; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[0]                                          ; |SIFO_4|lpm_bustri5:inst6|lpm_bustri:lpm_bustri_component|dout[0]                                             ; out              ;
++------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+------------------+
+
+
++---------------------+
+; Simulator INI Usage ;
++--------+------------+
+; Option ; Usage      ;
++--------+------------+
+
+
++--------------------+
+; Simulator Messages ;
++--------------------+
+Info: *******************************************************************
+Info: Running Quartus II Simulator
+    Info: Version 9.1 Build 222 10/21/2009 SJ Web Edition
+    Info: Processing started: Wed Dec 14 14:17:10 2022
+Info: Command: quartus_sim --read_settings_files=on --write_settings_files=off SIFO_4 -c SIFO_4
+Info: Using vector source file "C:/Users/User/Desktop/SIFO_4/SIFO_4.vwf"
+Info: Option to preserve fewer signal transitions to reduce memory requirements is enabled
+    Info: Simulation has been partitioned into sub-simulations according to the maximum transition count determined by the engine. Transitions from memory will be flushed out to disk at the end of each sub-simulation to reduce memory requirements.
+Info: Simulation partitioned into 1 sub-simulations
+Info: Simulation coverage is      52.25 %
+Info: Number of transitions in simulation is 4392
+Info: Quartus II Simulator was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 145 megabytes
+    Info: Processing ended: Wed Dec 14 14:17:10 2022
+    Info: Elapsed time: 00:00:00
+    Info: Total CPU time (on all processors): 00:00:00
+
+
