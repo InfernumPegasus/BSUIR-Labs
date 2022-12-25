@@ -1,0 +1,336 @@
+--------------------------------------------------------------------------------------
+Timing Analyzer Summary
+--------------------------------------------------------------------------------------
+
+Type           : Worst-case tsu
+Slack          : N/A
+Required Time  : None
+Actual Time    : 7.521 ns
+From           : read
+To             : cache:inst138|cache_line:inst136|lpm_dff0:inst5|lpm_ff:lpm_ff_component|dffs[0]
+From Clock     : --
+To Clock       : clk
+Failed Paths   : 0
+
+Type           : Worst-case tco
+Slack          : N/A
+Required Time  : None
+Actual Time    : 21.287 ns
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : data[6]
+From Clock     : clk
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case tpd
+Slack          : N/A
+Required Time  : None
+Actual Time    : 19.075 ns
+From           : read
+To             : data[6]
+From Clock     : --
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case th
+Slack          : N/A
+Required Time  : None
+Actual Time    : -0.212 ns
+From           : read
+To             : cache:inst138|lpm_dff6:inst508|lpm_ff:lpm_ff_component|dffs[0]
+From Clock     : --
+To Clock       : clk
+Failed Paths   : 0
+
+Type           : Clock Setup: 'clk'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 48.59 MHz ( period = 20.582 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|cache_line:inst133|lpm_dff0:inst5|lpm_ff:lpm_ff_component|dffs[0]
+From Clock     : clk
+To Clock       : clk
+Failed Paths   : 0
+
+Type           : Clock Setup: 'address[6]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 78.53 MHz ( period = 12.734 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : address[6]
+To Clock       : address[6]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'address[3]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 81.67 MHz ( period = 12.245 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : address[3]
+To Clock       : address[3]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'address[9]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 81.77 MHz ( period = 12.230 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : address[9]
+To Clock       : address[9]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'address[5]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 82.09 MHz ( period = 12.182 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : address[5]
+To Clock       : address[5]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'address[4]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 82.75 MHz ( period = 12.084 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : address[4]
+To Clock       : address[4]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'address[7]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 83.26 MHz ( period = 12.011 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : address[7]
+To Clock       : address[7]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'address[8]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 83.83 MHz ( period = 11.929 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : address[8]
+To Clock       : address[8]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'read'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 91.84 MHz ( period = 10.888 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : read
+To Clock       : read
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 91.84 MHz ( period = 10.888 ns )
+From           : cache:inst138|lpm_counter20:inst523|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[7]
+To             : cache:inst138|lpm_dff3:inst83|lpm_ff:lpm_ff_component|dffs[3]
+From Clock     : write
+To Clock       : write
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[0]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[0]
+To Clock       : write_data[0]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[1]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[1]
+To Clock       : write_data[1]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[3]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[3]
+To Clock       : write_data[3]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[5]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[5]
+To Clock       : write_data[5]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[4]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[4]
+To Clock       : write_data[4]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[2]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[2]
+To Clock       : write_data[2]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[6]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[6]
+To Clock       : write_data[6]
+Failed Paths   : 0
+
+Type           : Clock Setup: 'write_data[7]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : Restricted to 500.00 MHz ( period = 2.000 ns )
+From           : cache:inst138|continuous_ram_control:inst98|inst41
+To             : cache:inst138|continuous_ram_control:inst98|inst41
+From Clock     : write_data[7]
+To Clock       : write_data[7]
+Failed Paths   : 0
+
+Type           : Clock Hold: 'clk'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst537|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[4]
+To             : cache:inst138|lpm_counter20:inst537|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[4]
+From Clock     : clk
+To Clock       : clk
+Failed Paths   : 589
+
+Type           : Clock Hold: 'address[6]'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : address[6]
+To Clock       : address[6]
+Failed Paths   : 577
+
+Type           : Clock Hold: 'address[3]'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : address[3]
+To Clock       : address[3]
+Failed Paths   : 577
+
+Type           : Clock Hold: 'address[9]'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : address[9]
+To Clock       : address[9]
+Failed Paths   : 577
+
+Type           : Clock Hold: 'address[5]'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : address[5]
+To Clock       : address[5]
+Failed Paths   : 577
+
+Type           : Clock Hold: 'address[4]'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : address[4]
+To Clock       : address[4]
+Failed Paths   : 577
+
+Type           : Clock Hold: 'address[7]'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : address[7]
+To Clock       : address[7]
+Failed Paths   : 577
+
+Type           : Clock Hold: 'address[8]'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : address[8]
+To Clock       : address[8]
+Failed Paths   : 577
+
+Type           : Clock Hold: 'write'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : write
+To Clock       : write
+Failed Paths   : 33
+
+Type           : Clock Hold: 'read'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+To             : cache:inst138|lpm_counter20:inst507|lpm_counter:lpm_counter_component|cntr_ulh:auto_generated|safe_q[2]
+From Clock     : read
+To Clock       : read
+Failed Paths   : 32
+
+Type           : Total number of failed paths
+Slack          : 
+Required Time  : 
+Actual Time    : 
+From           : 
+To             : 
+From Clock     : 
+To Clock       : 
+Failed Paths   : 4693
+
+--------------------------------------------------------------------------------------
+
