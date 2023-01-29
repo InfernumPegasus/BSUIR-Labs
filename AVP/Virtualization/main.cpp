@@ -1,66 +1,101 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <chrono>
 
 using std::size_t;
+using std::vector;
 
-template<class MatrixContentType>
-class MatrixOperations {
-public:
-    virtual MatrixContentType& operator*=(const MatrixContentType& rhs) = 0;
-};
-
-template<class T>
-class TMatrix;
+using std::cout;
+using std::endl;
 
 using RequiredType = double;
-using NestedMatrixType = TMatrix<RequiredType>;
+using Submatrix = RequiredType **;
+using Matrix = Submatrix **;
 
-template<>
-class TMatrix<RequiredType> /*: public MatrixOperations<TMatrix<RequiredType>>*/ {
+std::random_device randomDevice;
+std::mt19937 gen(randomDevice());
+std::uniform_int_distribution<> distribution(0, 100);
+
+class TMatrix {
 public:
-    TMatrix(size_t rows, size_t columns) : rows_(rows), columns_(columns), matrix_(rows_) {
-        for (auto &row: matrix_)
-            row.resize(columns_);
+    TMatrix(size_t rows, size_t columns) : rows_(rows), columns_(columns) {
+        matrix_ = new Submatrix *[rows_];
+        for (int i {0}; i < rows_; i++) {
+            matrix_[i] = new Submatrix[columns_];
+            for (int j {0}; j < columns_; j++) {
+                matrix_[i][j] = new RequiredType *[NESTED_MATRIX_ROWS];
+                for (int k {0}; k < NESTED_MATRIX_ROWS; k++) {
+                    matrix_[i][j][k] = new RequiredType[NESTED_MATRIX_COLUMNS];
+                }
+            }
+        }
+        cout << "Object constructed.\n";
     }
 
-    ~TMatrix() = default;
+    ~TMatrix() {
+        for (int i{0}; i < rows_; i++) {
+            delete [] matrix_[i];
+        }
+        delete [] matrix_;
+        cout << "Object destructed.\n";
+    }
 
 public:
-    TMatrix &operator*=(const TMatrix &rhs) {
-        if (rhs.rows_ != columns_) {
+    TMatrix Multiply(const TMatrix& rhs) {
+        auto rows1 = rows_;
+        auto columns1 = columns_;
+        auto rows2 = rhs.rows_;
+        auto columns2 = rhs.columns_;
+
+        if (rows2 != columns1) {
             throw std::out_of_range("Rows and columns of matrices are not equal!");
         }
 
-        TMatrix temp(rows_, rhs.columns_);
+        TMatrix temp(rows1, columns2);
+//        cout << "rows1: " << rows1 << " columns1: " << columns1
+//        << " rows2: " << rows2 << " columns: " << columns2 << endl;
 
-        for (size_t i = 0; i < temp.rows_; i++)
-            for (size_t j = 0; j < temp.columns_; j++)
-                for (size_t k = 0; k < columns_; k++)
-                    temp[i][j] += matrix_[i][k] * rhs[k][j];
+        Submatrix res;
+        res = new RequiredType *[NESTED_MATRIX_ROWS];
+        for (int i {0}; i < NESTED_MATRIX_ROWS; i++) {
+            res[i] = new RequiredType[NESTED_MATRIX_COLUMNS];
+        }
 
-        std::swap(matrix_, temp.matrix_);
-        std::swap(columns_, temp.columns_);
+        for (int i {0}; i < rows1; i++) {
+            if (i % 100 == 0)
+                cout << "Processing " << i << " of " << rows1 << endl;
+            for (int j{0}; j < columns2; j++)
+                for (int k{0}; k < rows2; k++)
+                    temp.matrix_[i][j] = MultiplySubmatrix(matrix_[i][k], rhs.matrix_[k][j], res);
+        }
 
-        return *this;
+        return temp;
     }
 
-    std::vector<RequiredType> &operator[](size_t i) {
-        return matrix_[i];
-    }
+    static Submatrix MultiplySubmatrix(const Submatrix &m1,
+                                       const Submatrix &m2,
+                                       Submatrix &res) {
+        for (int i {0}; i < NESTED_MATRIX_ROWS; i++)
+            for (int j {0}; j < NESTED_MATRIX_COLUMNS; j++)
+                for (int k {0}; k < NESTED_MATRIX_ROWS; k++)
+                    res[i][j] += m1[i][k] * m2[k][j];
 
-    const std::vector<RequiredType> &operator[](size_t i) const {
-        return matrix_[i];
-    }
-
-    TMatrix operator*(const TMatrix &rhs) {
-        return *this *= rhs;
+        return res;
     }
 
     bool operator==(const TMatrix &rhs) const {
-        return rows_ == rhs.rows_ &&
-               columns_ == rhs.columns_ &&
-               matrix_ == rhs.matrix_;
+        if (rows_ != rhs.rows_ ||
+            columns_ != rhs.columns_) {
+            return false;
+        }
+        for (size_t i = 0; i < rhs.rows_; i++)
+            for (size_t j = 0; j < rhs.columns_; j++)
+                for (size_t k = 0; k < NESTED_MATRIX_ROWS; k++)
+                    for (size_t l = 0; l < NESTED_MATRIX_COLUMNS; l++)
+                        if (rhs.matrix_[i][j][k][l] != matrix_[i][j][k][l])
+                            return false;
+        return true;
     }
 
 public:
@@ -72,57 +107,69 @@ public:
         return columns_;
     }
 
-    void FillRandom() {
-        std::random_device randomDevice;
-        std::mt19937 gen(randomDevice());
-        std::uniform_int_distribution<> distribution(0, 100);
-
-        for (size_t i = 0; i < rows_; i++) {
-            for (size_t j = 0; j < columns_; j++) {
-                matrix_[i][j] = distribution(gen);
-            }
-        }
-    }
-
     void Print() const {
-        for (size_t i = 0; i < rows_; i++) {
-            for (size_t j = 0; j < columns_; j++) {
-                std::cout << matrix_[i][j] << "\t";
+        for (size_t i = 0; i < rows_; i++)
+            for (size_t j = 0; j < columns_; j++)
+                PrintSubmatrix(matrix_[i][j]);
+    }
+
+    void FillRandom() {
+        for (size_t i = 0; i < rows_; i++)
+            for (size_t j = 0; j < columns_; j++)
+                FillSubmatrixRandom(matrix_[i][j]);
+    }
+
+private:
+    static void FillSubmatrixRandom(Submatrix &submatrix) {
+        for (size_t i = 0; i < NESTED_MATRIX_ROWS; i++) {
+            for (size_t j = 0; j < NESTED_MATRIX_COLUMNS; j++) {
+                submatrix[i][j] = distribution(gen);
             }
-            std::cout << std::endl;
         }
     }
+    static void PrintSubmatrix(const Submatrix &submatrix) {
+        printf("[\n");
+        for (size_t i = 0; i < NESTED_MATRIX_ROWS; i++) {
+            for (size_t j = 0; j < NESTED_MATRIX_COLUMNS; j++) {
+                std::cout << submatrix[i][j] << "\t";
+            }
+            std::cout << "\n";
+        }
+        printf("]\n");
+    }
+
+public:
+    static constexpr auto NESTED_MATRIX_ROWS {4};
+    static constexpr auto NESTED_MATRIX_COLUMNS {3};
 
 private:
     size_t rows_;
     size_t columns_;
 
-    std::vector<std::vector<RequiredType>> matrix_;
+    Matrix matrix_;
 };
 
-void f(TMatrix<RequiredType> &matrix, const TMatrix<RequiredType> &other) {
-    auto a = matrix * other;
-}
-
 int main() {
-    using std::cout;
-    using std::endl;
-
-    TMatrix<RequiredType> tMatrix1(23, 12);
-    TMatrix<RequiredType> tMatrix2(12, 4);
+    TMatrix tMatrix1(300, 300);
+    TMatrix tMatrix2(300, 300);
 
     cout << "T1: " << tMatrix1.GetRows() << " " << tMatrix1.GetColumns() << endl;
     tMatrix1.FillRandom();
-    tMatrix1.Print();
+//    tMatrix1.Print();
+//    cout << endl;
     cout << "T2: " << tMatrix2.GetRows() << " " << tMatrix2.GetColumns() << endl;
     tMatrix2.FillRandom();
-    tMatrix2.Print();
+//    tMatrix2.Print();
+//    cout << endl;
 
-    auto multiplied = tMatrix1 * tMatrix2;
+    auto start = std::chrono::high_resolution_clock::now();
+    auto multiplied = tMatrix1.Multiply(tMatrix2);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto dif = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    std::cout << "Time : " << dif << endl;
+
     cout << "T3: " << multiplied.GetRows() << " " << multiplied.GetColumns() << endl;
-    TMatrix<RequiredType> tMatrix3(23, 4);
-    multiplied.Print();
-//    cout << std::boolalpha << (tMatrix3 == multiplied) << endl;
+//    multiplied.Print();
 
     return 0;
 }
