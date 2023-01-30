@@ -5,13 +5,11 @@
 
 using std::size_t;
 using std::vector;
-
 using std::cout;
-using std::endl;
 
-using RequiredType = double;
-using Submatrix = RequiredType **;
-using Matrix = Submatrix **;
+typedef double RequiredType;
+using Submatrix = vector<vector<RequiredType>>;
+using Matrix = vector<vector<Submatrix>>;
 
 std::random_device randomDevice;
 std::mt19937 gen(randomDevice());
@@ -20,68 +18,55 @@ std::uniform_int_distribution<> distribution(0, 100);
 class TMatrix {
 public:
     TMatrix(size_t rows, size_t columns) : rows_(rows), columns_(columns) {
-        matrix_ = new Submatrix *[rows_];
-        for (int i {0}; i < rows_; i++) {
-            matrix_[i] = new Submatrix[columns_];
-            for (int j {0}; j < columns_; j++) {
-                matrix_[i][j] = new RequiredType *[NESTED_MATRIX_ROWS];
-                for (int k {0}; k < NESTED_MATRIX_ROWS; k++) {
-                    matrix_[i][j][k] = new RequiredType[NESTED_MATRIX_COLUMNS];
+        matrix_.resize(rows_);
+        for (auto &row: matrix_) {
+            row.resize(columns_);
+            for (auto &col: row) {
+                col.resize(NESTED_MATRIX_ROWS);
+                for (auto &nRow: col) {
+                    nRow.resize(NESTED_MATRIX_COLUMNS);
                 }
             }
         }
-        cout << "Object constructed.\n";
-    }
-
-    ~TMatrix() {
-        for (int i{0}; i < rows_; i++) {
-            delete [] matrix_[i];
-        }
-        delete [] matrix_;
-        cout << "Object destructed.\n";
     }
 
 public:
-    TMatrix Multiply(const TMatrix& rhs) {
-        auto rows1 = rows_;
-        auto columns1 = columns_;
-        auto rows2 = rhs.rows_;
-        auto columns2 = rhs.columns_;
-
-        if (rows2 != columns1) {
+    TMatrix *Multiply(const TMatrix &rhs) {
+        if (rhs.rows_ != columns_) {
             throw std::out_of_range("Rows and columns of matrices are not equal!");
         }
 
-        TMatrix temp(rows1, columns2);
-//        cout << "rows1: " << rows1 << " columns1: " << columns1
-//        << " rows2: " << rows2 << " columns: " << columns2 << endl;
+        auto *res = new TMatrix(rows_, rhs.columns_);
 
-        Submatrix res;
-        res = new RequiredType *[NESTED_MATRIX_ROWS];
-        for (int i {0}; i < NESTED_MATRIX_ROWS; i++) {
-            res[i] = new RequiredType[NESTED_MATRIX_COLUMNS];
+        Submatrix submatrix(NESTED_MATRIX_ROWS);
+        for (auto &nRow: submatrix) {
+            nRow.resize(NESTED_MATRIX_COLUMNS);
         }
 
-        for (int i {0}; i < rows1; i++) {
+        for (int i{0}; i < rows_; i++) {
             if (i % 100 == 0)
-                cout << "Processing " << i << " of " << rows1 << endl;
-            for (int j{0}; j < columns2; j++)
-                for (int k{0}; k < rows2; k++)
-                    temp.matrix_[i][j] = MultiplySubmatrix(matrix_[i][k], rhs.matrix_[k][j], res);
+                cout << "Processing " << i << " of " << rows_ << "\n";
+            for (int j{0}; j < rhs.columns_; j++)
+                for (int k{0}; k < rhs.rows_; k++) {
+                    MultiplySubmatrix(matrix_[i][k], rhs.matrix_[k][j], submatrix);
+                    AddSubmatrix(res->matrix_[i][j], submatrix, res->matrix_[i][j]);
+                }
         }
-
-        return temp;
-    }
-
-    static Submatrix MultiplySubmatrix(const Submatrix &m1,
-                                       const Submatrix &m2,
-                                       Submatrix &res) {
-        for (int i {0}; i < NESTED_MATRIX_ROWS; i++)
-            for (int j {0}; j < NESTED_MATRIX_COLUMNS; j++)
-                for (int k {0}; k < NESTED_MATRIX_ROWS; k++)
-                    res[i][j] += m1[i][k] * m2[k][j];
 
         return res;
+    }
+
+    static void MultiplySubmatrix(const Submatrix &m1, const Submatrix &m2, Submatrix &res) {
+        for (int i{0}; i < NESTED_MATRIX_ROWS; i++)
+            for (int j{0}; j < NESTED_MATRIX_COLUMNS; j++)
+                for (int k{0}; k < NESTED_MATRIX_ROWS; k++)
+                    res[i][j] += m1[i][k] * m2[k][j];
+    }
+
+    static void AddSubmatrix(const Submatrix &m1, const Submatrix &m2, Submatrix &res) {
+        for (int i{0}; i < NESTED_MATRIX_ROWS; i++)
+            for (int j{0}; j < NESTED_MATRIX_COLUMNS; j++)
+                res[i][j] = m1[i][j] + m2[i][j];
     }
 
     bool operator==(const TMatrix &rhs) const {
@@ -89,13 +74,7 @@ public:
             columns_ != rhs.columns_) {
             return false;
         }
-        for (size_t i = 0; i < rhs.rows_; i++)
-            for (size_t j = 0; j < rhs.columns_; j++)
-                for (size_t k = 0; k < NESTED_MATRIX_ROWS; k++)
-                    for (size_t l = 0; l < NESTED_MATRIX_COLUMNS; l++)
-                        if (rhs.matrix_[i][j][k][l] != matrix_[i][j][k][l])
-                            return false;
-        return true;
+        return matrix_ == rhs.matrix_;
     }
 
 public:
@@ -108,39 +87,41 @@ public:
     }
 
     void Print() const {
-        for (size_t i = 0; i < rows_; i++)
-            for (size_t j = 0; j < columns_; j++)
+        for (int i{0}; i < rows_; i++)
+            for (int j{0}; j < columns_; j++)
                 PrintSubmatrix(matrix_[i][j]);
+        cout << "\n";
     }
 
     void FillRandom() {
-        for (size_t i = 0; i < rows_; i++)
-            for (size_t j = 0; j < columns_; j++)
+        for (int i{0}; i < rows_; i++)
+            for (int j{0}; j < columns_; j++)
                 FillSubmatrixRandom(matrix_[i][j]);
     }
 
 private:
     static void FillSubmatrixRandom(Submatrix &submatrix) {
-        for (size_t i = 0; i < NESTED_MATRIX_ROWS; i++) {
-            for (size_t j = 0; j < NESTED_MATRIX_COLUMNS; j++) {
+        for (int i{0}; i < NESTED_MATRIX_ROWS; i++) {
+            for (int j{0}; j < NESTED_MATRIX_COLUMNS; j++) {
                 submatrix[i][j] = distribution(gen);
             }
         }
     }
+
     static void PrintSubmatrix(const Submatrix &submatrix) {
-        printf("[\n");
-        for (size_t i = 0; i < NESTED_MATRIX_ROWS; i++) {
-            for (size_t j = 0; j < NESTED_MATRIX_COLUMNS; j++) {
-                std::cout << submatrix[i][j] << "\t";
+        cout << "[\n";
+        for (int i{0}; i < NESTED_MATRIX_ROWS; i++) {
+            for (int j{0}; j < NESTED_MATRIX_COLUMNS; j++) {
+                cout << submatrix[i][j] << "\t";
             }
-            std::cout << "\n";
+            cout << "\n";
         }
-        printf("]\n");
+        cout << "]\n";
     }
 
 public:
-    static constexpr auto NESTED_MATRIX_ROWS {4};
-    static constexpr auto NESTED_MATRIX_COLUMNS {3};
+    static constexpr auto NESTED_MATRIX_ROWS{4};
+    static constexpr auto NESTED_MATRIX_COLUMNS{3};
 
 private:
     size_t rows_;
@@ -150,26 +131,28 @@ private:
 };
 
 int main() {
-    TMatrix tMatrix1(300, 300);
-    TMatrix tMatrix2(300, 300);
+    {
+        TMatrix tMatrix1(1000, 1000);
+        TMatrix tMatrix2(1000, 1000);
 
-    cout << "T1: " << tMatrix1.GetRows() << " " << tMatrix1.GetColumns() << endl;
-    tMatrix1.FillRandom();
-//    tMatrix1.Print();
-//    cout << endl;
-    cout << "T2: " << tMatrix2.GetRows() << " " << tMatrix2.GetColumns() << endl;
-    tMatrix2.FillRandom();
-//    tMatrix2.Print();
-//    cout << endl;
+        cout << "T1: " << tMatrix1.GetRows() << " " << tMatrix1.GetColumns() << "\n";
+        tMatrix1.FillRandom();
+//        tMatrix1.Print();
+        cout << "T2: " << tMatrix2.GetRows() << " " << tMatrix2.GetColumns() << "\n";
+        tMatrix2.FillRandom();
+//        tMatrix2.Print();
 
-    auto start = std::chrono::high_resolution_clock::now();
-    auto multiplied = tMatrix1.Multiply(tMatrix2);
-    auto end = std::chrono::high_resolution_clock::now();
-    auto dif = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "Time : " << dif << endl;
+        auto start = std::chrono::high_resolution_clock::now();
+        auto multiplied = tMatrix1.Multiply(tMatrix2);
+        auto end = std::chrono::high_resolution_clock::now();
+        auto dif = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+        std::cout << "Time : " << dif << "\n";
 
-    cout << "T3: " << multiplied.GetRows() << " " << multiplied.GetColumns() << endl;
-//    multiplied.Print();
+        cout << "T3: " << multiplied->GetRows() << " " << multiplied->GetColumns() << "\n";
+//        multiplied->Print();
+
+        delete multiplied;
+    }
 
     return 0;
 }
