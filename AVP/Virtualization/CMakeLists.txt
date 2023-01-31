@@ -4,5 +4,4 @@ project(Virtualization)
 set(CMAKE_CXX_STANDARD 23)
 
 add_compile_options(-mavx2)
-add_compile_options(-fverbose-asm)
 add_executable(Virtualization main.cpp)
