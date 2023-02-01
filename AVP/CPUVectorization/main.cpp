@@ -88,11 +88,15 @@ public:
         return res;
     }
 
-    [[gnu::target("sse")]]
+    /*
+     * Rows and columns cycles are replaced by each other
+     * that's why this multiplication could be vectorized
+     */
+    [[gnu::target("sse,avx")]]
     static void AutoVectorizedMultiplySubmatrix(const Submatrix &m1, const Submatrix &m2, Submatrix &res) {
         for (int i{0}; i < NESTED_MATRIX_ROWS; i++)
-            for (int j{0}; j < NESTED_MATRIX_COLUMNS; j++)
-                for (int k{0}; k < NESTED_MATRIX_ROWS; k++)
+            for (int k{0}; k < NESTED_MATRIX_ROWS; k++)
+                for (int j{0}; j < NESTED_MATRIX_COLUMNS; j++)
                     res[i][j] += m1[i][k] * m2[k][j];
     }
 
@@ -146,8 +150,6 @@ public:
                     for (int l{0}; l < NESTED_MATRIX_COLUMNS; l++)
                         if (matrix_[i][j][k][l] != rhs.matrix_[i][j][k][l]) return false;
         return true;
-
-//        return matrix_ == rhs.matrix_;
     }
 
     [[nodiscard]] size_t GetRows() const {
@@ -156,13 +158,6 @@ public:
 
     [[nodiscard]] size_t GetColumns() const {
         return columns_;
-    }
-
-    void Print() const {
-        for (int i{0}; i < rows_; i++)
-            for (int j{0}; j < columns_; j++)
-                PrintSubmatrix(matrix_[i][j]);
-        cout << "\n";
     }
 
     void FillRandom() {
@@ -180,17 +175,6 @@ private:
         }
     }
 
-    static void PrintSubmatrix(const Submatrix &submatrix) {
-        cout << "[\n";
-        for (int i{0}; i < NESTED_MATRIX_ROWS; i++) {
-            for (int j{0}; j < NESTED_MATRIX_COLUMNS; j++) {
-                cout << submatrix[i][j] << "\t";
-            }
-            cout << "\n";
-        }
-        cout << "]\n";
-    }
-
 public:
     static constexpr auto NESTED_MATRIX_ROWS{12};
     static constexpr auto NESTED_MATRIX_COLUMNS{12};
@@ -204,8 +188,10 @@ private:
 
 int main() {
     {
-        TMatrix tMatrix1(100, 100);
-        TMatrix tMatrix2(100, 100);
+        static constexpr int size = 100;
+
+        TMatrix tMatrix1(size, size);
+        TMatrix tMatrix2(size, size);
         tMatrix1.FillRandom();
         tMatrix2.FillRandom();
 
@@ -216,7 +202,6 @@ int main() {
         auto dif = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << "Time : " << dif << " ms\n";
         cout << "T3: " << multiplied1->GetRows() << " " << multiplied1->GetColumns() << "\n\n";
-//        multiplied1->Print();
 
         cout << "Vectorization:\n";
         start = std::chrono::high_resolution_clock::now();
@@ -225,7 +210,6 @@ int main() {
         dif = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << "Time : " << dif << " ms\n";
         cout << "T3: " << multiplied3->GetRows() << " " << multiplied3->GetColumns() << "\n\n";
-//        multiplied3->Print();
 
         cout << "No vectorization:\n";
         start = std::chrono::high_resolution_clock::now();
@@ -234,7 +218,6 @@ int main() {
         dif = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << "Time : " << dif << " ms\n";
         cout << "T3: " << multiplied2->GetRows() << " " << multiplied2->GetColumns() << "\n\n";
-//        multiplied2->Print();
 
         if (*multiplied1 == *multiplied2 && *multiplied1 == *multiplied3 && *multiplied2 == *multiplied3) {
             cout << "All matrices are equal.\n";
