@@ -4,16 +4,19 @@
 using namespace std::string_literals;
 using namespace std::string_view_literals;
 
-// TODO реализовать ветки, возможность их мержить, создавать, удалять и т.д.
-class Branch {};
-
+using namespace std;
+using namespace std::filesystem;
 
 int main() {
-    Repository repository("Test-Rep", "./");
-    std::cout << repository.GetFolder() << ": " << repository.GetName() << std::endl;
-    for (auto & f : repository.CollectFiles()) {
-        std::cout << f.Name() << std::endl;
-    }
+    Repository repository("Test-Rep",
+                          "/home/vladimir/GitHub/BSUIR-Labs/TRITPO/6-sem/MyGit");
+    repository.CollectFiles();
+
+    auto json = repository.ToJson();
+    std::cout << json << std::endl;
+
+    Commit commit(std::vector<std::string> {"A.txt", "B.txt", "C.txt"}, "Test commit");
+    std::cout << commit.ToJson() << std::endl;
 
 //    unordered_map<std::string, file_time_type> file_timestamp_map;
 //    for (;;) {
@@ -54,25 +57,6 @@ int main() {
 //                std::cerr << "Failed open file";
 //                return -1;
 //            }
-
-//            auto write_err = bucket->Write(
-//                    alias, std::chrono::file_clock::to_sys(ts),
-//                    [file_size, &changed_file](ReductBucket::WritableRecord* rec) {
-//                        rec->Write(file_size, [&](size_t offest, size_t size) {
-//                            std::string buffer;
-//                            buffer.resize(size);
-//                            changed_file.read(buffer.data(), size);
-//                            std::cout << "." << std::flush;
-//                            return std::pair{offest + size <= file_size, buffer};
-//                        });
-//                    });
-
-//            if (write_err) {
-//                std::cout << " Err:" << write_err << std::endl;
-//            } else {
-//                std::cout << " OK (" << file_size / 1024 << " kB)" << std::endl;
-//        }
-//    }
 
     return 0;
 }

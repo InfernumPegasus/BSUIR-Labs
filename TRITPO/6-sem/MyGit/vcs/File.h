@@ -2,7 +2,10 @@
 #define MYGIT_FILE_H
 
 #include <fstream>
+#include <utility>
 #include <vector>
+#include "FileStatus.h"
+#include <nlohmann/json.hpp>
 
 using namespace std::string_literals;
 
@@ -10,43 +13,49 @@ using namespace std::string_literals;
 class File {
 public:
     explicit File(std::string name) : name_(std::move(name)) {
-        std::ifstream ifs(name_);
-        if (!ifs) {
-            throw std::invalid_argument("File '"s
-                                                .append(name_)
-                                                .append("' cannot be opened."));
-        }
-        char c;
-        while (ifs.good()) {
-            ifs.read(&c, sizeof(char));
-            content_.push_back(c);
+        if (std::filesystem::exists(name_)) {
+            status_ = FileStatus::Exists;
         }
     }
 
-    File(const File &rhs) = default;
+    File(const File &rhs) : File(rhs.name_) {}
 
-    File(File &&rhs) noexcept :
-            name_(std::move(rhs.name_)),
-            content_(std::move(rhs.content_)) {}
+//    File(File &&rhs) noexcept : File(rhs.Name()) {}
 
 public:
-    constexpr auto operator==(const File &rhs) -> bool {
-        return content_ == rhs.content_;
-    }
-
-public:
-    constexpr auto Name() -> std::string {
+    [[nodiscard]]
+    constexpr auto Name() const -> std::string {
         return name_;
     }
 
-    constexpr auto Content() -> std::vector<char> {
-        return content_;
+    [[nodiscard]]
+    constexpr auto Status() const -> FileStatus {
+        return status_;
+    }
+
+    auto operator==(const File &other) -> bool {
+        return name_ == other.name_ && status_ == other.status_;
+    }
+
+public:
+    void SetStatus(FileStatus status) {
+        status_ = status;
+    }
+
+public:
+    [[nodiscard]]
+    auto ToJson() const -> nlohmann::json {
+        nlohmann::json j;
+        j["name"] = name_;
+        j["status"] = status_;
+        return j;
     }
 
 private:
-    std::vector<char> content_;
-
+//    std::vector<char> content_;
     std::string name_;
+
+    FileStatus status_ {FileStatus::Unknown};
 };
 
 
