@@ -10,8 +10,6 @@ add_executable(MyGit
         vcs/Commit.h
         vcs/File.h
         vcs/Repository.h
-        vcs/VersionControlSystem.h
-        vcs/Branch.h
-        vcs/FileStatus.h vcs/FileDifference.h)
+        vcs/FileStatus.h)
 
 target_link_libraries(nlohmann_json::nlohmann_json)

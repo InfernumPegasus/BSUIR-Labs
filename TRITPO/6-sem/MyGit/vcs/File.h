@@ -13,12 +13,12 @@ using namespace std::string_literals;
 class File {
 public:
     explicit File(std::string name) : name_(std::move(name)) {
-        if (std::filesystem::exists(name_)) {
-            status_ = FileStatus::Exists;
-        }
+//        if (std::filesystem::exists(name_)) {
+//            status_ = FileStatus::Exists;
+//        }
     }
 
-    File(const File &rhs) : File(rhs.name_) {}
+    File(const File &rhs) = default;
 
 //    File(File &&rhs) noexcept : File(rhs.Name()) {}
 
@@ -28,26 +28,26 @@ public:
         return name_;
     }
 
-    [[nodiscard]]
-    constexpr auto Status() const -> FileStatus {
-        return status_;
-    }
+//    [[nodiscard]]
+//    constexpr auto Status() const -> FileStatus {
+//        return status_;
+//    }
 
     auto operator==(const File &other) -> bool {
-        return name_ == other.name_ && status_ == other.status_;
+        return name_ == other.name_; //&& status_ == other.status_;
     }
 
-public:
-    void SetStatus(FileStatus status) {
-        status_ = status;
-    }
+//public:
+//    void SetStatus(FileStatus status) {
+//        status_ = status;
+//    }
 
 public:
     [[nodiscard]]
     auto ToJson() const -> nlohmann::json {
         nlohmann::json j;
         j["name"] = name_;
-        j["status"] = status_;
+//        j["status"] = status_;
         return j;
     }
 
@@ -55,7 +55,7 @@ private:
 //    std::vector<char> content_;
     std::string name_;
 
-    FileStatus status_ {FileStatus::Unknown};
+//    FileStatus status_ {FileStatus::Unknown};
 };
 
 

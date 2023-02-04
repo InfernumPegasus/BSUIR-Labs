@@ -1,41 +1,86 @@
 #ifndef MYGIT_REPOSITORY_H
 #define MYGIT_REPOSITORY_H
 
-#include <filesystem>
-#include <unordered_map>
 #include "File.h"
 #include "Commit.h"
-#include "FileDifference.h"
+#include <unordered_map>
+#include <filesystem>
 #include <nlohmann/json.hpp>
+#include <regex>
 
 // TODO сделать ignore-файлы
 class Repository {
 public:
-    // TODO сделать занесение файлов
     // TODO сделать валидацию имени папки типа "../../folder/"
     // TODO сделать валидацию имени репозитория
-    // TODO сделать проверку на наличие write прав
-    Repository(std::string repositoryName, std::string repositoryFolder) :
-            repositoryName_(std::move(repositoryName)),
-            repositoryFolder_(std::move(repositoryFolder)) {
-        CreateConfigFolder();
-        commits_.emplace_back(std::vector<std::string>(), "Initial commit =)");
+    Repository(std::string_view repositoryName, std::string_view repositoryFolder) :
+            repositoryName_(repositoryName),
+            repositoryFolder_(std::filesystem::absolute(repositoryFolder)) {
+        if (LoadConfig()) {
+            std::cout << "Config loaded!\n";
+        } else if (CreateConfig()) {
+            std::cout << "Config file created!\n";
+            commits_.emplace_back(std::vector<std::string>(), "Initial commit =)");
+        }
     }
 
-public:
+    // TODO добавить условия для сохранения
+//    ~Repository() {
+//        SaveConfig();
+//    }
+
+private:
+    void Action(std::string_view file, FileStatus status) {
+        switch (status) {
+            case FileStatus::Created:
+                std::cout << "File created: " << file << '\n';
+                break;
+            case FileStatus::Modified:
+                std::cout << "File modified: " << file << '\n';
+                break;
+            case FileStatus::Deleted:
+                std::cout << "File erased: " << file << '\n';
+                break;
+            default:
+                std::cout << "Error! Unknown file status.\n";
+        }
+    }
+
     // TODO сделать избирательность выбора файлов из папок
     void CollectFiles() {
-        for (auto &file:
-                std::filesystem::recursive_directory_iterator(repositoryFolder_)) {
-            if (std::filesystem::is_regular_file(file)) {
-                trackedFiles_.emplace_back(file.path());
+        auto it = fileTimestampMap_.begin();
+        while (it != fileTimestampMap_.end()) {
+            // if item does not exist
+            if (!std::filesystem::exists(it->first)) {
+                Action(it->first, FileStatus::Deleted);
+                it = fileTimestampMap_.erase(it);
+            } else {
+                it++;
+            }
+        }
+
+        // Check if a file was created or modified
+        for (auto &file: std::filesystem::recursive_directory_iterator(repositoryFolder_)) {
+            // ignore folders
+            if (std::filesystem::is_directory(file)) {
+                continue;
+            }
+            auto currentFileLastTimeWrite = std::filesystem::last_write_time(file);
+            auto filename = file.path().filename().string();
+
+            // File creation
+            if (!fileTimestampMap_.contains(filename)) {
+                fileTimestampMap_[filename] = currentFileLastTimeWrite;
+                Action(filename, FileStatus::Created);
+                // File modification
+            } else if (fileTimestampMap_[filename] != currentFileLastTimeWrite) {
+                fileTimestampMap_[filename] = currentFileLastTimeWrite;
+                Action(filename, FileStatus::Modified);
             }
         }
     }
 
-    // TODO сделать заполнение конфигурационного файла (файлов)
-    // TODO сделать восстановление состояния системы из конфигурационных файлов
-    void CreateConfigFolder() {
+    bool CreateConfig() const {
         std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
         std::string configFile = configDirectory + "/" + VSC_REPOSITORY_INFO_FILE;
 
@@ -43,62 +88,81 @@ public:
              !std::filesystem::exists(configFile)) ||
             std::filesystem::create_directory(configDirectory)) {
             std::ofstream file(configFile);
-        }
-    }
-
-    void DoCommit() {
-        const auto lastCommit = commits_.back();
-        auto lastCommitFiles = lastCommit.FileNames();
-        std::vector<File> filesToCommit;
-
-        for (auto &filename: lastCommitFiles) {
-            File file(filename);
-            auto status = file.Status();
-
-            // TODO реализовать
-            switch (status) {
-                case FileStatus::Unknown:
-                    break;
-                case FileStatus::Exists:
-                    break;
-                // just add file to new commit
-                case FileStatus::Created:
-                    filesToCommit.push_back(file);
-                    break;
-                // determine what have changed
-                case FileStatus::Modified:
-//                    auto difference = FileDifference();
-                    filesToCommit.push_back(file);
-                    break;
-                case FileStatus::Deleted:
-                    break;
+            if (file.is_open()) {
+                return true;
             }
-            trackedFiles_.erase(
-                    std::find(trackedFiles_.begin(),
-                              trackedFiles_.end(),
-                              file));
+        }
+        return false;
+    }
+
+    void SaveConfig() const {
+        std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
+        std::string configFile = configDirectory + "/" + VSC_REPOSITORY_INFO_FILE;
+
+        std::ofstream ofs(configFile);
+        if (!ofs.is_open() && !CreateConfig()) {
+            std::cerr << "Cannot create config folder!";
+            return;
+        }
+
+        auto repoJson = ToJson().dump(2);
+        ofs.write(repoJson.c_str(), static_cast<long>(repoJson.length()));
+    }
+
+    // true means successful load, false otherwise
+    bool LoadConfig() {
+        std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
+        std::string configFile = configDirectory + "/" + VSC_REPOSITORY_INFO_FILE;
+
+        if (!std::filesystem::exists(configFile)) {
+            return false;
+        }
+
+        if (std::filesystem::is_empty(configFile)) {
+            return true;
+        }
+
+        std::ifstream ofs(configFile);
+        if (ofs.is_open()) {
+            nlohmann::json j = nlohmann::json::parse(ofs);
+            std::string repoName = j["repo_name"];
+            std::string repoFolder = j["repo_folder"];
+            for (auto & file : j["tracked_files"]) {
+                fileTimestampMap_[file] = std::filesystem::last_write_time(file);
+            }
+
+            std::vector<nlohmann::json> commits = j["commits"];
+            std::vector<Commit> commitsVector;
+
+            for (auto &commit: commits) {
+                commitsVector.emplace_back(commit["file_names"], commit["message"]);
+            }
+
+            repositoryName_ = repoName;
+            repositoryFolder_ = repoFolder;
+            commits_ = commitsVector;
+
+            return true;
+        }
+
+        return false;
+    }
+
+public:
+
+    [[deprecated]]
+    void AddCommit(const Commit &commit) {
+        commits_.push_back(commit);
+    }
+
+    [[deprecated]]
+    void AddCommits(const std::vector<Commit> &commits) {
+        for (auto & c : commits) {
+            commits_.push_back(c);
         }
     }
 
-    auto ToJson() -> nlohmann::json {
-        nlohmann::json j;
-
-        std::vector<nlohmann::json> commitsJson;
-        for (auto &commit: commits_) {
-            commitsJson.push_back(commit.ToJson());
-        }
-        std::vector<nlohmann::json> filesJson;
-        for (auto &file: trackedFiles_) {
-            filesJson.push_back(file.ToJson());
-        }
-
-        j["repo_name"] = repositoryName_;
-        j["repo_folder"] = repositoryFolder_;
-        j["tracked_files"] = filesJson;
-        j["commits"] = commitsJson;
-
-        return j;
-    }
+    void DoCommit() {}
 
 public:
     [[nodiscard]]
@@ -117,19 +181,41 @@ public:
     }
 
     [[nodiscard]]
-    constexpr auto Files() const -> std::vector<File> {
-        return trackedFiles_;
+    auto ToJson() const -> nlohmann::json {
+        nlohmann::json j;
+        std::vector<nlohmann::json> commitsJson;
+        std::vector<std::string> filesJson;
+
+        for (auto &commit: commits_) {
+            commitsJson.push_back(commit.ToJson());
+        }
+        for (auto &[file, _]: fileTimestampMap_) {
+            filesJson.push_back(file);
+        }
+
+        j["repo_name"] = repositoryName_;
+        j["repo_folder"] = repositoryFolder_;
+        j["tracked_files"] = filesJson;
+        j["commits"] = commitsJson;
+
+        return j;
     }
+
+//    [[nodiscard]]
+//    auto Files() const -> std::unordered_map<File, FileStatus> {
+//        return files_;
+//    }
 
 private:
     static constexpr std::string VSC_DIRECTORY = "config";
-    static constexpr std::string VSC_REPOSITORY_INFO_FILE = "gitfile";
+    static constexpr std::string VSC_REPOSITORY_INFO_FILE = "repo_info.json";
+    static constexpr std::string VSC_REPOSITORY_COMMITS_FILE = "commits.json";
 
 private:
     std::string repositoryName_;
     std::string repositoryFolder_;
 
-    std::vector<File> trackedFiles_;
+    std::unordered_map<std::string, std::filesystem::file_time_type> fileTimestampMap_;
     std::vector<Commit> commits_;
 };
 

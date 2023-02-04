@@ -7,7 +7,6 @@ enum class FileStatus {
     Created = 0,
     Modified = 1,
     Deleted = 2,
-    Exists = 4
 };
 
 

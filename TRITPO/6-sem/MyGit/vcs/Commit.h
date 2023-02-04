@@ -28,11 +28,6 @@ public:
         return std::find(fileNames_.begin(), fileNames_.end(), filename) != fileNames_.end();
     }
 
-//    [[nodiscard]]
-//    constexpr auto Find(std::string_view filename) const {
-//        return std::find(fileNames_.begin(), fileNames_.end(), filename);
-//    }
-
 public:
     [[nodiscard]]
     auto ToJson() const -> nlohmann::json {
