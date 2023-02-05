@@ -5,7 +5,7 @@
 
 class VersionControlSystem {
 public:
-    void CreateRepository(std::string repositoryName) {}
+    void CreateRepository(std::string_view repositoryName) {}
     void DeleteRepository(std::string_view repositoryName) {}
 
 private:

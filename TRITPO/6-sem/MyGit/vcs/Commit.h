@@ -4,17 +4,23 @@
 #include "File.h"
 #include <nlohmann/json.hpp>
 #include <algorithm>
+#include <set>
 
 // TODO добавить хэш-сумму и уникальный ID коммита
 class Commit {
 public:
-    Commit(const std::vector<std::string> &files, std::string message) :
+    Commit(const std::set<std::string> &files, std::string message) :
             fileNames_(files),
-            message_(std::move(message)) {}
+            message_(std::move(message)) {
+    }
+
+//    Commit(const std::vector<std::string> &files, std::string_view message) :
+//            fileNames_(files),
+//            message_(message) {}
 
 public:
     [[nodiscard]]
-    constexpr auto FileNames() const -> std::vector<std::string> {
+    auto FileNames() const -> std::set<std::string> {
         return fileNames_;
     }
 
@@ -24,8 +30,8 @@ public:
     }
 
     [[nodiscard]]
-    constexpr auto Contains(std::string_view filename) const -> bool {
-        return std::find(fileNames_.begin(), fileNames_.end(), filename) != fileNames_.end();
+    auto Contains(std::string_view filename) const -> bool {
+        return fileNames_.contains(filename.data());
     }
 
 public:
@@ -37,8 +43,14 @@ public:
         return j;
     }
 
+    static Commit FromJson(nlohmann::json json) {
+        std::set<std::string> filenames = json["file_names"];
+        std::string message = json["message"];
+        return {filenames, message};
+    }
+
 private:
-    std::vector<std::string> fileNames_;
+    std::set<std::string> fileNames_;
     std::string message_;
 };
 
