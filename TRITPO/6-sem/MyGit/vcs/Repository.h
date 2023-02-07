@@ -30,18 +30,18 @@ public:
             CreateIgnoreFile();
             ReadIgnoreFile();
         }
+        UpdateIgnoreFile();
     }
 
 private:
     Repository(std::string_view repositoryName,
                std::string_view repositoryFolder,
-               std::vector<Commit> commits)
-            : repositoryName_(repositoryName),
-              repositoryFolder_(repositoryFolder),
-              commits_(std::move(commits)) {}
+               std::vector<Commit> commits) :
+            repositoryName_(repositoryName),
+            repositoryFolder_(repositoryFolder),
+            commits_(std::move(commits)) {}
 
 private:
-
     static bool ExistFile(std::string_view filename) {
         return std::filesystem::exists(filename);
     }
@@ -53,9 +53,9 @@ private:
             return false;
         }
 
+        std::cout << "CreateIgnoreFile()\n";
         for (auto &file: std::filesystem::recursive_directory_iterator(repositoryFolder_)) {
             auto filename = std::filesystem::absolute(file).filename().string();
-
             if (filename.starts_with(".")) {
                 auto absolute = std::filesystem::absolute(file).string() + "\n";
                 ofs.write(absolute.c_str(), (long) absolute.length());
@@ -77,22 +77,14 @@ private:
         }
 
         std::string readFilename;
+        std::cout << "ReadIgnoreFile()\n";
         while (ifs.good()) {
             std::getline(ifs, readFilename);
-
             if (!ExistFile(readFilename)) {
                 continue;
             }
 
-            if (readFilename.starts_with(".") || readFilename.starts_with("..")) {
-                ignoredFiles_.insert(readFilename);
-            }
-
-            // TODO удалить
-            if (std::filesystem::is_regular_file(readFilename)) {
-                ignoredFiles_.insert(readFilename);
-            }
-
+            ignoredFiles_.insert(readFilename);
             if (std::filesystem::is_directory(readFilename)) {
                 for (auto &file:
                         std::filesystem::recursive_directory_iterator(readFilename)) {
@@ -105,20 +97,32 @@ private:
         return true;
     }
 
+    void UpdateIgnoreFile() {
+        std::ofstream ofs;
+        ofs.open(ignoreFile_, std::ios_base::ate);
+        if (ofs.is_open()) {
+            std::cout << "UpdateIgnoreFile()\n";
+            for (const auto &item: ignoredFiles_) {
+                std::string file = item + "\n";
+                ofs.write(file.c_str(), (long) file.length());
+            }
+        }
+    }
+
     [[nodiscard]]
-    auto CollectFiles() const -> std::set<std::string> {
-        std::set<std::string> collectedFiles;
+    auto CollectFiles() const -> std::set<File> {
+        std::set<File> collectedFiles;
 
         // Check if a file was created or modified
-        for (auto &file: std::filesystem::recursive_directory_iterator(repositoryFolder_)) {
+        for (auto &file:
+                std::filesystem::recursive_directory_iterator(repositoryFolder_)) {
             auto filename = std::filesystem::absolute(file).string();
 
-            // ignore folders and files in ignore file
-            if (!std::filesystem::is_directory(filename) &&
-                !ignoredFiles_.contains(filename)) {
-                collectedFiles.insert(filename);
+            if (ignoredFiles_.contains(filename)) {
+                continue;
             }
 
+            collectedFiles.emplace(filename);
         }
 
         return collectedFiles;
@@ -139,11 +143,6 @@ private:
         return false;
     }
 
-public:
-    void RemoveAllCommits() {
-        commits_.clear();
-    }
-
     void UpdateConfigFile() const {
         std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
         std::string configFile = configDirectory + "/" + VSC_REPOSITORY_INFO_FILE;
@@ -158,7 +157,6 @@ public:
         ofs.write(repoJson.c_str(), static_cast<long>(repoJson.length()));
     }
 
-private:
     // true means successful load, false otherwise
     bool LoadConfigFile() {
         std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
@@ -175,11 +173,9 @@ private:
         std::ifstream ofs(configFile);
         if (ofs.is_open()) {
             nlohmann::json j = nlohmann::json::parse(ofs);
-
-            std::vector<nlohmann::json> commits = j["commits"];
             std::vector<Commit> commitsVector;
 
-            for (auto &commit: commits) {
+            for (auto &commit: j["commits"]) {
                 commitsVector.emplace_back(Commit::FromJson(commit));
             }
 
@@ -200,8 +196,8 @@ public:
         auto collectedFiles = CollectFiles();
 
         for (const auto &file: collectedFiles) {
-            auto filename = std::filesystem::absolute(file).string();
-            auto currentFileLastTimeWrite = std::filesystem::last_write_time(file);
+            auto filename = std::filesystem::absolute(file.Name()).string();
+            auto currentFileLastTimeWrite = std::filesystem::last_write_time(file.Name());
 
 ////             File modification
 //            if (fileTimestampMap_[filename] != currentFileLastTimeWrite) {
@@ -211,10 +207,11 @@ public:
 
         std::set<File> files;
         for (const auto &item: collectedFiles) {
-            File f(item);
-            files.insert(f);
+            files.insert(item);
         }
         commits_.emplace_back(files, std::move(message));
+
+        UpdateConfigFile();
     }
 
 public:

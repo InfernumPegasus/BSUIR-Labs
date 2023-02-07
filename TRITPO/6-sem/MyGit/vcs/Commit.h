@@ -17,12 +17,20 @@ public:
             message_(std::move(message)) {
         std::set<File> filesSet;
         for (const auto &file: files) {
-            std::cout << "FILE: " << file << std::endl;
-            File f(file);
-            filesSet.insert(f);
+            filesSet.emplace(file);
         }
         files_ = filesSet;
     }
+
+    Commit(const Commit &rhs) = default;
+
+    Commit &operator=(const Commit &rhs) = default;
+
+    Commit(Commit &&rhs) noexcept:
+            files_(std::move(rhs.files_)),
+            message_(std::move(rhs.message_)) {}
+
+    Commit &operator=(Commit &&rhs) noexcept = default;
 
 public:
     [[nodiscard]]

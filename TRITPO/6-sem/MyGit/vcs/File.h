@@ -16,9 +16,15 @@ public:
             name_(std::move(name)),
             hash_(Hash()) {}
 
-    File(const File &rhs) : File(rhs.name_) {
-        hash_ = rhs.hash_;
-    }
+    File(const File &rhs) = default;
+
+    File &operator=(const File &rhs) = default;
+
+    File(File &&rhs) noexcept:
+            name_(std::move(rhs.name_)),
+            hash_(rhs.hash_) {}
+
+    File &operator=(File &&rhs) noexcept = default;
 
 private:
     File(std::string_view name, size_t hash) :
@@ -30,10 +36,6 @@ public:
     constexpr auto Name() const -> std::string {
         return name_;
     }
-
-//    auto operator==(const File &other) const -> bool {
-//        return content_ == other.content_;
-//    }
 
     bool operator<(const File &rhs) const {
         return hash_ < rhs.hash_;
@@ -70,9 +72,10 @@ public:
 
     [[nodiscard]]
     auto Hash() const -> size_t {
-        size_t res{0};
-        for (auto &c: LoadContent()) {
-            res |= std::hash<size_t>{}(c);
+        auto content = LoadContent();
+        size_t res = content.size();
+        for (auto &c: content) {
+            res ^= static_cast<size_t>(c) + 0x9e3779b9 + (res << 6) + (res >> 2);
         }
         return res;
     }
