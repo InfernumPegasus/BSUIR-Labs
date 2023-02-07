@@ -12,13 +12,18 @@ using namespace std::string_literals;
 // TODO добавить валидацию пути
 class File {
 public:
-    explicit File(std::string name) : name_(std::move(name)) {}
+    explicit File(std::string name) :
+            name_(std::move(name)),
+            hash_(Hash()) {}
 
-    File(std::string_view name, const std::vector<char> &content) :
+    File(const File &rhs) : File(rhs.name_) {
+        hash_ = rhs.hash_;
+    }
+
+private:
+    File(std::string_view name, size_t hash) :
             name_(name),
-            content_(content) {}
-
-    File(const File &rhs) = default;
+            hash_(hash) {}
 
 public:
     [[nodiscard]]
@@ -26,24 +31,26 @@ public:
         return name_;
     }
 
+//    auto operator==(const File &other) const -> bool {
+//        return content_ == other.content_;
+//    }
+
+    bool operator<(const File &rhs) const {
+        return hash_ < rhs.hash_;
+    }
+
     [[nodiscard]]
-    constexpr auto Content() const -> std::vector<char> {
-        return content_;
-    }
-
-    auto operator==(const File &other) -> bool {
-        return name_ == other.name_ && content_ == other.content_;
-    }
-
-    bool LoadContent() {
+    auto LoadContent() const -> std::vector<char> {
+        std::vector<char> content;
         std::ifstream ifs(name_);
         if (ifs.is_open()) {
             char c;
             while (ifs.good()) {
                 ifs.read(&c, sizeof(char));
-                content_.push_back(c);
+                content.push_back(c);
             }
         }
+        return content;
     }
 
 public:
@@ -51,27 +58,27 @@ public:
     auto ToJson() const -> nlohmann::json {
         nlohmann::json j;
         j["name"] = name_;
-        j["content"] = content_;
+        j["hash"] = hash_;
         return j;
     }
 
     static File FromJson(nlohmann::json json) {
         std::string name = json["name"];
-        std::vector<char> content = json["content"];
-        return {name, content};
+        size_t hash = json["hash"];
+        return {name, hash};
     }
 
     [[nodiscard]]
-    constexpr auto Hash() const -> size_t {
+    auto Hash() const -> size_t {
         size_t res{0};
-        for (auto &c : Content()) {
-            res ^= std::hash<size_t>{}(c);
+        for (auto &c: LoadContent()) {
+            res |= std::hash<size_t>{}(c);
         }
         return res;
     }
 
 private:
-    std::vector<char> content_;
+    size_t hash_;
 
     std::string name_;
 };

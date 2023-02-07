@@ -9,19 +9,25 @@
 // TODO добавить хэш-сумму и уникальный ID коммита
 class Commit {
 public:
-    Commit(const std::set<std::string> &files, std::string message) :
-            fileNames_(files),
-            message_(std::move(message)) {
-    }
+    Commit(const std::set<File> &files, std::string message) :
+            files_(files),
+            message_(std::move(message)) {}
 
-//    Commit(const std::vector<std::string> &files, std::string_view message) :
-//            fileNames_(files),
-//            message_(message) {}
+    Commit(const std::set<std::string> &files, std::string message) :
+            message_(std::move(message)) {
+        std::set<File> filesSet;
+        for (const auto &file: files) {
+            std::cout << "FILE: " << file << std::endl;
+            File f(file);
+            filesSet.insert(f);
+        }
+        files_ = filesSet;
+    }
 
 public:
     [[nodiscard]]
-    auto FileNames() const -> std::set<std::string> {
-        return fileNames_;
+    auto Files() const -> std::set<File> {
+        return files_;
     }
 
     [[nodiscard]]
@@ -29,28 +35,31 @@ public:
         return message_;
     }
 
-    [[nodiscard]]
-    auto Contains(std::string_view filename) const -> bool {
-        return fileNames_.contains(filename.data());
-    }
-
 public:
     [[nodiscard]]
     auto ToJson() const -> nlohmann::json {
         nlohmann::json j;
-        j["file_names"] = fileNames_;
+        std::vector<nlohmann::json> files;
+        for (const auto &file: files_) {
+            files.push_back(file.ToJson());
+        }
+        j["files"] = files;
         j["message"] = message_;
         return j;
     }
 
     static Commit FromJson(nlohmann::json json) {
-        std::set<std::string> filenames = json["file_names"];
+        std::set<File> files;
+        for (auto &file: json["files"]) {
+//            std::cout << file.dump(2) << std::endl;
+            files.insert(File::FromJson(file));
+        }
         std::string message = json["message"];
-        return {filenames, message};
+        return {files, message};
     }
 
 private:
-    std::set<std::string> fileNames_;
+    std::set<File> files_;
     std::string message_;
 };
 
