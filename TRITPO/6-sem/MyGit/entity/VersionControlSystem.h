@@ -1,7 +1,7 @@
 #ifndef MYGIT_VERSIONCONTROLSYSTEM_H
 #define MYGIT_VERSIONCONTROLSYSTEM_H
 
-#include "Repository.h"
+#include "repository/Repository.h"
 
 class VersionControlSystem {
 public:

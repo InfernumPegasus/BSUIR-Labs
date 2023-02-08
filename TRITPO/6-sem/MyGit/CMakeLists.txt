@@ -7,9 +7,9 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 
 add_executable(MyGit
         main.cpp
-        vcs/Commit.h
-        vcs/File.h
-        vcs/Repository.h
-        vcs/FileStatus.h)
+        entity/Commit.h
+        entity/file/File.h
+        entity/repository/Repository.h
+        entity/file/FileStatus.h)
 
 target_link_libraries(nlohmann_json::nlohmann_json)

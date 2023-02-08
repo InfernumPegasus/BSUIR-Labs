@@ -1,14 +1,10 @@
 #ifndef MYGIT_REPOSITORY_H
 #define MYGIT_REPOSITORY_H
 
-#include "File.h"
-#include "Commit.h"
-#include <unordered_map>
-#include <filesystem>
-#include <nlohmann/json.hpp>
-#include <regex>
-#include <utility>
-#include <set>
+#include "../file/File.h"
+#include "../Commit.h"
+#include <iostream>
+
 
 class Repository {
 public:
@@ -18,7 +14,8 @@ public:
                std::string_view repositoryFolder) :
             repositoryName_(repositoryName),
             repositoryFolder_(std::filesystem::absolute(repositoryFolder)),
-            ignoreFile_(repositoryFolder_ + "/config/ignore") {
+            configFile_(repositoryFolder_ + "/" + VCS_CONFIG_DIRECTORY + "/" + VCS_CONFIG_FILE),
+            ignoreFile_(repositoryFolder_ + "/" + VCS_CONFIG_DIRECTORY + "/" + VCS_IGNORE_FILE) {
         if (LoadConfigFile()) {
             std::cout << "Config loaded!\n";
         } else if (CreateConfigFile()) {
@@ -26,7 +23,7 @@ public:
         }
 
         if (!ReadIgnoreFile()) {
-            std::cerr << "Error with ignore file!";
+            std::cout << "Creating ignore file!";
             CreateIgnoreFile();
             ReadIgnoreFile();
         }
@@ -42,10 +39,6 @@ private:
             commits_(std::move(commits)) {}
 
 private:
-    static bool ExistFile(std::string_view filename) {
-        return std::filesystem::exists(filename);
-    }
-
     bool CreateIgnoreFile() {
         std::ofstream ofs;
         ofs.open(ignoreFile_, std::ios_base::ate);
@@ -53,7 +46,6 @@ private:
             return false;
         }
 
-        std::cout << "CreateIgnoreFile()\n";
         for (auto &file: std::filesystem::recursive_directory_iterator(repositoryFolder_)) {
             auto filename = std::filesystem::absolute(file).filename().string();
             if (filename.starts_with(".")) {
@@ -66,7 +58,7 @@ private:
     }
 
     bool ReadIgnoreFile() {
-        if (!ExistFile(ignoreFile_) ||
+        if (!std::filesystem::exists(ignoreFile_) ||
             std::filesystem::is_empty(ignoreFile_)) {
             return false;
         }
@@ -77,14 +69,13 @@ private:
         }
 
         std::string readFilename;
-        std::cout << "ReadIgnoreFile()\n";
         while (ifs.good()) {
             std::getline(ifs, readFilename);
-            if (!ExistFile(readFilename)) {
+            if (!std::filesystem::exists(readFilename)) {
                 continue;
             }
 
-            ignoredFiles_.insert(readFilename);
+            ignoredFiles_.emplace(readFilename);
             if (std::filesystem::is_directory(readFilename)) {
                 for (auto &file:
                         std::filesystem::recursive_directory_iterator(readFilename)) {
@@ -99,9 +90,8 @@ private:
 
     void UpdateIgnoreFile() {
         std::ofstream ofs;
-        ofs.open(ignoreFile_, std::ios_base::ate);
+        ofs.open(ignoreFile_);
         if (ofs.is_open()) {
-            std::cout << "UpdateIgnoreFile()\n";
             for (const auto &item: ignoredFiles_) {
                 std::string file = item + "\n";
                 ofs.write(file.c_str(), (long) file.length());
@@ -109,47 +99,37 @@ private:
         }
     }
 
-    [[nodiscard]]
-    auto CollectFiles() const -> std::set<File> {
+    // TODO Check if a file was created or modified
+    [[nodiscard]] auto CollectFiles() const -> std::set<File> {
         std::set<File> collectedFiles;
 
-        // Check if a file was created or modified
         for (auto &file:
                 std::filesystem::recursive_directory_iterator(repositoryFolder_)) {
             auto filename = std::filesystem::absolute(file).string();
 
-            if (ignoredFiles_.contains(filename)) {
-                continue;
+            if (!ignoredFiles_.contains(filename) &&
+                !std::filesystem::is_directory(filename)) {
+                collectedFiles.emplace(filename);
             }
-
-            collectedFiles.emplace(filename);
         }
 
         return collectedFiles;
     }
 
     [[nodiscard]] bool CreateConfigFile() const {
-        std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
-        std::string configFile = configDirectory + "/" + VSC_REPOSITORY_INFO_FILE;
-
-        if ((ExistFile(configDirectory) &&
-             !ExistFile(configFile)) ||
-            std::filesystem::create_directory(configDirectory)) {
-            std::ofstream file(configFile);
-            if (file.is_open()) {
-                return true;
-            }
-        }
-        return false;
+        std::string configDirectory = repositoryFolder_ + "/" + VCS_CONFIG_DIRECTORY;
+        std::ofstream file;
+        if ((std::filesystem::exists(configDirectory) &&
+             !std::filesystem::exists(configFile_)) ||
+            std::filesystem::create_directory(configDirectory)) {}
+        file.open(configFile_);
+        return file.is_open();
     }
 
     void UpdateConfigFile() const {
-        std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
-        std::string configFile = configDirectory + "/" + VSC_REPOSITORY_INFO_FILE;
-
-        std::ofstream ofs(configFile);
+        std::ofstream ofs(configFile_);
         if (!ofs.is_open() && !CreateConfigFile()) {
-            std::cerr << "Cannot create config folder!";
+            std::cout << "Cannot create config folder!";
             return;
         }
 
@@ -159,18 +139,15 @@ private:
 
     // true means successful load, false otherwise
     bool LoadConfigFile() {
-        std::string configDirectory = repositoryFolder_ + "/" + VSC_DIRECTORY;
-        std::string configFile = configDirectory + "/" + VSC_REPOSITORY_INFO_FILE;
-
-        if (!ExistFile(configFile)) {
+        if (!std::filesystem::exists(configFile_)) {
             return false;
         }
 
-        if (std::filesystem::is_empty(configFile)) {
+        if (std::filesystem::is_empty(configFile_)) {
             return true;
         }
 
-        std::ifstream ofs(configFile);
+        std::ifstream ofs(configFile_);
         if (ofs.is_open()) {
             nlohmann::json j = nlohmann::json::parse(ofs);
             std::vector<Commit> commitsVector;
@@ -191,23 +168,33 @@ private:
 
 public:
 
+    [[nodiscard]] auto CollectPreviousFiles() const -> std::set<File> {
+        std::set<File> files;
+        for (const auto &commit: std::ranges::reverse_view(commits_)) {
+            files.merge(commit.Files());
+        }
+        return files;
+    }
+
     // TODO трекать изменения с последнего коммита
     void DoCommit(std::string message) {
-        auto collectedFiles = CollectFiles();
-
-        for (const auto &file: collectedFiles) {
-            auto filename = std::filesystem::absolute(file.Name()).string();
-            auto currentFileLastTimeWrite = std::filesystem::last_write_time(file.Name());
-
-////             File modification
-//            if (fileTimestampMap_[filename] != currentFileLastTimeWrite) {
-//                fileTimestampMap_[filename] = currentFileLastTimeWrite;
-//            }
+        // if no commits
+        if (commits_.empty()) {
+            commits_.emplace_back(std::set<File>(), "Initial commit =)");
         }
 
+        auto collectedFiles = CollectFiles();
+        auto lastCommitFiles = CollectPreviousFiles();
+
         std::set<File> files;
-        for (const auto &item: collectedFiles) {
-            files.insert(item);
+        for (const auto &collectedFile: collectedFiles) {
+            if (lastCommitFiles.contains(collectedFile)) {
+                if (collectedFile.Hash() != lastCommitFiles.find(collectedFile)->Hash()) {
+                    files.insert(collectedFile);
+                }
+            } else {
+                files.insert(collectedFile);
+            }
         }
         commits_.emplace_back(files, std::move(message));
 
@@ -215,23 +202,19 @@ public:
     }
 
 public:
-    [[nodiscard]]
-    constexpr auto Name() const -> std::string {
+    [[nodiscard]] constexpr auto Name() const -> std::string {
         return repositoryName_;
     }
 
-    [[nodiscard]]
-    constexpr auto Folder() const -> std::string {
+    [[nodiscard]] constexpr auto Folder() const -> std::string {
         return repositoryFolder_;
     }
 
-    [[nodiscard]]
-    constexpr auto Commits() const -> std::vector<Commit> {
+    [[nodiscard]] constexpr auto Commits() const -> std::vector<Commit> {
         return commits_;
     }
 
-    [[nodiscard]]
-    auto ToJson() const -> nlohmann::json {
+    [[nodiscard]] auto ToJson() const -> nlohmann::json {
         nlohmann::json j;
         std::vector<nlohmann::json> commitsJson;
         std::for_each(commits_.begin(), commits_.end(),
@@ -261,18 +244,18 @@ public:
     }
 
 private:
-    static constexpr std::string VSC_DIRECTORY = "config";
-    static constexpr std::string VSC_REPOSITORY_INFO_FILE = "repo_info.json";
-    static constexpr std::string VSC_IGNORE_FILE = "ignore";
+    static constexpr std::string VCS_CONFIG_DIRECTORY = "config";
+    static constexpr std::string VCS_CONFIG_FILE = "repo_info.json";
+    static constexpr std::string VCS_IGNORE_FILE = "ignore";
 
 private:
     std::string repositoryName_;
     std::string repositoryFolder_;
 
-//    std::map<std::string, std::filesystem::file_time_type> fileTimestampMap_;
-    std::vector<Commit> commits_;
-
+    std::string configFile_;
     std::string ignoreFile_;
+
+    std::vector<Commit> commits_;
     std::set<std::string> ignoredFiles_;
 };
 
