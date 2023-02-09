@@ -1,10 +1,9 @@
 #ifndef MYGIT_COMMIT_H
 #define MYGIT_COMMIT_H
 
-#include "file/File.h"
-#include <nlohmann/json.hpp>
-#include <set>
 
+#include <set>
+#include "../file/File.h"
 
 // TODO добавить хэш-сумму и уникальный ID коммита
 class Commit {
@@ -29,34 +28,14 @@ public:
     Commit &operator=(Commit &&rhs) noexcept = default;
 
 public:
-    [[nodiscard]] auto Files() const -> std::set<File> {
-        return files_;
-    }
+    [[nodiscard]] auto Files() const -> std::set<File>;
 
-    [[nodiscard]] constexpr auto Message() const -> std::string {
-        return message_;
-    }
+    [[nodiscard]] constexpr auto Message() const -> std::string;
 
 public:
-    [[nodiscard]] auto ToJson() const -> nlohmann::json {
-        nlohmann::json j;
-        std::vector<nlohmann::json> files;
-        for (const auto &file: files_) {
-            files.push_back(file.ToJson());
-        }
-        j["files"] = files;
-        j["message"] = message_;
-        return j;
-    }
+    [[nodiscard]] auto ToJson() const -> nlohmann::json;
 
-    static Commit FromJson(nlohmann::json json) {
-        std::set<File> files;
-        for (auto &file: json["files"]) {
-            files.insert(File::FromJson(file));
-        }
-        std::string message = json["message"];
-        return {files, message};
-    }
+    static Commit FromJson(nlohmann::json json);
 
 private:
     std::set<File> files_;
