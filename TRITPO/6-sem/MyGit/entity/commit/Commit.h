@@ -3,7 +3,6 @@
 
 
 #include <set>
-#include <iostream>
 #include <nlohmann/json.hpp>
 #include "../file/File.h"
 
@@ -13,21 +12,18 @@ public:
     Commit(const std::set<File> &files, std::string message) :
             message_(std::move(message)) {
         for (const auto &file: files) {
-            files_.emplace(file.Name(), File::CalculateHash(file.Name()));
+            files_.emplace(file);
         }
     }
 
     Commit(const std::set<std::string> &files, std::string message) :
             message_(std::move(message)) {
-//        std::set<File> filesSet;
         for (const auto &file: files) {
-//            FileStatus status{FileStatus::Created};
-//            if (!std::filesystem::exists(file)) {
-//                status = FileStatus::Deleted;
-//            }
-            files_.emplace(file, File::CalculateHash(file));
+            files_.emplace(file,
+                           File::LastWriteTimeString(file),
+                           File::CalculateHash(file),
+                           FileStatus::Unknown);
         }
-//        files_ = filesSet;
     }
 
     Commit(const Commit &rhs) = default;

@@ -3,7 +3,7 @@
 
 
 enum class FileStatus {
-    Unknown = -1,
+    Unknown = -1,   // Should never be
     Created = 0,
     Modified = 1,
     Deleted = 2,

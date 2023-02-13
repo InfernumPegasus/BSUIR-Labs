@@ -1,4 +1,3 @@
-#include <iostream>
 #include <fstream>
 #include "File.h"
 
@@ -19,7 +18,10 @@ std::string File::ModificationTime() const {
 }
 
 constexpr bool File::operator==(const File &rhs) const {
-    return name_ == rhs.name_ && hash_ == rhs.hash_ && modificationTime_ == rhs.modificationTime_;
+    return name_ == rhs.name_ &&
+           modificationTime_ == rhs.modificationTime_ &&
+           hash_ == rhs.hash_ &&
+           status_ == rhs.status_;
 }
 
 bool File::operator<(const File &rhs) const {
@@ -29,18 +31,18 @@ bool File::operator<(const File &rhs) const {
 auto File::ToJson() const -> nlohmann::json {
     nlohmann::json j;
     j["name"] = name_;
+    j["mod"] = modificationTime_;
     j["hash"] = hash_;
     j["status"] = status_;
-    j["mod"] = modificationTime_;
     return j;
 }
 
 File File::FromJson(nlohmann::json json) {
     std::string name = json["name"];
+    std::string modTime = json["mod"];
     int64_t hash = json["hash"];
     FileStatus status = json["status"];
-    std::string modTime = json["mod"];
-    return {name, hash, modTime, status};
+    return {name, modTime, hash, status};
 }
 
 auto File::LoadContent(std::string_view filename) -> std::vector<char> {

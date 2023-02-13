@@ -41,17 +41,12 @@ private:
 
     void UpdateConfigFile() const;
 
-    // true means successful load, false otherwise
     bool LoadConfigFile();
 
 private:
-    // TODO Check if a file was created or modified
     [[nodiscard]] FileHashMap CollectFiles() const;
 
-    [[nodiscard]] std::set<File> CollectPreviousFiles() const;
-
 public:
-    // TODO трекать изменения с последнего коммита
     void DoCommit(std::string_view message);
 
     void Init();
