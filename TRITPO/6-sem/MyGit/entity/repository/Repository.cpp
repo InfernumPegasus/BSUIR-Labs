@@ -1,4 +1,5 @@
 #include <fstream>
+#include <ranges>
 #include "Repository.h"
 
 bool Repository::CreateIgnoreFile() {
@@ -13,7 +14,7 @@ bool Repository::CreateIgnoreFile() {
         auto filename = std::filesystem::absolute(file).filename().string();
         if (filename.starts_with(".")) {
             auto absolute = std::filesystem::absolute(file).string() + "\n";
-            ofs.write(absolute.c_str(), (long) absolute.length());
+            ofs.write(absolute.c_str(), static_cast<long>(absolute.length()));
         }
     }
 
@@ -62,7 +63,7 @@ void Repository::UpdateIgnoreFile() {
     }
 }
 
-auto Repository::CollectFiles() const -> std::set<File> {
+std::set<File> Repository::CollectFiles() const {
     std::set<File> collectedFiles;
 
     for (auto &file:
@@ -71,18 +72,21 @@ auto Repository::CollectFiles() const -> std::set<File> {
 
         if (!ignoredFiles_.contains(filename) &&
             !std::filesystem::is_directory(filename)) {
-            collectedFiles.emplace(filename);
+            collectedFiles.emplace(filename, File::CalculateHash(filename));
         }
     }
 
     return collectedFiles;
 }
 
-auto Repository::CollectPreviousFiles() const -> std::set<File> {
+std::set<File> Repository::CollectPreviousFiles() const {
     std::set<File> files;
-    for (const auto &commit:
-            std::ranges::reverse_view(commits_)) {
+    for (const auto &commit: std::ranges::reverse_view(commits_)) {
 //        auto commitFiles = commit.Files();
+//        for (const auto &file: commitFiles) {
+//            std::cout << file.ToJson() << std::endl;
+//        }
+
 //        for (auto &file: commitFiles) {
 //            FileStatus status = FileStatus::Unknown;
 //            if (!std::filesystem::exists(file.Name())) {
@@ -149,6 +153,22 @@ bool Repository::LoadConfigFile() {
     return false;
 }
 
+void Repository::Init() {
+    if (LoadConfigFile()) {
+        std::cout << "Config loaded!\n";
+    } else if (CreateConfigFile()) {
+        std::cout << "Config file created!\n";
+    }
+    ignoredFiles_.emplace(configFile_);
+
+    if (!ReadIgnoreFile()) {
+        std::cout << "Creating ignore file!";
+        CreateIgnoreFile();
+        ReadIgnoreFile();
+    }
+    UpdateIgnoreFile();
+}
+
 void Repository::DoCommit(std::string message) {
     // if no commits
     if (commits_.empty()) {
@@ -160,6 +180,7 @@ void Repository::DoCommit(std::string message) {
 
     std::set<File> files;
     for (const auto &collectedFile: collectedFiles) {
+//        files.insert(collectedFile);
         if (lastCommitFiles.contains(collectedFile)) {
             if (collectedFile.Hash() != lastCommitFiles.find(collectedFile)->Hash()) {
                 files.insert(collectedFile);
@@ -185,7 +206,7 @@ constexpr auto Repository::Commits() const -> std::vector<Commit> {
     return commits_;
 }
 
-auto Repository::ToJson() const -> nlohmann::json {
+nlohmann::json Repository::ToJson() const {
     nlohmann::json j;
     std::vector<nlohmann::json> commitsJson;
     std::for_each(commits_.begin(), commits_.end(),
@@ -200,7 +221,7 @@ auto Repository::ToJson() const -> nlohmann::json {
     return j;
 }
 
-auto Repository::FromJson(nlohmann::json json) -> Repository {
+Repository Repository::FromJson(nlohmann::json json) {
     std::string repoName = json["repo_name"];
     std::string repoFolder = json["repo_folder"];
     std::vector<nlohmann::json> commitsJson = json["commits"];

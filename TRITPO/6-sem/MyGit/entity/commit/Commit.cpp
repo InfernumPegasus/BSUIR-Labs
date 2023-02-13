@@ -1,10 +1,10 @@
 #include "Commit.h"
 
-auto Commit::Files() const -> std::set<File> {
+std::set<File> Commit::Files() const {
     return files_;
 }
 
-constexpr auto Commit::Message() const -> std::string {
+constexpr std::string Commit::Message() const {
     return message_;
 }
 

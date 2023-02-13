@@ -14,20 +14,7 @@ public:
             repositoryName_(repositoryName),
             repositoryFolder_(std::filesystem::absolute(repositoryFolder)),
             configFile_(repositoryFolder_ + "/" + VCS_CONFIG_DIRECTORY + "/" + VCS_CONFIG_FILE),
-            ignoreFile_(repositoryFolder_ + "/" + VCS_CONFIG_DIRECTORY + "/" + VCS_IGNORE_FILE) {
-        if (LoadConfigFile()) {
-            std::cout << "Config loaded!\n";
-        } else if (CreateConfigFile()) {
-            std::cout << "Config file created!\n";
-        }
-
-        if (!ReadIgnoreFile()) {
-            std::cout << "Creating ignore file!";
-            CreateIgnoreFile();
-            ReadIgnoreFile();
-        }
-        UpdateIgnoreFile();
-    }
+            ignoreFile_(repositoryFolder_ + "/" + VCS_CONFIG_DIRECTORY + "/" + VCS_IGNORE_FILE) {}
 
 private:
     Repository(std::string_view repositoryName,
@@ -45,9 +32,9 @@ private:
     void UpdateIgnoreFile();
 
     // TODO Check if a file was created or modified
-    [[nodiscard]] auto CollectFiles() const -> std::set<File>;
+    [[nodiscard]] std::set<File> CollectFiles() const;
 
-    [[nodiscard]] auto CollectPreviousFiles() const -> std::set<File>;
+    [[nodiscard]] std::set<File> CollectPreviousFiles() const;
 
     [[nodiscard]] bool CreateConfigFile() const;
 
@@ -57,19 +44,21 @@ private:
     bool LoadConfigFile();
 
 public:
+    void Init();
+
     // TODO трекать изменения с последнего коммита
     void DoCommit(std::string message);
 
 public:
-    [[nodiscard]] constexpr auto Name() const -> std::string;
+    [[nodiscard]] constexpr std::string Name() const;
 
-    [[nodiscard]] constexpr auto Folder() const -> std::string;
+    [[nodiscard]] constexpr std::string Folder() const;
 
-    [[nodiscard]] constexpr auto Commits() const -> std::vector<Commit>;
+    [[nodiscard]] constexpr std::vector<Commit> Commits() const;
 
-    [[nodiscard]] auto ToJson() const -> nlohmann::json;
+    [[nodiscard]] nlohmann::json ToJson() const;
 
-    static auto FromJson(nlohmann::json json) -> Repository;
+    static Repository FromJson(nlohmann::json json);
 
 private:
     static constexpr std::string VCS_CONFIG_DIRECTORY = "config";
