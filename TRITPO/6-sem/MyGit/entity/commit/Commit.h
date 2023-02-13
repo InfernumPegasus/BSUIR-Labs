@@ -14,7 +14,6 @@ public:
             message_(std::move(message)) {
         for (const auto &file: files) {
             files_.emplace(file.Name(), File::CalculateHash(file.Name()));
-//            std::cout << files_.find(file)->ToToml().dump(2) << std::endl;
         }
     }
 
