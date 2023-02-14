@@ -19,10 +19,7 @@ public:
     Commit(const std::set<std::string> &files, std::string message) :
             message_(std::move(message)) {
         for (const auto &file: files) {
-            files_.emplace(file,
-                           File::LastWriteTimeString(file),
-                           File::CalculateHash(file),
-                           FileStatus::Unknown);
+            files_.emplace(file);
         }
     }
 

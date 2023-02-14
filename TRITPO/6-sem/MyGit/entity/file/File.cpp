@@ -45,6 +45,7 @@ File File::FromJson(nlohmann::json json) {
     return {name, modTime, hash, status};
 }
 
+// TODO улучшить алгоритм
 auto File::LoadContent(std::string_view filename) -> std::vector<char> {
     std::vector<char> content;
     std::ifstream ifs(filename.data());
@@ -58,6 +59,7 @@ auto File::LoadContent(std::string_view filename) -> std::vector<char> {
     return content;
 }
 
+// TODO проверить на баги с пустым или несуществующим файлом
 int64_t File::CalculateHash(std::string_view filename) {
     auto content = LoadContent(filename);
     auto res = static_cast<int64_t>(content.size());

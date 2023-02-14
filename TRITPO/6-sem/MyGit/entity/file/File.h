@@ -15,6 +15,12 @@ public:
                               hash_(hash),
                               status_(status) {}
 
+    explicit File(std::string_view filename) :
+            name_(filename),
+            modificationTime_(filename),
+            hash_(CalculateHash(filename)),
+            status_(FileStatus::Unknown) {}
+
     File(const File &rhs) = default;
 
     File &operator=(const File &rhs) = default;

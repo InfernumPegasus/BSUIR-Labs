@@ -30,6 +30,8 @@ private:
             fileHashMap_(std::move(fileHashMap)) {}
 
 private:
+    // TODO мб вынести в отдельный класс работу с конфигами?
+    // TODO сделать так чтобы папка в игнор листе автоматически игнорила все ее содержимое
     bool CreateIgnoreFile();
 
     bool ReadIgnoreFile();
@@ -63,9 +65,9 @@ public:
     static Repository FromJson(nlohmann::json json);
 
 private:
-    static constexpr std::string VCS_CONFIG_DIRECTORY = "config";
-    static constexpr std::string VCS_CONFIG_FILE = "repo_info.json";
-    static constexpr std::string VCS_IGNORE_FILE = "ignore";
+    static constexpr std::string VCS_CONFIG_DIRECTORY = ".config";
+    static constexpr std::string VCS_CONFIG_FILE = ".repo_info.json";
+    static constexpr std::string VCS_IGNORE_FILE = ".ignore";
 
 private:
     std::string repositoryName_;

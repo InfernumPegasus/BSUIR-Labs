@@ -188,7 +188,6 @@ void Repository::Init() {
     } else if (CreateConfigFile()) {
         std::cout << "Config file created!\n";
     }
-    ignoredFiles_.emplace(configFile_);
 
     if (!ReadIgnoreFile()) {
         std::cout << "Creating ignore file!";
