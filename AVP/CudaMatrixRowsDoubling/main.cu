@@ -8,8 +8,8 @@ using namespace std::chrono;
 
 using DataType = float;
 
-constexpr size_t M = 7485;
-constexpr size_t N = 9889;
+constexpr size_t M = 10;
+constexpr size_t N = 20;
 
 DataType h_inputMatrix[N][M];
 DataType h_outputMatrix[N][2 * M];
@@ -114,6 +114,14 @@ bool CompareResults(const DataType cpuMatrix[N][2 * M],
     return true;
 }
 
+void ShowMatrix(const DataType matrix[N][2 * M]) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < 2 * M; j++) {
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+}
 
 int main() {
     PrintDeviceProperties();
@@ -132,13 +140,12 @@ int main() {
 
     CpuDoubleRows(h_inputMatrix, cpu_outputMatrix);
 
+    ShowMatrix(cpu_outputMatrix);
+    std::cout << "\n";
+
     AssertCudaSuccess(cudaMalloc((void **) &d_outputMatrix,
                                  N * 2 * M * sizeof(DataType)),
                       "cudaMalloc [dev output]");
-
-    AssertCudaSuccess(cudaMemcpy(d_inputMatrix, h_inputMatrix,
-                                 N * M * sizeof(int), cudaMemcpyHostToDevice),
-                      "cudaMemcpy [dev input]");
 
     GpuDoubleRows(d_inputMatrix, d_outputMatrix);
 
@@ -147,6 +154,9 @@ int main() {
                                  N * 2 * M * sizeof(int),
                                  cudaMemcpyDeviceToHost),
                       "cudaMemcpy [host output]");
+
+    ShowMatrix(h_outputMatrix);
+    std::cout << "\n";
 
     std::cout << "\nResult matrices equal: " << std::boolalpha <<
               CompareResults(cpu_outputMatrix,
