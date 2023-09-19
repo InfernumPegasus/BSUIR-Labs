@@ -23,7 +23,7 @@ class TCPServer {
   explicit TCPServer(int port) {
     serverSocketDescriptor_ = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocketDescriptor_ == -1) {
-      handleError("Failed to create server socket");
+      HandleError("Failed to create server socket");
     }
 
     serverAddress_.sin_family = AF_INET;
@@ -32,34 +32,34 @@ class TCPServer {
 
     if (bind(serverSocketDescriptor_, (struct sockaddr*)&serverAddress_,
              sizeof(serverAddress_)) < 0) {
-      handleError("Failed to bind server socket");
+      HandleError("Failed to bind server socket");
     }
 
     if (listen(serverSocketDescriptor_, 3) < 0) {
-      handleError("Failed to listen on server socket");
+      HandleError("Failed to listen on server socket");
     }
 
     std::cout << "Server started on port " << port << std::endl;
   }
 
-  ~TCPServer() { stopServer(); }
+  ~TCPServer() { Stop(); }
 
-  void acceptConnection() {
+  void AcceptConnection() {
     socklen_t clientAddressLength = sizeof(clientAddress_);
     clientSocketDescriptor_ = accept(
         serverSocketDescriptor_, (struct sockaddr*)&clientAddress_, &clientAddressLength);
     if (clientSocketDescriptor_ < 0) {
-      handleError("Failed to accept client connection");
+      HandleError("Failed to accept client connection");
     }
   }
 
-  [[nodiscard]] std::string receive() const {
+  [[nodiscard]] std::string Receive() const {
     char buffer[4096];
     memset(buffer, 0, sizeof(buffer));
     std::string receivedData;
 
     if (recv(clientSocketDescriptor_, buffer, 4096, 0) < 0) {
-      handleError("Failed to receive data from client");
+      HandleError("Failed to Receive data from client");
     } else {
       receivedData = buffer;
     }
@@ -67,18 +67,18 @@ class TCPServer {
     return receivedData;
   }
 
-  void send(const std::string& message) const {
+  void Send(const std::string& message) const {
     if (write(clientSocketDescriptor_, message.c_str(), message.length()) < 0) {
-      handleError("Failed to send data to client");
+      HandleError("Failed to Send data to client");
     }
   }
 
-  void closeConnection() const { close(clientSocketDescriptor_); }
+  void CloseConnection() const { close(clientSocketDescriptor_); }
 
-  void stopServer() const { close(serverSocketDescriptor_); }
+  void Stop() const { close(serverSocketDescriptor_); }
 
  private:
-  static void handleError(const std::string& errorMessage) {
+  static void HandleError(const std::string& errorMessage) {
     std::cerr << errorMessage << std::endl;
     exit(1);
   }
@@ -87,10 +87,10 @@ class TCPServer {
 int main() {
   TCPServer server(8080);
   std::string receivedData;
-  server.acceptConnection();
+  server.AcceptConnection();
 
   while (true) {
-    receivedData = server.receive();
+    receivedData = server.Receive();
     auto splitData = SplitString(receivedData, ' ');
 
     if (splitData[0] == EXIT_COMMAND) {
@@ -113,8 +113,8 @@ int main() {
     }
   }
 
-  server.closeConnection();
-  server.stopServer();
+  server.CloseConnection();
+  server.Stop();
 
   return 0;
 }

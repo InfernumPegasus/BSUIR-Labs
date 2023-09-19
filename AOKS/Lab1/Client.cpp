@@ -8,46 +8,46 @@
 
 #include "Utility.hpp"
 
-class TCPSocket {
+class TCPClient {
  private:
   int socketDescriptor_;
 
  public:
-  TCPSocket() {
+  TCPClient() {
     socketDescriptor_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socketDescriptor_ == -1) {
-      handleError("Failed to create socket");
+      HandleError("Failed to create socket");
     }
   }
 
-  void connectToServer(const std::string& ipAddress, int port) const {
+  void ConnectToServer(const std::string& ipAddress, int port) const {
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
 
     if (inet_pton(AF_INET, ipAddress.c_str(), &(serverAddress.sin_addr)) <= 0) {
-      handleError("Invalid address/ Address not supported");
+      HandleError("Invalid address/ Address not supported");
     }
 
     if (connect(socketDescriptor_, (struct sockaddr*)&serverAddress,
                 sizeof(serverAddress)) < 0) {
-      handleError("Connection failed");
+      HandleError("Connection failed");
     }
   }
 
-  void send(const std::string& message) const {
+  void Send(const std::string& message) const {
     if (write(socketDescriptor_, message.c_str(), message.length()) < 0) {
-      handleError("Failed to send message");
+      HandleError("Failed to Send message");
     }
   }
 
-  [[nodiscard]] std::string receive() const {
+  [[nodiscard]] std::string Receive() const {
     char buffer[4096];
     memset(buffer, 0, sizeof(buffer));
     std::string receivedData;
 
     if (read(socketDescriptor_, buffer, sizeof(buffer)) < 0) {
-      handleError("Failed to receive data");
+      HandleError("Failed to Receive data");
     } else {
       receivedData = buffer;
     }
@@ -55,14 +55,14 @@ class TCPSocket {
     return receivedData;
   }
 
-  void closeConnection() const {
+  void CloseConnection() const {
     if (close(socketDescriptor_) < 0) {
-      handleError("Failed to close connection");
+      HandleError("Failed to close connection");
     }
   }
 
  private:
-  static void handleError(const std::string& errorMessage) {
+  static void HandleError(const std::string& errorMessage) {
     std::cerr << errorMessage << " (" << errno << ": " << strerror(errno) << ")"
               << std::endl;
     exit(1);
@@ -70,9 +70,9 @@ class TCPSocket {
 };
 
 int main() {
-  TCPSocket clientSocket;
-  clientSocket.connectToServer("127.0.0.1", 8080);
-  clientSocket.send("Hello, server!");
+  TCPClient client;
+  client.ConnectToServer("127.0.0.1", 8080);
+  client.Send("Hello, server!");
   std::string data;
 
   while (true) {
@@ -80,10 +80,10 @@ int main() {
     std::cin.clear();
     std::getline(std::cin, data);
 
-    clientSocket.send(data);
+    client.Send(data);
 
     if (data == EXIT_COMMAND) {
-      clientSocket.closeConnection();
+      client.CloseConnection();
       break;
     }
   }
