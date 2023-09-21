@@ -90,7 +90,7 @@ class TCPServer {
   void CloseConnection() const { close(clientSocketDescriptor_); }
 
   void Stop() const {
-    if (close(serverSocketDescriptor_) < 0) {
+    if (shutdown(serverSocketDescriptor_, SHUT_RDWR) < 0) {
       fmt::print("Server socket {} cannot be closed\n", serverSocketDescriptor_);
     }
   }

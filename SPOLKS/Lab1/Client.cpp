@@ -64,7 +64,7 @@ class TCPClient {
   }
 
   void CloseConnection() const {
-    if (close(socketDescriptor_) < 0) {
+    if (shutdown(socketDescriptor_, SHUT_RDWR) < 0) {
       HandleError("Failed to close connection");
     }
   }
