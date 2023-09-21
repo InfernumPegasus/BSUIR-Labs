@@ -20,6 +20,14 @@ class TCPClient {
     }
   }
 
+  TCPClient(const TCPClient&) = delete;
+
+  TCPClient(TCPClient&&) = delete;
+
+  TCPClient& operator=(const TCPClient&) = delete;
+
+  TCPClient& operator=(TCPClient&&) = delete;
+
   void ConnectToServer(const std::string& ipAddress, int port) const {
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
@@ -69,14 +77,24 @@ class TCPClient {
   }
 };
 
-int main() {
+int main(int argc, char** argv) {
+  std::string ip;
+  int port;
+  if (argc == 3) {
+    ip = argv[1];
+    port = std::stoi(argv[2]);
+  } else {
+    ip = DEFAULT_IP;
+    port = DEFAULT_PORT;
+  }
+
   TCPClient client;
-  client.ConnectToServer("127.0.0.1", 8080);
-  client.Send("Hello, server!");
+  client.ConnectToServer(ip, port);
+//  client.Send("Hello, server!");
   std::string data;
 
   while (true) {
-    std::cout << "Send data to the server:\n";
+    std::cout << "Enter command to the server:\n";
     std::cin.clear();
     std::getline(std::cin, data);
 

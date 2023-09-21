@@ -4,6 +4,9 @@
 #include <ranges>
 #include <vector>
 
+inline constexpr auto DEFAULT_IP = "127.0.0.1";
+inline constexpr auto DEFAULT_PORT = 8080;
+
 inline constexpr auto EXIT_COMMAND = "exit";
 inline constexpr auto ECHO_COMMAND = "echo";
 inline constexpr auto TIME_COMMAND = "time";

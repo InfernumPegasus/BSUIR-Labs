@@ -44,6 +44,14 @@ class TCPServer {
 
   ~TCPServer() { Stop(); }
 
+  TCPServer(const TCPServer&) = delete;
+
+  TCPServer(TCPServer&&) = delete;
+
+  TCPServer& operator=(const TCPServer&) = delete;
+
+  TCPServer& operator=(TCPServer&&) = delete;
+
   void AcceptConnection() {
     socklen_t clientAddressLength = sizeof(clientAddress_);
     clientSocketDescriptor_ = accept(
@@ -84,8 +92,10 @@ class TCPServer {
   }
 };
 
-int main() {
-  TCPServer server(8080);
+int main(int argc, char** argv) {
+  int port = (argc == 2) ? std::stoi(argv[1]) : DEFAULT_PORT;
+
+  TCPServer server(port);
   std::string receivedData;
   server.AcceptConnection();
 
@@ -93,7 +103,7 @@ int main() {
     receivedData = server.Receive();
     auto splitData = SplitString(receivedData, ' ');
 
-    if (splitData[0] == EXIT_COMMAND) {
+    if (splitData.at(0) == EXIT_COMMAND) {
       break;
     }
 
@@ -102,14 +112,12 @@ int main() {
       fmt::print("Current server time: {}\n", t);
     }
 
-    if (splitData.size() > 1) {
-      if (splitData.at(0) == ECHO_COMMAND) {
-        std::cout << "Received data from client command:" << std::endl;
-        for (size_t i = 1; i < splitData.size(); i++) {
-          std::cout << splitData.at(i) << " ";
-        }
-        std::cout << std::endl;
+    if (splitData.size() > 1 && splitData.at(0) == ECHO_COMMAND) {
+      std::cout << "Received data from client command:" << std::endl;
+      for (size_t i = 1; i < splitData.size(); i++) {
+        std::cout << splitData.at(i) << " ";
       }
+      std::cout << std::endl;
     }
   }
 
