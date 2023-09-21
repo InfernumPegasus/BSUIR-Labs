@@ -12,9 +12,9 @@ inline constexpr auto ECHO_COMMAND = "echo";
 inline constexpr auto TIME_COMMAND = "time";
 
 std::vector<std::string> SplitString(const std::string& str, char delimiter) {
-  auto split = str | std::ranges::views::split(delimiter) |
-               std::ranges::views::transform([](auto&& str) {
-                 return std::string_view(&*str.begin(), std::ranges::distance(str));
+  using namespace std::ranges;
+  auto split = str | views::split(delimiter) | views::transform([](auto&& str) {
+                 return std::string_view(&*str.begin(), distance(str));
                });
   return {split.begin(), split.end()};
 }

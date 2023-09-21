@@ -42,7 +42,11 @@ class TCPServer {
     std::cout << "Server started on port " << port << std::endl;
   }
 
-  ~TCPServer() { Stop(); }
+  ~TCPServer() {
+    std::cout << "Closing server..." << std::endl;
+    Stop();
+    std::cout << "Server closed.\n";
+  }
 
   TCPServer(const TCPServer&) = delete;
 
@@ -58,6 +62,8 @@ class TCPServer {
         serverSocketDescriptor_, (struct sockaddr*)&clientAddress_, &clientAddressLength);
     if (clientSocketDescriptor_ < 0) {
       HandleError("Failed to accept client connection");
+    } else {
+      fmt::print("Client {} connected to server\n", clientSocketDescriptor_);
     }
   }
 
@@ -83,7 +89,11 @@ class TCPServer {
 
   void CloseConnection() const { close(clientSocketDescriptor_); }
 
-  void Stop() const { close(serverSocketDescriptor_); }
+  void Stop() const {
+    if (close(serverSocketDescriptor_) < 0) {
+      fmt::print("Server socket {} cannot be closed\n", serverSocketDescriptor_);
+    }
+  }
 
  private:
   static void HandleError(const std::string& errorMessage) {
@@ -122,7 +132,6 @@ int main(int argc, char** argv) {
   }
 
   server.CloseConnection();
-  server.Stop();
 
   return 0;
 }
