@@ -1,5 +1,4 @@
 #include <arpa/inet.h>
-#include <fmt/core.h>
 #include <sys/socket.h>
 
 #include <functional>
