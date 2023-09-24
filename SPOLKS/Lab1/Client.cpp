@@ -1,6 +1,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
+#include <cstring>
 #include <functional>
 #include <iostream>
 #include <thread>
