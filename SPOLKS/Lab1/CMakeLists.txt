@@ -15,5 +15,5 @@ add_executable(
         Server.cpp
 )
 
-target_link_libraries(client PRIVATE fmt)
+target_link_libraries(client PRIVATE)
 target_link_libraries(server PRIVATE fmt)
