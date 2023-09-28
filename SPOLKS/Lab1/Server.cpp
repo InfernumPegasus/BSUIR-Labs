@@ -91,6 +91,9 @@ class TCPServer {
 
   void Stop() const {
     if (shutdown(serverSocketDescriptor_, SHUT_RDWR) < 0) {
+      fmt::print("Shutdown error\n", serverSocketDescriptor_);
+    }
+    if (close(serverSocketDescriptor_) < 0) {
       fmt::print("Server socket {} cannot be closed\n", serverSocketDescriptor_);
     }
   }

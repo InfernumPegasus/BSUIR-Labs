@@ -20,6 +20,15 @@ class TCPClient {
     }
   }
 
+  ~TCPClient() {
+    if (shutdown(socketDescriptor_, SHUT_RDWR) < 0) {
+      std::cout << "Shutdown error\n";
+    }
+    if (close(socketDescriptor_) < 0) {
+      std::cerr << "Close error\n";
+    }
+  }
+
   TCPClient(const TCPClient&) = delete;
 
   TCPClient(TCPClient&&) = delete;
@@ -63,16 +72,17 @@ class TCPClient {
     return receivedData;
   }
 
-  void CloseConnection() const {
+  void CloseConnection() {
     if (shutdown(socketDescriptor_, SHUT_RDWR) < 0) {
       HandleError("Failed to close connection");
     }
   }
 
  private:
-  static void HandleError(const std::string& errorMessage) {
+  void HandleError(const std::string& errorMessage) const {
     std::cerr << errorMessage << " (" << errno << ": " << strerror(errno) << ")"
               << std::endl;
+    close(socketDescriptor_);
     exit(1);
   }
 };
