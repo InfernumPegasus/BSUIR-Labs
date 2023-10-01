@@ -14,11 +14,21 @@ def plot_histogram_1(image1):
 def plot_histogram_2(image1, image2):
     plt.figure()
 
+    gray_image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+    gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+
+    histogram1 = cv2.calcHist([gray_image1], [0], None, [256], [0, 256])
+    histogram2 = cv2.calcHist([gray_image2], [0], None, [256], [0, 256])
+
     plt.subplot(2, 1, 1)
-    plt.hist(image1.ravel(), 256, [0, 256])
+    # plt.hist(image1.ravel(), 256, [0, 256])
+
+    plt.plot(histogram1, color='gray')
 
     plt.subplot(2, 1, 2)
-    plt.hist(image2.ravel(), 256, [0, 256])
+    plt.plot(histogram2, color='gray')
+
+    # plt.hist(image2.ravel(), 256, [0, 256])
 
     plt.show()
 
@@ -40,7 +50,7 @@ def apply_prewitt_filter(image):
 def apply_prewitt_filter_no_lib(image):
     height, width, _ = image.shape
 
-    kernel_x = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
+    kernel_x = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]])
     kernel_y = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])
 
     gray_image = np.zeros((height, width), dtype=np.uint8)
@@ -109,4 +119,3 @@ if __name__ == "__main__":
         max_value = int(sys.argv[2])
         contrast = float(sys.argv[3])
     main(min_value, max_value, contrast)
-
