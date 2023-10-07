@@ -93,7 +93,7 @@ class TCPServer {
   }
 
  private:
-  void HandleError(const std::string& errorMessage) {
+  void HandleError(const std::string& errorMessage) const {
     std::cerr << errorMessage << std::endl;
     std::cerr << "Error message from errno: " << strerror(errno) << std::endl;
     Stop();
