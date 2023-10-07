@@ -3,11 +3,9 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-#include <csignal>
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <thread>
 
 #include "Utility.hpp"
 
@@ -20,6 +18,8 @@ class TCPServer {
   sockaddr_in clientAddress_{};
 
  public:
+  DISABLE_COPY_AND_MOVE(TCPServer)
+
   explicit TCPServer(int port) {
     serverSocketDescriptor_ = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocketDescriptor_ == -1) {
@@ -48,14 +48,6 @@ class TCPServer {
     std::cout << "Server closed.\n";
   }
 
-  TCPServer(const TCPServer&) = delete;
-
-  TCPServer(TCPServer&&) = delete;
-
-  TCPServer& operator=(const TCPServer&) = delete;
-
-  TCPServer& operator=(TCPServer&&) = delete;
-
   void AcceptConnection() {
     socklen_t clientAddressLength = sizeof(clientAddress_);
     clientSocketDescriptor_ = accept(
@@ -67,7 +59,7 @@ class TCPServer {
     }
   }
 
-  [[nodiscard]] std::string Receive() const {
+  [[nodiscard]] std::string Receive() {
     char buffer[4096];
     memset(buffer, 0, sizeof(buffer));
     std::string receivedData;
@@ -81,26 +73,30 @@ class TCPServer {
     return receivedData;
   }
 
-  void Send(const std::string& message) const {
+  void Send(const std::string& message) {
     if (write(clientSocketDescriptor_, message.c_str(), message.length()) < 0) {
       HandleError("Failed to Send data to client");
     }
   }
 
-  void CloseConnection() const { close(clientSocketDescriptor_); }
-
-  void Stop() const {
-    if (shutdown(serverSocketDescriptor_, SHUT_RDWR) < 0) {
-      fmt::print("Shutdown error\n", serverSocketDescriptor_);
-    }
+  void CloseConnection() const {
     if (close(serverSocketDescriptor_) < 0) {
       fmt::print("Server socket {} cannot be closed\n", serverSocketDescriptor_);
     }
   }
 
+  void Stop() const {
+    if (shutdown(serverSocketDescriptor_, SHUT_RDWR) < 0) {
+      fmt::print("Shutdown error\n");
+    }
+    CloseConnection();
+  }
+
  private:
-  static void HandleError(const std::string& errorMessage) {
+  void HandleError(const std::string& errorMessage) {
     std::cerr << errorMessage << std::endl;
+    std::cerr << "Error message from errno: " << strerror(errno) << std::endl;
+    Stop();
     exit(1);
   }
 };
@@ -110,9 +106,10 @@ int main(int argc, char** argv) {
 
   TCPServer server(port);
   std::string receivedData;
-  server.AcceptConnection();
 
   while (true) {
+    server.AcceptConnection();
+
     receivedData = server.Receive();
     auto splitData = SplitString(receivedData, ' ');
 
@@ -133,8 +130,6 @@ int main(int argc, char** argv) {
       std::cout << std::endl;
     }
   }
-
-  server.CloseConnection();
 
   return 0;
 }

@@ -1,10 +1,10 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include <cstring>
 #include <functional>
 #include <iostream>
-#include <thread>
 
 #include "Utility.hpp"
 
@@ -13,6 +13,8 @@ class TCPClient {
   int socketDescriptor_;
 
  public:
+  DISABLE_COPY_AND_MOVE(TCPClient)
+
   TCPClient() {
     socketDescriptor_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socketDescriptor_ == -1) {
@@ -21,21 +23,8 @@ class TCPClient {
   }
 
   ~TCPClient() {
-    if (shutdown(socketDescriptor_, SHUT_RDWR) < 0) {
-      std::cout << "Shutdown error\n";
-    }
-    if (close(socketDescriptor_) < 0) {
-      std::cerr << "Close error\n";
-    }
+    CloseConnection();
   }
-
-  TCPClient(const TCPClient&) = delete;
-
-  TCPClient(TCPClient&&) = delete;
-
-  TCPClient& operator=(const TCPClient&) = delete;
-
-  TCPClient& operator=(TCPClient&&) = delete;
 
   void ConnectToServer(const std::string& ipAddress, int port) const {
     sockaddr_in serverAddress{};
@@ -72,17 +61,19 @@ class TCPClient {
     return receivedData;
   }
 
-  void CloseConnection() {
+  void CloseConnection() const {
     if (shutdown(socketDescriptor_, SHUT_RDWR) < 0) {
-      HandleError("Failed to close connection");
+      std::cout << "Shutdown error\n" << std::endl;
+    }
+    if (close(socketDescriptor_) < 0) {
+      std::cout << "Close error\n" << std::endl;
     }
   }
 
  private:
-  void HandleError(const std::string& errorMessage) const {
+  static void HandleError(const std::string& errorMessage) {
     std::cerr << errorMessage << " (" << errno << ": " << strerror(errno) << ")"
               << std::endl;
-    close(socketDescriptor_);
     exit(1);
   }
 };
@@ -110,7 +101,6 @@ int main(int argc, char** argv) {
     client.Send(data);
 
     if (data == EXIT_COMMAND) {
-      client.CloseConnection();
       break;
     }
   }

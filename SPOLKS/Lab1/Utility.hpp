@@ -11,12 +11,27 @@ inline constexpr auto EXIT_COMMAND = "exit";
 inline constexpr auto ECHO_COMMAND = "echo";
 inline constexpr auto TIME_COMMAND = "time";
 
+#define DISABLE_COPY_AND_MOVE(className) \
+    className(const className&) = delete; \
+    className& operator=(const className&) = delete; \
+    className(className&&) = delete; \
+    className& operator=(className&&) = delete;
+
 std::vector<std::string> SplitString(const std::string& str, char delimiter) {
-  using namespace std::ranges;
-  auto split = str | views::split(delimiter) | views::transform([](auto&& str) {
-                 return std::string_view(&*str.begin(), distance(str));
-               });
-  return {split.begin(), split.end()};
+  std::vector<std::string> split;
+  std::string current;
+
+  for (char c : str) {
+    if (c == delimiter) {
+      split.push_back(current);
+      current.clear();
+    } else {
+      current += c;
+    }
+  }
+
+  split.push_back(current);
+  return split;
 }
 
 #endif  // SERVER_UTILITY_HPP
