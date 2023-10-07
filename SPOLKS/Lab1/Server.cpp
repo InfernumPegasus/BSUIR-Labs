@@ -101,35 +101,38 @@ class TCPServer {
   }
 };
 
+[[noreturn]]
 int main(int argc, char** argv) {
   int port = (argc == 2) ? std::stoi(argv[1]) : DEFAULT_PORT;
 
   TCPServer server(port);
   std::string receivedData;
 
-  while (true) {
-    server.AcceptConnection();
-
-    receivedData = server.Receive();
-    auto splitData = SplitString(receivedData, ' ');
-
+  const auto commandHandler = [&](const std::vector<std::string>& splitData) {
     if (splitData.at(0) == EXIT_COMMAND) {
-      break;
+      exit(0);
     }
 
     if (splitData.at(0) == TIME_COMMAND) {
       auto t = std::chrono::system_clock::now();
-      fmt::print("Current server time: {}\n", t);
+      fmt::print("[{}] Current server time: {}\n", TIME_COMMAND, t);
     }
 
     if (splitData.size() > 1 && splitData.at(0) == ECHO_COMMAND) {
-      std::cout << "Received data from client command:" << std::endl;
+      fmt::print("[{}] Received data from client command:\n", ECHO_COMMAND);
       for (size_t i = 1; i < splitData.size(); i++) {
         std::cout << splitData.at(i) << " ";
       }
       std::cout << std::endl;
     }
-  }
+  };
 
-  return 0;
+  server.AcceptConnection();
+
+  while (true) {
+    receivedData = server.Receive();
+    auto splitData = SplitString(receivedData, ' ');
+
+    commandHandler(splitData);
+  }
 }
