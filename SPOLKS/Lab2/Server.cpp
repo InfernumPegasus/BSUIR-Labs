@@ -75,12 +75,14 @@ class TCPServer {
   }
 
   void Send(const std::string& message) {
-    if (write(clientSocketDescriptor_, message.c_str(), message.length()) < 0) {
+    const auto bytes = write(clientSocketDescriptor_, message.c_str(), message.length());
+    if (bytes < 0) {
       HandleError("Failed to send data to client");
     }
+    std::cout << "Sent bytes: " << bytes << std::endl;
   }
 
-  void TransmitFile(const std::string& fileName) const {
+  void UploadFile(const std::string& fileName) const {
     std::ifstream file(fileName, std::ios::binary);
     if (!file) {
       std::cout << "Error opening file!\n";
@@ -105,7 +107,7 @@ class TCPServer {
       }
     }
 
-    std::cout << "File transmitted.\n";
+    std::cout << "File '" << fileName << "' transmitted.\n";
   }
 
   void ReceiveFile(const std::string& fileName) const {
@@ -122,7 +124,7 @@ class TCPServer {
 
     // Read and write the file in chunks until there is no more data
     while (true) {
-      auto bytesRead = read(clientSocketDescriptor_, buffer, bufferSize);
+      auto bytesRead = recv(clientSocketDescriptor_, buffer, bufferSize, MSG_DONTWAIT);
       if (bytesRead <= 0) {
         break;
       }
@@ -130,7 +132,7 @@ class TCPServer {
       file.write(buffer, bytesRead);
     }
 
-    std::cout << "File received and saved.\n";
+    std::cout << "File '" << fileName << "' received and saved.\n";
   }
 
   void CloseConnection() const {
@@ -155,7 +157,6 @@ class TCPServer {
   }
 };
 
-
 int main(int argc, char** argv) {
   int port = (argc == 2) ? std::stoi(argv[1]) : DEFAULT_PORT;
 
@@ -163,13 +164,16 @@ int main(int argc, char** argv) {
   std::string receivedData;
 
   const auto commandHandler = [&](const std::vector<std::string>& splitData) {
+    //    std::cout << "RECEIVED:\n" << receivedData << "\n";
+
     if (splitData.at(0) == EXIT_COMMAND) {
       exit(0);
     }
 
     if (splitData.at(0) == TIME_COMMAND) {
       auto t = std::chrono::system_clock::now();
-      fmt::print("[{}] Current server time: {}\n", TIME_COMMAND, t);
+      const auto timeString = fmt::format("Current server time: {}\n", t);
+      server.Send(timeString);
     }
 
     if (splitData.size() > 1 && splitData.at(0) == ECHO_COMMAND) {
@@ -181,21 +185,23 @@ int main(int argc, char** argv) {
     }
 
     if (splitData.size() == 2 && splitData.at(0) == UPLOAD_COMMAND) {
-      server.TransmitFile(splitData.at(1));
+      server.ReceiveFile(splitData[1] + "_server_received");
+    }
+
+    if (splitData.size() == 2 && splitData.at(0) == DOWNLOAD_COMMAND) {
+      server.UploadFile(splitData[1]);
     }
   };
 
   server.AcceptConnection();
 
-//  server.TransmitFile("../TESTFILE");
-  server.ReceiveFile("TESTFILE_R");
+  //  server.UploadFile("../TESTFILE");
+  //  server.ReceiveFile("TESTFILE_R");
 
-//  while (true) {
-//    receivedData = server.Receive();
-//    auto splitData = SplitString(receivedData, ' ');
-//
-//    commandHandler(splitData);
-//  }
+  while (true) {
+    receivedData = server.Receive();
+    auto splitData = SplitString(receivedData, ' ');
 
-  return 0;
+    commandHandler(splitData);
+  }
 }

@@ -39,12 +39,12 @@ class TCPClient {
     }
   }
 
-  size_t Send(const std::string& message) const {
-    const auto res = write(socketDescriptor_, message.c_str(), message.length());
-    if (res < 0) {
+  void Send(const std::string& message) const {
+    const auto bytes = write(socketDescriptor_, message.c_str(), message.length());
+    if (bytes < 0) {
       HandleError("Failed to send data to client");
     }
-    return res;
+    std::cout << "Sent bytes: " << bytes << std::endl;
   }
 
   [[nodiscard]] std::string Receive() const {
@@ -61,16 +61,10 @@ class TCPClient {
     return receivedData;
   }
 
-  void UploadFile(const std::string& fileName) {
+  void UploadFile(const std::string& fileName) const {
     const auto [lines, size] = SplitFile(fileName, BUFSIZ);
-    Send(std::to_string(size));
-
-    std::hash<std::string> hasher;
 
     for (const auto& line : lines) {
-      size_t hash = hasher(line);
-
-      Send(std::to_string(hash));
       Send(line);
     }
   }
@@ -89,7 +83,7 @@ class TCPClient {
 
     // Read and write the file in chunks until there is no more data
     while (true) {
-      auto bytesRead = read(socketDescriptor_, buffer, bufferSize);
+      auto bytesRead = recv(socketDescriptor_, buffer, bufferSize, MSG_DONTWAIT);
       if (bytesRead <= 0) {
         break;
       }
@@ -97,35 +91,7 @@ class TCPClient {
       file.write(buffer, bytesRead);
     }
 
-    std::cout << "[LOG] : File received and saved.\n";
-  }
-
-  void TransmitFile(const std::string& fileName) const {
-    std::ifstream file(fileName, std::ios::binary);
-    if (!file) {
-      std::cout << "Error opening file!\n";
-      return;
-    }
-
-    const int bufferSize = 1024;
-    char buffer[bufferSize];
-
-    // Read and send the file in chunks until there is no more data
-    while (true) {
-      file.read(buffer, bufferSize);
-      auto bytesRead = file.gcount();
-      if (bytesRead <= 0) {
-        break;
-      }
-
-      auto bytesSent = send(socketDescriptor_, buffer, bytesRead, 0);
-      if (bytesSent <= 0) {
-        std::cout << "Error sending data!\n";
-        return;
-      }
-    }
-
-    std::cout << "File transmitted.\n";
+    std::cout << "File '" << fileName << "' received and saved.\n";
   }
 
   void CloseConnection() const {
@@ -165,25 +131,35 @@ int main(int argc, char** argv) {
       exit(0);
     }
 
+    if (splitData.at(0) == TIME_COMMAND) {
+      const auto timeString = client.Receive();
+      std::cout << timeString << std::endl;
+    }
+
+    // Send file
     if (splitData.size() == 2 && splitData.at(0) == UPLOAD_COMMAND) {
-      client.UploadFile(splitData.at(0));
+      client.UploadFile(splitData.at(1));
+    }
+
+    // Receive file
+    if (splitData.size() == 2 && splitData.at(0) == DOWNLOAD_COMMAND) {
+      client.ReceiveFile(splitData[1] + "_client_received");
     }
   };
 
-  client.TransmitFile("../TESTFILE");
-//  client.ReceiveFile("TESTFILE_R");
+  //  client.UploadFile("../TESTFILE");
+  //  client.ReceiveFile("RECEIVED");
 
-//  while (true) {
-//    std::cout << "Enter command to the server:\n";
-//    std::cin.clear();
-//    std::getline(std::cin, data);
-//
-//    client.Send(data);
-//
-//    if (data == EXIT_COMMAND) {
-//      break;
-//    }
-//  }
+  while (true) {
+    std::cout << "Enter command to the server:\n";
+    std::cin.clear();
+    std::getline(std::cin, data);
+    auto splitData = SplitString(data, ' ');
+
+    client.Send(data);
+
+    commandHandler(splitData);
+  }
 
   return 0;
 }
