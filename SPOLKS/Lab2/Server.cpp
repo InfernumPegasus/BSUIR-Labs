@@ -1,16 +1,10 @@
 #include <fmt/chrono.h>
 #include <fmt/core.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
 
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <string>
-
+#include "TCPBase.h"
 #include "Utility.hpp"
 
-class TCPServer {
+class TCPServer : public TCPBase {
  private:
   int serverSocketDescriptor_;
 
@@ -60,80 +54,58 @@ class TCPServer {
     }
   }
 
-  [[nodiscard]] std::string Receive() {
-    char buffer[BUFSIZ];
-    memset(buffer, 0, sizeof(buffer));
-    std::string receivedData;
+  //  void UploadFile(const std::string& fileName) const {
+  //    std::ifstream file(fileName, std::ios::binary);
+  //    if (!file) {
+  //      std::cout << "Error opening file!\n";
+  //      return;
+  //    }
+  //
+  //    const int bufferSize = BUFSIZ;
+  //    char buffer[bufferSize];
+  //
+  //    // Read and send the file in chunks until there is no more data
+  //    while (true) {
+  //      file.read(buffer, bufferSize);
+  //      auto bytesRead = file.gcount();
+  //      if (bytesRead <= 0) {
+  //        break;
+  //      }
+  //
+  //      auto bytesSent = send(clientSocketDescriptor_, buffer, bytesRead, 0);
+  //      if (bytesSent <= 0) {
+  //        std::cout << "Error sending data!\n";
+  //        return;
+  //      }
+  //    }
+  //
+  //    std::cout << "File '" << fileName << "' transmitted.\n";
+  //  }
 
-    if (recv(clientSocketDescriptor_, buffer, 4096, 0) < 0) {
-      HandleError("Failed to Receive data from client");
-    } else {
-      receivedData = buffer;
-    }
-
-    return receivedData;
-  }
-
-  void Send(const std::string& message) {
-    const auto bytes = write(clientSocketDescriptor_, message.c_str(), message.length());
-    if (bytes < 0) {
-      HandleError("Failed to send data to client");
-    }
-    std::cout << "Sent bytes: " << bytes << std::endl;
-  }
-
-  void UploadFile(const std::string& fileName) const {
-    std::ifstream file(fileName, std::ios::binary);
-    if (!file) {
-      std::cout << "Error opening file!\n";
-      return;
-    }
-
-    const int bufferSize = 1024;
-    char buffer[bufferSize];
-
-    // Read and send the file in chunks until there is no more data
-    while (true) {
-      file.read(buffer, bufferSize);
-      auto bytesRead = file.gcount();
-      if (bytesRead <= 0) {
-        break;
-      }
-
-      auto bytesSent = send(clientSocketDescriptor_, buffer, bytesRead, 0);
-      if (bytesSent <= 0) {
-        std::cout << "Error sending data!\n";
-        return;
-      }
-    }
-
-    std::cout << "File '" << fileName << "' transmitted.\n";
-  }
-
-  void ReceiveFile(const std::string& fileName) const {
-    std::ofstream file(fileName, std::ios::binary);
-    if (!file) {
-      std::cout << "Error opening file!\n";
-      return;
-    }
-
-    const int bufferSize = 1024;
-    char buffer[bufferSize];
-
-    std::cout << "[LOG] : Receiving file...\n";
-
-    // Read and write the file in chunks until there is no more data
-    while (true) {
-      auto bytesRead = recv(clientSocketDescriptor_, buffer, bufferSize, MSG_DONTWAIT);
-      if (bytesRead <= 0) {
-        break;
-      }
-
-      file.write(buffer, bytesRead);
-    }
-
-    std::cout << "File '" << fileName << "' received and saved.\n";
-  }
+  //  void ReceiveFile(const std::string& fileName) const {
+  //    std::ofstream file(fileName, std::ios::binary);
+  //    if (!file) {
+  //      std::cout << "Error opening file!\n";
+  //      return;
+  //    }
+  //
+  //    const int bufferSize = BUFSIZ;
+  //    char buffer[bufferSize];
+  //
+  //    std::cout << "[LOG] : Receiving file...\n";
+  //
+  //    // Read and write the file in chunks until there is no more data
+  //    while (true) {
+  //      auto bytesRead = recv(clientSocketDescriptor_, buffer, bufferSize,
+  //      MSG_DONTWAIT); if (bytesRead <= 0) {
+  //        break;
+  //      }
+  //
+  //      file.write(buffer, bytesRead);
+  //    }
+  //
+  //    std::cout << "File '" << fileName << "' received and saved.\n";
+  //  }
 
   void CloseConnection() const {
     if (close(serverSocketDescriptor_) < 0) {
@@ -148,32 +120,24 @@ class TCPServer {
     CloseConnection();
   }
 
- private:
-  void HandleError(const std::string& errorMessage) const {
-    std::cerr << errorMessage << std::endl;
-    std::cerr << "Error message from errno: " << strerror(errno) << std::endl;
-    Stop();
-    exit(1);
-  }
+  [[nodiscard]] int ClientSocket() const { return clientSocketDescriptor_; }
 };
 
-int main(int argc, char** argv) {
+[[noreturn]] int main(int argc, char** argv) {
   int port = (argc == 2) ? std::stoi(argv[1]) : DEFAULT_PORT;
 
   TCPServer server(port);
   std::string receivedData;
 
   const auto commandHandler = [&](const std::vector<std::string>& splitData) {
-    //    std::cout << "RECEIVED:\n" << receivedData << "\n";
-
     if (splitData.at(0) == EXIT_COMMAND) {
       exit(0);
     }
 
     if (splitData.at(0) == TIME_COMMAND) {
       auto t = std::chrono::system_clock::now();
-      const auto timeString = fmt::format("Current server time: {}\n", t);
-      server.Send(timeString);
+      const auto timeString = fmt::format("Current server time: {}", t);
+      server.Send(timeString, server.ClientSocket());
     }
 
     if (splitData.size() > 1 && splitData.at(0) == ECHO_COMMAND) {
@@ -185,21 +149,18 @@ int main(int argc, char** argv) {
     }
 
     if (splitData.size() == 2 && splitData.at(0) == UPLOAD_COMMAND) {
-      server.ReceiveFile(splitData[1] + "_server_received");
+      server.ReceiveFile(splitData[1] + "_server_received", server.ClientSocket());
     }
 
     if (splitData.size() == 2 && splitData.at(0) == DOWNLOAD_COMMAND) {
-      server.UploadFile(splitData[1]);
+      server.UploadFile(splitData[1], server.ClientSocket());
     }
   };
 
   server.AcceptConnection();
 
-  //  server.UploadFile("../TESTFILE");
-  //  server.ReceiveFile("TESTFILE_R");
-
   while (true) {
-    receivedData = server.Receive();
+    receivedData = server.Receive(server.ClientSocket());
     auto splitData = SplitString(receivedData, ' ');
 
     commandHandler(splitData);
