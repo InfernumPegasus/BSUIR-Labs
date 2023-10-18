@@ -62,6 +62,16 @@ class TCPClient : public TCPBase {
   client.ConnectToServer(ip, port);
   std::string data;
 
+  const auto handleConnection = [&]() {
+    std::cout << "Enter your name: ";
+    std::getline(std::cin, data);
+    client.Send(data, client.ClientSocket());
+    data = client.Receive(client.ClientSocket());
+    std::cout << data << std::endl;
+  };
+
+  handleConnection();
+
   const auto commandHandler = [&](const std::vector<std::string>& splitData) {
     if (splitData.at(0) == EXIT_COMMAND) {
       exit(0);

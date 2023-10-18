@@ -70,11 +70,13 @@ class TCPServer : public TCPBase {
   [[nodiscard]] int ClientSocket() const { return clientSocketDescriptor_; }
 };
 
+bool hasClient = false;
+
 [[noreturn]] int main(int argc, char** argv) {
   int port = (argc == 2) ? std::stoi(argv[1]) : DEFAULT_PORT;
 
   TCPServer server(port);
-  std::string receivedData;
+  std::string data;
 
   const auto commandHandler = [&](const std::vector<std::string>& splitData) {
     if (splitData.at(0) == EXIT_COMMAND) {
@@ -104,11 +106,20 @@ class TCPServer : public TCPBase {
     }
   };
 
-  server.AcceptConnection();
+  const auto handleConnection = [&]() {
+    if (!hasClient) {
+      server.AcceptConnection();
+      data = server.Receive(server.ClientSocket());
+      server.Send("Hello, " + data + "!", server.ClientSocket());
+      hasClient = true;
+    }
+  };
 
   while (true) {
-    receivedData = server.Receive(server.ClientSocket());
-    auto splitData = SplitString(receivedData, ' ');
+    handleConnection();
+
+    data = server.Receive(server.ClientSocket());
+    auto splitData = SplitString(data, ' ');
 
     commandHandler(splitData);
   }
