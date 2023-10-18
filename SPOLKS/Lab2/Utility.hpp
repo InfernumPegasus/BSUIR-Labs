@@ -1,9 +1,9 @@
 #ifndef SERVER_UTILITY_HPP
 #define SERVER_UTILITY_HPP
 
+#include <filesystem>
 #include <fstream>
 #include <vector>
-#include <filesystem>
 
 namespace fs = std::filesystem;
 
@@ -11,12 +11,15 @@ inline constexpr auto DEFAULT_IP = "127.0.0.1";
 inline constexpr auto DEFAULT_PORT = 8080;
 
 // clang-format off
-inline constexpr auto EXIT_COMMAND      = "exit";
-inline constexpr auto ECHO_COMMAND      = "echo";
-inline constexpr auto TIME_COMMAND      = "time";
-inline constexpr auto DOWNLOAD_COMMAND  = "download";
-inline constexpr auto UPLOAD_COMMAND    = "upload";
+inline constexpr auto EXIT_COMMAND          = "exit";
+inline constexpr auto EXIT_ALL_COMMAND      = "!exit";
+inline constexpr auto ECHO_COMMAND          = "echo";
+inline constexpr auto TIME_COMMAND          = "time";
+inline constexpr auto DOWNLOAD_COMMAND      = "download";
+inline constexpr auto UPLOAD_COMMAND        = "upload";
 // clang-format on
+
+inline const fs::path USERS_FOLDER = "users";
 
 #define DISABLE_COPY_AND_MOVE(className)           \
   className(const className&) = delete;            \
@@ -41,14 +44,14 @@ std::vector<std::string> SplitString(const std::string& str, char delimiter) {
   return split;
 }
 
-std::pair<std::vector<std::string>, size_t> SplitFile(const std::string& filename, int N) {
+std::pair<std::vector<std::string>, int> SplitFile(const std::string& filename, long N) {
   std::vector<std::string> result;
 
   std::ifstream file(filename, std::ios::binary);
 
   if (!file) {
     std::cerr << "Failed to open file: " << filename << std::endl;
-    return {result, 0};
+    return {result, -1};
   }
 
   file.seekg(0, std::ios::end);

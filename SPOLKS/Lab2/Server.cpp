@@ -54,59 +54,6 @@ class TCPServer : public TCPBase {
     }
   }
 
-  //  void UploadFile(const std::string& fileName) const {
-  //    std::ifstream file(fileName, std::ios::binary);
-  //    if (!file) {
-  //      std::cout << "Error opening file!\n";
-  //      return;
-  //    }
-  //
-  //    const int bufferSize = BUFSIZ;
-  //    char buffer[bufferSize];
-  //
-  //    // Read and send the file in chunks until there is no more data
-  //    while (true) {
-  //      file.read(buffer, bufferSize);
-  //      auto bytesRead = file.gcount();
-  //      if (bytesRead <= 0) {
-  //        break;
-  //      }
-  //
-  //      auto bytesSent = send(clientSocketDescriptor_, buffer, bytesRead, 0);
-  //      if (bytesSent <= 0) {
-  //        std::cout << "Error sending data!\n";
-  //        return;
-  //      }
-  //    }
-  //
-  //    std::cout << "File '" << fileName << "' transmitted.\n";
-  //  }
-
-  //  void ReceiveFile(const std::string& fileName) const {
-  //    std::ofstream file(fileName, std::ios::binary);
-  //    if (!file) {
-  //      std::cout << "Error opening file!\n";
-  //      return;
-  //    }
-  //
-  //    const int bufferSize = BUFSIZ;
-  //    char buffer[bufferSize];
-  //
-  //    std::cout << "[LOG] : Receiving file...\n";
-  //
-  //    // Read and write the file in chunks until there is no more data
-  //    while (true) {
-  //      auto bytesRead = recv(clientSocketDescriptor_, buffer, bufferSize,
-  //      MSG_DONTWAIT); if (bytesRead <= 0) {
-  //        break;
-  //      }
-  //
-  //      file.write(buffer, bytesRead);
-  //    }
-  //
-  //    std::cout << "File '" << fileName << "' received and saved.\n";
-  //  }
-
   void CloseConnection() const {
     if (close(serverSocketDescriptor_) < 0) {
       fmt::print("Server socket {} cannot be closed\n", serverSocketDescriptor_);
