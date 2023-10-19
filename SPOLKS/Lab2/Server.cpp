@@ -1,8 +1,14 @@
 #include <fmt/chrono.h>
 #include <fmt/core.h>
 
+#include <unordered_map>
+
 #include "TCPBase.hpp"
 #include "Utility.hpp"
+
+using Sessions = std::unordered_map<std::string, std::optional<SessionFileInfo>>;
+
+Sessions sessions;
 
 class TCPServer : public TCPBase {
  private:
@@ -118,6 +124,17 @@ bool hasClient = false;
       clientName = server.Receive(server.ClientSocket());
       server.Send("Hello, " + clientName + "!", server.ClientSocket());
       hasClient = true;
+
+//      if (sessions.contains(clientName)) {
+//        fmt::print("Client {} detected!\n", clientName);
+//        const auto fileInfo = sessions[clientName];
+//        if (fileInfo.has_value()) {
+//
+//        }
+//      } else {
+//        fmt::print("Creating client {}!\n", clientName);
+//        sessions[clientName] = {};
+//      }
     }
   };
 

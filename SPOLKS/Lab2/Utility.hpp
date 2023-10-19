@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -11,12 +12,14 @@ inline constexpr auto DEFAULT_IP = "127.0.0.1";
 inline constexpr auto DEFAULT_PORT = 8080;
 
 // clang-format off
-inline constexpr auto EXIT_COMMAND          = "exit";
-inline constexpr auto EXIT_ALL_COMMAND      = "!exit";
-inline constexpr auto ECHO_COMMAND          = "echo";
-inline constexpr auto TIME_COMMAND          = "time";
-inline constexpr auto DOWNLOAD_COMMAND      = "download";
-inline constexpr auto UPLOAD_COMMAND        = "upload";
+inline constexpr auto EXIT_COMMAND                = "exit";
+inline constexpr auto EXIT_ALL_COMMAND            = "!exit";
+inline constexpr auto ECHO_COMMAND                = "echo";
+inline constexpr auto TIME_COMMAND                = "time";
+inline constexpr auto DOWNLOAD_COMMAND            = "download";
+inline constexpr auto UPLOAD_COMMAND              = "upload";
+
+inline constexpr auto STRING_NO_PREVIOUS_SESSIONS = "No previous sessions";
 // clang-format on
 
 inline const fs::path USERS_FOLDER = "users";
@@ -78,5 +81,10 @@ std::pair<std::vector<std::string>, int> SplitFile(const std::string& filename, 
 
   return {result, fileSize};
 }
+
+struct SessionFileInfo {
+  std::vector<wchar_t> file_;
+  std::size_t hash_;
+};
 
 #endif  // SERVER_UTILITY_HPP

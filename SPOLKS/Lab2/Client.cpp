@@ -68,6 +68,16 @@ class TCPClient : public TCPBase {
     client.Send(data, client.ClientSocket());
     data = client.Receive(client.ClientSocket());
     std::cout << data << std::endl;
+//    data = client.Receive(client.ClientSocket());
+//    std::cout << data << std::endl;
+
+//    if (data != STRING_NO_PREVIOUS_SESSIONS) {
+//      std::getline(std::cin, data);
+//      client.Send(data, client.ClientSocket());
+//      if (data == "yes") {
+//        client.ReceiveFile(client.Receive(client.ClientSocket()), client.ClientSocket());
+//      }
+//    }
   };
 
   handleConnection();

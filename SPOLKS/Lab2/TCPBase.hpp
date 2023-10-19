@@ -1,5 +1,5 @@
-#ifndef SERVER_TCPBASE_H
-#define SERVER_TCPBASE_H
+#ifndef SERVER_TCPBASE_HPP
+#define SERVER_TCPBASE_HPP
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -16,7 +16,7 @@
 class TCPBase {
  public:
   void Send(const std::string& message, int socketFd) {
-    const auto bytes = write(socketFd, message.c_str(), message.length());
+    const auto bytes = send(socketFd, message.c_str(), message.length(), 0);
     if (bytes < 0) {
       HandleError("Failed to send data.");
     }
@@ -86,4 +86,4 @@ class TCPBase {
   }
 };
 
-#endif  // SERVER_TCPBASE_H
+#endif  // SERVER_TCPBASE_HPP
