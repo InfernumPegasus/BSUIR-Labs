@@ -1,7 +1,7 @@
 #include <fmt/chrono.h>
 #include <fmt/core.h>
 
-#include "TCPBase.h"
+#include "TCPBase.hpp"
 #include "Utility.hpp"
 
 class TCPServer : public TCPBase {
@@ -77,9 +77,15 @@ bool hasClient = false;
 
   TCPServer server(port);
   std::string data;
+  std::string clientName;
 
   const auto commandHandler = [&](const std::vector<std::string>& splitData) {
     if (splitData.at(0) == EXIT_COMMAND) {
+      fmt::print("Client {} disconnected!\n", clientName);
+      hasClient = false;
+    }
+
+    if (splitData.at(0) == EXIT_ALL_COMMAND) {
       exit(0);
     }
 
@@ -109,8 +115,8 @@ bool hasClient = false;
   const auto handleConnection = [&]() {
     if (!hasClient) {
       server.AcceptConnection();
-      data = server.Receive(server.ClientSocket());
-      server.Send("Hello, " + data + "!", server.ClientSocket());
+      clientName = server.Receive(server.ClientSocket());
+      server.Send("Hello, " + clientName + "!", server.ClientSocket());
       hasClient = true;
     }
   };

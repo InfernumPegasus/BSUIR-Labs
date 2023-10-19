@@ -1,7 +1,7 @@
 #include <functional>
 #include <iostream>
 
-#include "TCPBase.h"
+#include "TCPBase.hpp"
 #include "Utility.hpp"
 
 class TCPClient : public TCPBase {
@@ -73,7 +73,7 @@ class TCPClient : public TCPBase {
   handleConnection();
 
   const auto commandHandler = [&](const std::vector<std::string>& splitData) {
-    if (splitData.at(0) == EXIT_COMMAND) {
+    if (splitData.at(0) == EXIT_COMMAND || splitData.at(0) == EXIT_ALL_COMMAND) {
       exit(0);
     }
 
