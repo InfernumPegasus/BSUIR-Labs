@@ -1,16 +1,16 @@
 #include <fmt/chrono.h>
 #include <fmt/core.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
 
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <string>
+#include <unordered_map>
 
+#include "TCPBase.hpp"
 #include "Utility.hpp"
 
-class TCPServer {
+using Sessions = std::unordered_map<std::string, std::optional<SessionFileInfo>>;
+
+Sessions sessions;
+
+class TCPServer : public TCPBase {
  private:
   int serverSocketDescriptor_;
 
@@ -60,79 +60,6 @@ class TCPServer {
     }
   }
 
-  [[nodiscard]] std::string Receive() {
-    char buffer[BUFSIZ];
-    memset(buffer, 0, sizeof(buffer));
-    std::string receivedData;
-
-    if (recv(clientSocketDescriptor_, buffer, 4096, 0) < 0) {
-      HandleError("Failed to Receive data from client");
-    } else {
-      receivedData = buffer;
-    }
-
-    return receivedData;
-  }
-
-  void Send(const std::string& message) {
-    if (write(clientSocketDescriptor_, message.c_str(), message.length()) < 0) {
-      HandleError("Failed to send data to client");
-    }
-  }
-
-  void TransmitFile(const std::string& fileName) const {
-    std::ifstream file(fileName, std::ios::binary);
-    if (!file) {
-      std::cout << "Error opening file!\n";
-      return;
-    }
-
-    const int bufferSize = 1024;
-    char buffer[bufferSize];
-
-    // Read and send the file in chunks until there is no more data
-    while (true) {
-      file.read(buffer, bufferSize);
-      auto bytesRead = file.gcount();
-      if (bytesRead <= 0) {
-        break;
-      }
-
-      auto bytesSent = send(clientSocketDescriptor_, buffer, bytesRead, 0);
-      if (bytesSent <= 0) {
-        std::cout << "Error sending data!\n";
-        return;
-      }
-    }
-
-    std::cout << "File transmitted.\n";
-  }
-
-  void ReceiveFile(const std::string& fileName) const {
-    std::ofstream file(fileName, std::ios::binary);
-    if (!file) {
-      std::cout << "Error opening file!\n";
-      return;
-    }
-
-    const int bufferSize = 1024;
-    char buffer[bufferSize];
-
-    std::cout << "[LOG] : Receiving file...\n";
-
-    // Read and write the file in chunks until there is no more data
-    while (true) {
-      auto bytesRead = read(clientSocketDescriptor_, buffer, bufferSize);
-      if (bytesRead <= 0) {
-        break;
-      }
-
-      file.write(buffer, bytesRead);
-    }
-
-    std::cout << "File received and saved.\n";
-  }
-
   void CloseConnection() const {
     if (close(serverSocketDescriptor_) < 0) {
       fmt::print("Server socket {} cannot be closed\n", serverSocketDescriptor_);
@@ -146,30 +73,32 @@ class TCPServer {
     CloseConnection();
   }
 
- private:
-  void HandleError(const std::string& errorMessage) const {
-    std::cerr << errorMessage << std::endl;
-    std::cerr << "Error message from errno: " << strerror(errno) << std::endl;
-    Stop();
-    exit(1);
-  }
+  [[nodiscard]] int ClientSocket() const { return clientSocketDescriptor_; }
 };
 
+bool hasClient = false;
 
-int main(int argc, char** argv) {
+[[noreturn]] int main(int argc, char** argv) {
   int port = (argc == 2) ? std::stoi(argv[1]) : DEFAULT_PORT;
 
   TCPServer server(port);
-  std::string receivedData;
+  std::string data;
+  std::string clientName;
 
   const auto commandHandler = [&](const std::vector<std::string>& splitData) {
     if (splitData.at(0) == EXIT_COMMAND) {
+      fmt::print("Client {} disconnected!\n", clientName);
+      hasClient = false;
+    }
+
+    if (splitData.at(0) == EXIT_ALL_COMMAND) {
       exit(0);
     }
 
     if (splitData.at(0) == TIME_COMMAND) {
       auto t = std::chrono::system_clock::now();
-      fmt::print("[{}] Current server time: {}\n", TIME_COMMAND, t);
+      const auto timeString = fmt::format("Current server time: {}", t);
+      server.Send(timeString, server.ClientSocket());
     }
 
     if (splitData.size() > 1 && splitData.at(0) == ECHO_COMMAND) {
@@ -181,21 +110,40 @@ int main(int argc, char** argv) {
     }
 
     if (splitData.size() == 2 && splitData.at(0) == UPLOAD_COMMAND) {
-      server.TransmitFile(splitData.at(1));
+      server.ReceiveFile(splitData[1] + "_server_received", server.ClientSocket());
+    }
+
+    if (splitData.size() == 2 && splitData.at(0) == DOWNLOAD_COMMAND) {
+      server.UploadFile(splitData[1], server.ClientSocket());
     }
   };
 
-  server.AcceptConnection();
+  const auto handleConnection = [&]() {
+    if (!hasClient) {
+      server.AcceptConnection();
+      clientName = server.Receive(server.ClientSocket());
+      server.Send("Hello, " + clientName + "!", server.ClientSocket());
+      hasClient = true;
 
-//  server.TransmitFile("../TESTFILE");
-  server.ReceiveFile("TESTFILE_R");
-
-//  while (true) {
-//    receivedData = server.Receive();
-//    auto splitData = SplitString(receivedData, ' ');
+//      if (sessions.contains(clientName)) {
+//        fmt::print("Client {} detected!\n", clientName);
+//        const auto fileInfo = sessions[clientName];
+//        if (fileInfo.has_value()) {
 //
-//    commandHandler(splitData);
-//  }
+//        }
+//      } else {
+//        fmt::print("Creating client {}!\n", clientName);
+//        sessions[clientName] = {};
+//      }
+    }
+  };
 
-  return 0;
+  while (true) {
+    handleConnection();
+
+    data = server.Receive(server.ClientSocket());
+    auto splitData = SplitString(data, ' ');
+
+    commandHandler(splitData);
+  }
 }
