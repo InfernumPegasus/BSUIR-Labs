@@ -1,0 +1,7 @@
+Entity_Name,ObjectID,NumOID,ImportID,ModelID,Num_ModelID,Structured_Type_ID,Num_Structured_Type_ID,Structured_Type_Name,Number_Data_Elements,Classification_Type,Allow_Type_Substitution,Min_Volume,Expected_Volume,Max_Volume,Growth_Rate_Percents,Growth_Rate_Interval,Normal_Form,Temporary_Object_Scope,Adequately_Normalized,Substitution_Parent,Num_Substitution_Parent,Synonyms,Synonym_To_Display,Preferred_Abbreviation,SuperTypeEntity_ID,Num_SuperTypeEntity_ID,Engineering_Strategy,Owner,Entity_Source
+"Booking",DC431DDC-427A-715B-E552-674EA6309A2F,71,,7F71FEFE-669B-D8AD-6CA1-053AA3BA5642,70,,,,8,,Y,0,0,9999999,0,Year,Third,,N,,,,,,,,,,,
+"Client",6C633701-AD7C-5C4E-FA05-3869944E9831,72,,7F71FEFE-669B-D8AD-6CA1-053AA3BA5642,70,,,,6,,Y,0,0,9999999,0,Year,Third,,N,,,,,,,,,,,
+"Hotel",219A0D11-8E79-ACE2-687C-085428ABC9E1,73,,7F71FEFE-669B-D8AD-6CA1-053AA3BA5642,70,,,,4,,Y,0,0,9999999,0,Year,Third,,N,,,,,,,,,,,
+"Payment",65C2C913-DD41-C515-D8F6-F39E678425E8,74,,7F71FEFE-669B-D8AD-6CA1-053AA3BA5642,70,,,,5,,Y,0,0,9999999,0,Year,Third,,N,,,,,,,,,,,
+"Tour",824282A2-8F21-54B3-C2A4-86A183ED2C81,75,,7F71FEFE-669B-D8AD-6CA1-053AA3BA5642,70,,,,5,,Y,0,0,9999999,0,Year,Third,,N,,,,,,,,,,,
+"Voucher",D52C8D80-3E37-2C40-8A74-473D9F1C1DD8,76,,7F71FEFE-669B-D8AD-6CA1-053AA3BA5642,70,,,,4,,Y,0,0,9999999,0,Year,Third,,N,,,,,,,,,,,

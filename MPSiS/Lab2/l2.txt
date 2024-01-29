@@ -1,0 +1,67 @@
+#include <msp430.h>
+
+#define BUTTON BIT1
+#define LED1 BIT0
+#define LED2 BIT1
+#define LED3 BIT2
+
+volatile int buttonPressCount = 0;
+
+void main(void)
+{
+    WDTCTL = WDTPW + WDTHOLD;   // Отключение сторожевого таймера
+
+    P1DIR |= LED1 + LED2 + LED3;    // Установка пинов LED1, LED2 и LED3 на выходы
+    P1OUT &= ~(LED1 + LED2 + LED3); // Выключение всех диодов
+
+    P1DIR &= ~BUTTON;       // Установка пина BUTTON на вход
+    P1REN |= BUTTON;        // Включение подтягивающего резистора для пина BUTTON
+    P1OUT |= BUTTON;        // Настройка подтягивающего резистора на подтяжку к VCC
+    P1IE |= BUTTON;         // Разрешение прерывания для пина BUTTON
+    P1IES |= BUTTON;        // Настройка прерывания по спаду
+
+    TA0CCR0 = 10000;        // Задание значения для регистра сравнения
+    TA0CCTL0 = CCIE;        // Разрешение прерывания по совпадению для регистра сравнения
+    TA0CTL = TASSEL_2 + MC_1;   // Выбор источника тактирования SMCLK и настройка в режим "вверх"
+
+    __enable_interrupt();   // Разрешение глобальных прерываний
+
+    while (1)
+    {
+        // Ожидание прерываний
+    }
+}
+
+// Обработчик прерывания для кнопки
+#pragma vector = PORT1_VECTOR
+__interrupt void Port1_ISR(void)
+{
+    if (P1IFG & BUTTON)     // Проверка флага прерывания для кнопки
+    {
+        P1IFG &= ~BUTTON;   // Сброс флага прерывания для кнопки
+
+        buttonPressCount++; // Увеличение счетчика нажатий на кнопку
+        if (buttonPressCount > 3)
+        {
+            buttonPressCount = 1; // Если счетчик превышает 3, сбросить его до 1
+        }
+    }
+}
+
+// Обработчик прерывания для системного таймера
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void Timer0_A0_ISR(void)
+{
+    switch (buttonPressCount)
+    {
+    case 1:
+        P1OUT ^= LED1;  // Инвертировать состояние диода LED1
+        break;
+    case 2:
+        P1OUT ^= LED2;  // Инвертировать состояние диода LED2
+        break;
+    case 3:
+        P1OUT ^= LED3;  // Инвертировать состояние диода LED3
+        break;
+    }
+}

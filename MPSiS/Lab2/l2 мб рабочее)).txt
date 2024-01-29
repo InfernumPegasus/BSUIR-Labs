@@ -1,0 +1,79 @@
+#include <msp430.h>
+
+#define LED1 BIT0
+#define LED2 BIT1
+#define LED3 BIT2
+#define BUTTON BIT7
+
+volatile unsigned int buttonPressCount = 0;
+volatile unsigned int buttonPressTime = 0;
+
+void main(void) {
+    // отключаем сторожевой таймер
+    WDTCTL = WDTPW | WDTHOLD;
+
+    // устанавливаем пины LED1, LED2 и LED3 как выходы
+    P1DIR |= LED1;
+    P8DIR |= (LED2 | LED3);
+    P8OUT &= ~(LED2 | LED3);
+
+    // выключаем все светодиоды
+    P1OUT &= ~LED1;
+    P8OUT &= ~(LED2 | LED3);
+
+    // устанавливаем пин BUTTON как вход
+    P1DIR &= ~BUTTON;
+    // включаем подтягивающий резистор на пине BUTTON
+    P1REN |= BUTTON;
+    // устанавливаем подтягивающий резистор на пине BUTTON
+    P1OUT |= BUTTON;
+
+    /*TODO БЕГИ СУКА БЕГИИИ*/
+
+    P1IE |= BUTTON;         // Разрешение прерывания для пина BUTTON
+    P1IES |= BUTTON;        // Настройка прерывания по спаду
+
+    TA1CCTL0 = CCIE;    // Разрешение прерывания для таймера TA1
+    TA1CCR0 = 32768;    // Значение счетчика таймера TA1 для задержки в 1 секунду
+    TA1CTL = TASSEL_2 + MC_1 + TACLR;
+
+    __enable_interrupt();   // Разрешение глобальных прерываний
+    __no_operation();
+}
+
+#pragma vector=PORT1_VECTOR
+
+__interrupt void Port1_ISR(void) {
+    if (P2IFG & BUTTON) {
+        P2IFG &= ~BUTTON;   // Сброс флага прерывания
+
+        buttonPressCount++;     // Увеличение счетчика нажатий кнопки
+        buttonPressTime = 0;    // Сброс счетчика времени
+
+        if (buttonPressCount > 3) {
+            buttonPressCount = 1;    // Зацикливание счетчика нажатий кнопки
+        }
+    }
+}
+
+#pragma vector=TIMER1_A0_VECTOR
+
+__interrupt void Timer1_A0_ISR(void) {
+    buttonPressTime++;  // Увеличение счетчика времени
+
+    if (buttonPressTime >= 5) {
+        switch (buttonPressCount) {
+            case 1:
+                P1OUT ^= LED1;  // Инвертирование состояния LED1
+                break;
+            case 2:
+                P8OUT ^= LED2;  // Инвертирование состояния LED2
+                break;
+            case 3:
+                P8OUT ^= LED3;  // Инвертирование состояния LED3
+                break;
+        }
+
+        buttonPressTime = 0;    // Сброс счетчика времени
+    }
+}

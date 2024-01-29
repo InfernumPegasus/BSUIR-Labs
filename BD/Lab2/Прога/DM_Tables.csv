@@ -1,0 +1,7 @@
+Table_Name,ObjectID,NumOID,ImportID,ModelID,Num_ModelID,Structured_Type_ID,Num_Structured_Type_ID,Structured_Type_Name,Number_Data_Elements,Classification_Type,Allow_Type_Substitution,Min_Volume,Expected_Volume,Max_Volume,Growth_Rate_Percents,Growth_Rate_Interval,Normal_Form,Temporary_Object_Scope,Adequately_Normalized,Substitution_Parent,Num_Substitution_Parent,Engineer,Spatial_Table,OID_is_PK,OID_is_User_Defined,Include_Scripts_Into_DDL
+"Booking",6367AAAD-DEDE-4C58-8415-01A92DB955FF,122,,78E99769-ED20-D511-12E9-1279F51EAC30,121,,,,8,,Y,0,0,9999999,0,Year,Third,,N,,,Y,N,N,Y,N,
+"Client",162EC5F4-36CF-7449-DCC8-057762AFF68D,123,,78E99769-ED20-D511-12E9-1279F51EAC30,121,,,,6,,Y,0,0,9999999,0,Year,Third,,N,,,Y,N,N,Y,N,
+"Hotel",0E798F0F-ECF2-006C-9870-F4ABB897863C,124,,78E99769-ED20-D511-12E9-1279F51EAC30,121,,,,4,,Y,0,0,9999999,0,Year,Third,,N,,,Y,N,N,Y,N,
+"Payment",667A6D33-FF38-F4CE-3022-DB1084BD3A74,125,,78E99769-ED20-D511-12E9-1279F51EAC30,121,,,,5,,Y,0,0,9999999,0,Year,Third,,N,,,Y,N,N,Y,N,
+"Tour",56AA20A3-1F78-58F3-42C0-8F8A8A1C63A9,126,,78E99769-ED20-D511-12E9-1279F51EAC30,121,,,,5,,Y,0,0,9999999,0,Year,Third,,N,,,Y,N,N,Y,N,
+"Voucher",3EE21394-A563-9820-AC92-1F6A51299276,127,,78E99769-ED20-D511-12E9-1279F51EAC30,121,,,,4,,Y,0,0,9999999,0,Year,Third,,N,,,Y,N,N,Y,N,
