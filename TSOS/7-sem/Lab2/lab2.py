@@ -1,186 +1,227 @@
-import math
-
-import matplotlib.pyplot as plt
+import cv2 as cv
 import numpy as np
-from PIL import Image, ImageFilter
-from scipy.cluster.vq import kmeans
-from skimage import io, measure
+
+path = 'P0001465.jpg'
+orig_image = cv.imread(path, cv.IMREAD_COLOR)
 
 
-def mark_objects(image: Image.Image):
-    new_image = image.copy()
-    current_label = 0
-    free_labels = []
+def gamma_correction(image):
+    a, gamma = 2, 5
+    rows, cols = image.shape
 
-    pixels = new_image.load()
+    for i in range(rows):
+        for j in range(cols):
+            new_pixel = int(a * pow(image[i, j] / 255, gamma) * 255)
 
-    for x in range(new_image.size[0]):
-        for y in range(new_image.size[1]):
-            kn = y - 1
-            b = pixels[x, kn] if kn > 0 else 0
+            if new_pixel > 255:
+                new_pixel = 255
 
-            km = x - 1
-            c = pixels[km, y] if km > 0 else 0
+            image[i, j] = new_pixel
 
-            a = pixels[x, y]
-
-            if a != 0:
-                if b == 0 and c == 0:
-                    if len(free_labels) > 0:
-                        label = free_labels.pop()
-                    else:
-                        current_label += 1
-                        label = current_label
-
-                    pixels[x, y] = label
-                elif b != 0 and c == 0:
-                    pixels[x, y] = b
-                elif b == 0 and c != 0:
-                    pixels[x, y] = c
-                elif b != 0 and c != 0:
-                    pixels[x, y] = b
-                    if b != c:
-                        change_label(new_image, c, b)
-                        free_labels.append(c)
-
-    return new_image
+    return image
 
 
-def change_label(image, old_label: int, new_label: int):
-    pixels = image.load()
+def erosion(image):
+    kernel = np.array([[1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1],
+                       [1, 1, 1, 1, 1]], dtype=np.uint8)
 
-    for x in range(image.size[0]):
-        for y in range(image.size[1]):
-            if pixels[x, y] == old_label:
-                pixels[x, y] = new_label
+    rows, cols = image.shape
+    k_rows, k_cols = kernel.shape
 
+    k_rows_2, k_cols_2 = k_rows // 2, k_cols // 2
 
-def binarize(image, threshold):
-    pixels = image.load()
+    result = image.copy()
 
-    for i in range(image.size[0]):
-        for j in range(image.size[1]):
-            pixels[i, j] = 0 if pixels[i, j] <= threshold else 255
+    for i in range(k_rows_2, rows - k_rows_2):
+        for j in range(k_cols_2, cols - k_cols_2):
+            min_value = 255
 
+            for k in range(k_rows):
+                for l in range(k_cols):
+                    pixel = image[i - k_rows_2 + k, j - k_cols_2 + l]
+                    min_value = min(min_value, pixel)
 
-def generate_unique_labels(image, transform_colors=False):
-    matrix = np.array(image.getdata()).reshape(image.size)
+            result[i, j] = min_value
 
-    unique_labels = np.unique(matrix)
-    unique_labels = np.delete(unique_labels, 0)
-
-    if len(unique_labels) < 25 and transform_colors:
-        for i in range(len(unique_labels)):
-            change_label(image, int(unique_labels[i]), int(unique_labels[i] * 10))
-            unique_labels[i] *= 10
-
-    return unique_labels
+    return result
 
 
-def plot_results(vectors, centroids, num_clusters):
-    x = [vector[0] for vector in vectors]
-    y = [vector[1] for vector in vectors]
+def threshold(image):
+    hist, _ = np.histogram(image, bins=256, range=(0, 256))
+    total_pixels = image.size
 
-    fig, ax = plt.subplots()
-    ax.scatter(x, y, c='r', marker='x')
+    best_threshold = 0
+    best_variance = 0
 
-    for i, (xi, yi) in enumerate(zip(x, y)):
-        ax.annotate(
-            f'Object {i + 1}',
-            xy=(xi, yi),
-            xytext=(xi + 0.05 * i, yi + 0.05 * i),
-            arrowprops=dict(
-                arrowstyle="->",
-                connectionstyle='angle3',
-            ),
-        )
+    for t in range(1, 256):
+        before_hist = hist[:t]
+        after_hist = hist[t:]
 
-    for i in range(num_clusters):
-        ax.scatter(
-            centroids[i][0],
-            centroids[i][1],
-            c='g',
-            marker='o'
-        )
+        sum_before_hist = np.sum(before_hist)
+        sum_after_hist = np.sum(after_hist)
 
-    ax.set_xlabel('Area')
-    ax.set_ylabel('Eccentricity')
-    plt.show()
+        if sum_before_hist == 0 or sum_after_hist == 0:
+            continue
+
+        w0 = sum_before_hist / total_pixels
+        w1 = sum_after_hist / total_pixels
+
+        u0 = np.sum(np.arange(t) * before_hist) / (w0 * total_pixels)
+        u1 = np.sum(np.arange(t, 256) * after_hist) / (w1 * total_pixels)
+
+        variance = w0 * w1 * (u0 - u1) ** 2
+
+        if variance > best_variance:
+            best_threshold = t
+            best_variance = variance
+
+    return (image > best_threshold).astype(np.uint8) * 255
 
 
-def get_region_vectors_skimage(image_name):
-    sk_image = io.imread(image_name)
-    label_image = measure.label(sk_image)
-    regions = measure.regionprops(label_image)
+def params(component):
+    rows, cols = component.shape
 
-    fig, ax = plt.subplots()
-    ax.imshow(sk_image)
+    square = 0
+    perimeter = 0
+    static_x = 0
+    static_y = 0
 
-    for i, props in enumerate(regions, start=1):
-        y0, x0 = props.centroid
-        orientation = props.orientation
-        x1 = x0 + math.cos(orientation) * 0.5 * props.major_axis_length
-        y1 = y0 - math.sin(orientation) * 0.5 * props.major_axis_length
-        x2 = x0 - math.sin(orientation) * 0.5 * props.minor_axis_length
-        y2 = y0 - math.cos(orientation) * 0.5 * props.minor_axis_length
+    m11 = 0
+    m02 = 0
+    m20 = 0
 
-        ax.plot((x0, x1), (y0, y1), '-r', linewidth=2.5)
-        ax.plot((x0, x2), (y0, y2), '-r', linewidth=2.5)
-        ax.plot(x0, y0, '.g', markersize=15)
+    for i in range(rows):
+        for j in range(cols):
+            if component[i, j] == 255:
+                square += 1
+                static_x += i
+                static_y += j
 
-        ax.annotate(
-            f'Object {i}',
-            xy=(x0, y0),
-            arrowprops=dict(facecolor='black', shrink=0.05),
-        )
+                if (i == 0 or i == rows - 1 or
+                        j == 0 or j == cols - 1 or
+                        component[i, j + 1] == 0 or
+                        component[i, j - 1] == 0 or
+                        component[i + 1, j] == 0 or
+                        component[i - 1, j] == 0):
+                    perimeter += 1
 
-        minr, minc, maxr, maxc = props.bbox
-        bx = (minc, maxc, maxc, minc, minc)
-        by = (minr, minr, maxr, maxr, minr)
-        ax.plot(bx, by, '-b', linewidth=2.5)
+    for i in range(rows):
+        for j in range(cols):
+            if component[i, j] == 255:
+                m11 += (i - static_x / square) * (j - static_y / square)
+                m02 += (i - static_x / square) ** 2
+                m20 += (j - static_y / square) ** 2
 
-    regions_vectors = [[props.area, props.eccentricity] for props in regions]
-    return regions_vectors
+    compactness = perimeter * perimeter / square
+
+    elongation = ((m20 + m02 + np.sqrt((m20 - m02) ** 2 + 4 * m11 ** 2)) /
+                  (m20 + m02 - np.sqrt((m20 - m02) ** 2 + 4 * m11 ** 2)))
+
+    return [square, perimeter, compactness, elongation, static_x, static_y]
+
+
+def components(image):
+    data = []
+
+    rows, cols = image.shape
+    index = 1
+
+    labeled = np.zeros_like(image, dtype=int)
+
+    for i in range(rows):
+        for j in range(cols):
+            if image[i, j] == 255 and labeled[i, j] == 0:
+                component = np.zeros((rows, cols), dtype=np.uint8)
+
+                stack = [(i, j)]
+
+                while stack:
+                    x, y = stack.pop()
+
+                    if (not (0 <= x < rows) or not (0 <= y < cols) or not (image[x, y] == 255)) or labeled[x, y] != 0:
+                        continue
+                    labeled[x, y] = index
+                    component[x, y] = 255
+
+                    stack.extend([(x + 1, y),
+                                  (x - 1, y),
+                                  (x, y + 1),
+                                  (x, y - 1)])
+
+                data_row = params(component)
+
+                if data_row[0] > 200:
+                    data.append(data_row[:4])
+
+                    print()
+                    print('%11s: %d' % ('index', index))
+                    print('%11s: %d' % ('square', data_row[0]))
+                    print('%11s: %d' % ('perimeter', data_row[1]))
+                    print('%11s: %.2f' % ('compactness', data_row[2]))
+                    print('%11s: %.2f' % ('elongation', data_row[3]))
+                    print('%11s: %d' % ('static_x', data_row[4]))
+                    print('%11s: %d' % ('static_y', data_row[5]))
+
+                    cv.putText(orig_image, f'Object {index}', (j - 40, i), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
+                    index += 1
+
+    cv.imshow('Result', orig_image)
+
+    return np.array(data)
+
+
+def distance(a, b):
+    return np.sqrt(np.sum((a - b) ** 2))
+
+
+def k_means(data, k):
+    rows, _ = data.shape
+
+    cluster_centers = data[np.random.choice(rows, k, replace=False)]
+    cluster_assigns = np.zeros(rows)
+
+    for _ in range(10):
+        for i, row in enumerate(data):
+            distances = [distance(row, center) for center in cluster_centers]
+
+            closest_cluster = np.argmin(distances)
+            cluster_assigns[i] = closest_cluster
+
+        for cluster in range(k):
+            cluster_rows = data[cluster_assigns == cluster]
+
+            if len(cluster_rows) > 0:
+                cluster_centers[cluster] = np.mean(cluster_rows, axis=0)
+
+    print()
+
+    for i in range(k):
+        cluster_components = ([j + 1 for j, cluster in enumerate(cluster_assigns)
+                               if cluster == i])
+
+        print(f'{i + 1}: {cluster_components}')
 
 
 def main():
-    initial_image_name = "image.jpg"
-    final_image_name = 'final.pgm'
+    k = 3
 
-    initial_image = Image.open(initial_image_name)
-    image = initial_image.copy().convert("L")
+    image = cv.imread(path, cv.IMREAD_GRAYSCALE)
+    cv.imshow('Initial Image', image)
 
-    plt.imshow(image)
-    plt.show()
+    image = gamma_correction(image)
+    cv.imshow('Gamma Image', image)
+    image = erosion(image)
+    image = threshold(image)
+    cv.imshow('Binary Image', image)
 
-    binarization_threshold = 200
+    k_means(components(image), k)
 
-    binarize(image, binarization_threshold)
-
-    plt.imshow(image)
-    plt.show()
-
-    new_image = image.filter(ImageFilter.MedianFilter(size=5))
-    binarize(new_image, binarization_threshold)
-
-    plt.imshow(new_image)
-    plt.show()
-
-    change_label(new_image, 255, 1)
-    marked_image = mark_objects(new_image)
-    unique_labels = generate_unique_labels(marked_image, transform_colors=True)
-
-    print('Unique labels:', unique_labels)
-
-    marked_image.save(final_image_name)
-
-    plt.imshow(marked_image)
-    plt.show()
-
-    regions_vectors = get_region_vectors_skimage(final_image_name)
-    centroids, _ = kmeans(np.array(regions_vectors), 2)
-    plot_results(regions_vectors, centroids, 2)
+    cv.waitKey(0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

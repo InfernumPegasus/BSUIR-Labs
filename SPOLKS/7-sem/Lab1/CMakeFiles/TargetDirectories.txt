@@ -1,0 +1,4 @@
+/home/vladimir/GitHub/BSUIR-Labs/SPOLKS/Lab1/CMakeFiles/client.dir
+/home/vladimir/GitHub/BSUIR-Labs/SPOLKS/Lab1/CMakeFiles/server.dir
+/home/vladimir/GitHub/BSUIR-Labs/SPOLKS/Lab1/CMakeFiles/edit_cache.dir
+/home/vladimir/GitHub/BSUIR-Labs/SPOLKS/Lab1/CMakeFiles/rebuild_cache.dir

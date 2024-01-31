@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wpedantic -Wno-maybe-uninitialized -O3 CMakeFiles/client.dir/Client.cpp.o -o client 

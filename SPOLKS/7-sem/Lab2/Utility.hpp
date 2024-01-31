@@ -3,7 +3,6 @@
 
 #include <filesystem>
 #include <fstream>
-#include <vector>
 #include <iostream>
 
 namespace fs = std::filesystem;
@@ -19,10 +18,9 @@ inline constexpr auto TIME_COMMAND                = "time";
 inline constexpr auto DOWNLOAD_COMMAND            = "download";
 inline constexpr auto UPLOAD_COMMAND              = "upload";
 
-inline constexpr auto STRING_NO_PREVIOUS_SESSIONS = "No previous sessions";
+inline constexpr auto STRING_NO_PREVIOUS_SESSIONS = "NO_PREVIOUS_SESSIONS";
+inline constexpr auto STRING_END_INDEX            = "END_INDEX";
 // clang-format on
-
-inline const fs::path USERS_FOLDER = "users";
 
 #define DISABLE_COPY_AND_MOVE(className)           \
   className(const className&) = delete;            \
@@ -82,9 +80,15 @@ std::pair<std::vector<std::string>, int> SplitFile(const std::string& filename, 
   return {result, fileSize};
 }
 
+std::string GetParameterValueStr(const std::string& str,
+                                 const std::string& delimiter = "=") {
+  return str.substr(str.find(delimiter) + delimiter.length(), str.length());
+}
+
 struct SessionFileInfo {
-  std::vector<wchar_t> file_;
-  std::size_t hash_;
+  std::string file_;
+  size_t currentIndex_;
+  size_t maxIndex_;
 };
 
 #endif  // SERVER_UTILITY_HPP

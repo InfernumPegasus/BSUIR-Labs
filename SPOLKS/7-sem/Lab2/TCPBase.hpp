@@ -2,10 +2,12 @@
 #define SERVER_TCPBASE_HPP
 
 #include <arpa/inet.h>
+#include <fmt/core.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <cassert>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -15,12 +17,13 @@
 
 class TCPBase {
  public:
-  void Send(const std::string& message, int socketFd) {
+  long Send(const std::string& message, int socketFd) {
     const auto bytes = send(socketFd, message.c_str(), message.length(), 0);
     if (bytes < 0) {
       HandleError("Failed to send data.");
     }
-    std::cout << "Sent bytes: " << bytes << std::endl;
+    return bytes;
+//    std::cout << "Sent bytes: " << bytes << std::endl;
   }
 
   [[nodiscard]] std::string Receive(int socketFd) {
@@ -28,7 +31,7 @@ class TCPBase {
     memset(buffer, 0, sizeof(buffer));
     std::string receivedData;
 
-    if (read(socketFd, buffer, sizeof(buffer)) < 0) {
+    if (recv(socketFd, buffer, sizeof(buffer), 0) < 0) {
       HandleError("Failed to receive data.");
     } else {
       receivedData = buffer;
@@ -37,13 +40,19 @@ class TCPBase {
     return receivedData;
   }
 
-  void UploadFile(const std::string& fileName, int socketFd) {
+  void SendFile(const std::string& fileName, int socketFd) {
     const auto [lines, size] = SplitFile(fileName, BUFSIZ);
-    std::cout << size << "\n";
+    fmt::print("File '{}' size: {} bytes\n", fileName, size);
+
     Send(std::to_string(size), socketFd);
+    long summaryBytes = 0;
 
     for (const auto& line : lines) {
-      Send(line, socketFd);
+      summaryBytes += Send(line, socketFd);
+    }
+    if (size != summaryBytes) {
+      std::cout << "size != summaryBytes\n";
+      exit(0);
     }
   }
 

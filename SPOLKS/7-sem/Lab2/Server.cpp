@@ -85,7 +85,7 @@ bool hasClient = false;
   std::string data;
   std::string clientName;
 
-  const auto commandHandler = [&](const std::vector<std::string>& splitData) {
+  const auto handleCommand = [&](const std::vector<std::string>& splitData) {
     if (splitData.at(0) == EXIT_COMMAND) {
       fmt::print("Client {} disconnected!\n", clientName);
       hasClient = false;
@@ -114,7 +114,7 @@ bool hasClient = false;
     }
 
     if (splitData.size() == 2 && splitData.at(0) == DOWNLOAD_COMMAND) {
-      server.UploadFile(splitData[1], server.ClientSocket());
+      server.SendFile(splitData[1], server.ClientSocket());
     }
   };
 
@@ -124,17 +124,6 @@ bool hasClient = false;
       clientName = server.Receive(server.ClientSocket());
       server.Send("Hello, " + clientName + "!", server.ClientSocket());
       hasClient = true;
-
-//      if (sessions.contains(clientName)) {
-//        fmt::print("Client {} detected!\n", clientName);
-//        const auto fileInfo = sessions[clientName];
-//        if (fileInfo.has_value()) {
-//
-//        }
-//      } else {
-//        fmt::print("Creating client {}!\n", clientName);
-//        sessions[clientName] = {};
-//      }
     }
   };
 
@@ -144,6 +133,6 @@ bool hasClient = false;
     data = server.Receive(server.ClientSocket());
     auto splitData = SplitString(data, ' ');
 
-    commandHandler(splitData);
+    handleCommand(splitData);
   }
 }

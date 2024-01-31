@@ -68,16 +68,15 @@ class TCPClient : public TCPBase {
     client.Send(data, client.ClientSocket());
     data = client.Receive(client.ClientSocket());
     std::cout << data << std::endl;
-//    data = client.Receive(client.ClientSocket());
-//    std::cout << data << std::endl;
+    //    data = client.Receive(client.ClientSocket());
+    //    std::cout << data << std::endl;
 
-//    if (data != STRING_NO_PREVIOUS_SESSIONS) {
-//      std::getline(std::cin, data);
-//      client.Send(data, client.ClientSocket());
-//      if (data == "yes") {
-//        client.ReceiveFile(client.Receive(client.ClientSocket()), client.ClientSocket());
-//      }
-//    }
+    //    if (data != STRING_NO_PREVIOUS_SESSIONS) {
+    //      std::getline(std::cin, data);
+    //      client.Send(data, client.ClientSocket());
+    //      if (data == "yes") {
+    //        client.ReceiveFile(client.Receive(client.ClientSocket()),
+    // client.ClientSocket());       }    }
   };
 
   handleConnection();
@@ -94,7 +93,7 @@ class TCPClient : public TCPBase {
 
     // Send file
     if (splitData.size() == 2 && splitData.at(0) == UPLOAD_COMMAND) {
-      client.UploadFile(splitData.at(1), client.ClientSocket());
+      client.SendFile(splitData.at(1), client.ClientSocket());
     }
 
     // Receive file
