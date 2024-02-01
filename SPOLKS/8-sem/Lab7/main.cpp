@@ -87,9 +87,9 @@ void CalculateSynchronized(int size, int rank, int* const* matrix1, int* const* 
 }
 
 template <typename Func>
-constexpr void CalculateTime(Func f, int size, int rank, int* const* matrix1,
+constexpr void Calculate(Func calcMethod, int size, int rank, int* const* matrix1,
                              int* const* matrix2, int** mat_res) {
-  f(size, rank, matrix1, matrix2, mat_res);
+  calcMethod(size, rank, matrix1, matrix2, mat_res);
 }
 
 int main(int argc, char** argv) {
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
   AssertMPISuccess(MPI_Barrier(MPI_COMM_WORLD));
   if (rank == 0) t1 = MPI_Wtime();
 
-  CalculateTime(CalculateSynchronized, size, rank, matrix1, matrix2, mat_res);
+  Calculate(CalculateSynchronized, size, rank, matrix1, matrix2, mat_res);
 
   if (rank == 0) {
     const auto t2 = MPI_Wtime();
