@@ -5,8 +5,9 @@
 #include "Matrix.h"
 
 template <size_t Size>
-constexpr void CalculateSynchronized(Matrix<Size>& A, Matrix<Size>& B, Matrix<Size>& C,
-                                     const int size, const int to, const int from) {
+constexpr void CalculateSynchronized(const Matrix<Size>& A, const Matrix<Size>& B,
+                                     Matrix<Size>& C, const int size, const int to,
+                                     const int from) {
   /* Process 0 fills the input matrices and broadcasts them to the rest */
   /* (actually, only the relevant stripe of A is sent to each process) */
 

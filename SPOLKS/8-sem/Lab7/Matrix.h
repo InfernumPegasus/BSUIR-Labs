@@ -7,7 +7,7 @@
 #include <memory>
 
 template <size_t N>
-class Matrix {
+class Matrix final {
  private:
   int (*matrix)[N];
 
@@ -42,6 +42,7 @@ class Matrix {
   }
 
   [[nodiscard]] constexpr auto PlainArray() noexcept { return matrix; }
+  [[nodiscard]] constexpr auto PlainArray() const noexcept { return matrix; }
 
   constexpr auto operator[](size_t i) const noexcept { return *(matrix + i); }
   constexpr auto operator[](size_t i) noexcept { return *(matrix + i); }
