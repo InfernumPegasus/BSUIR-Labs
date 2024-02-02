@@ -1,135 +1,79 @@
 #include <mpi.h>
 
-#include <functional>
-#include <iostream>
-#include <random>
-#include <source_location>
+#include <cstdio>
 
-#define N 4
-#define X 4
-#define Y 4
+#include "Matrix.h"
 
-void AssertMPISuccess(int expressionResult) {
-  if (expressionResult != MPI_SUCCESS) {
-    const std::source_location& loc = std::source_location::current();
-    std::cerr << "Assertion failed: " << std::source_location::current().file_name() << " at line " << loc.line()
-              << std::endl;
+template <size_t Size>
+constexpr void CalculateSynchronized(Matrix<Size>& A, Matrix<Size>& B, Matrix<Size>& C,
+                                     const int size, const int to, const int from) {
+  /* Process 0 fills the input matrices and broadcasts them to the rest */
+  /* (actually, only the relevant stripe of A is sent to each process) */
+
+  constexpr auto SizeSquare = Size * Size;
+
+  MPI_Bcast(B.PlainArray(), SizeSquare, MPI_INT, 0, MPI_COMM_WORLD);
+  MPI_Scatter(A.PlainArray(), SizeSquare / size, MPI_INT, A[from], SizeSquare / size,
+              MPI_INT, 0, MPI_COMM_WORLD);
+
+  for (int i = from; i < to; i++) {
+    for (size_t j = 0; j < Size; j++) {
+      C[i][j] = 0;
+      for (size_t k = 0; k < Size; k++) {
+        C[i][j] += A[i][k] * B[k][j];
+      }
+    }
+  }
+
+  MPI_Gather(C.PlainArray()[from], SizeSquare / size, MPI_INT, C.PlainArray(),
+             SizeSquare / size, MPI_INT, 0, MPI_COMM_WORLD);
+}
+
+int main(int argc, char* argv[]) {
+  constexpr auto MATRIX_SIZE = 3; /* Size of matrices */
+
+  Matrix<MATRIX_SIZE> A{};
+  Matrix<MATRIX_SIZE> B{};
+  Matrix<MATRIX_SIZE> C{};
+
+  A.Randomize();
+  B.Randomize();
+
+  int rank, size, from, to;
+
+  MPI_Init(&argc, &argv);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank); /* who am i */
+  MPI_Comm_size(MPI_COMM_WORLD, &size); /* number of processors */
+
+  if (rank == 0) {
+    std::cout << "A:\n";
+    A.Print();
+    std::cout << "B:\n";
+    B.Print();
+  }
+
+  /* Just to use the simple variants of MPI_Gather and MPI_Scatter we */
+  /* impose that MATRIX_SIZE is divisible by size. By using the vector versions, */
+  /* (MPI_Gatherv and MPI_Scatterv) it is easy to drop this restriction. */
+
+  if (MATRIX_SIZE % size != 0) {
+    if (rank == 0) printf("Matrix size not divisible by number of processors\n");
+    MPI_Finalize();
     MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
   }
-}
 
-void AllocateMatrix(int**& matrix, int n, int m) {
-  matrix = new int*[n];
-  for (int i = 0; i < n; ++i) {
-    matrix[i] = new int[m];
-  }
-}
+  from = rank * MATRIX_SIZE / size;
+  to = (rank + 1) * MATRIX_SIZE / size;
 
-void DeallocateMatrix(int**& matrix, int n) {
-  for (int i = 0; i < n; ++i) {
-    delete[] matrix[i];
-  }
-  delete[] matrix;
-}
-
-void FillRandom(int** vec, size_t n, size_t m) {
-  static std::random_device rd;
-  static std::mt19937 gen(rd());
-  static std::uniform_int_distribution<> distrib(1, 255);
-
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < m; j++) {
-      vec[i][j] = distrib(gen);
-    }
-  }
-}
-
-void PrintMatrix(int* const* matrix, int n, int m) {
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < m; j++) {
-      std::cout << matrix[i][j] << "\t";  // print the result
-    }
-    std::cout << std::endl;
-  }
-}
-
-void CalculateSynchronized(int size, int rank, int* const* matrix1, int* const* matrix2,
-                           int** mat_res) {
-  int sum = 0;
-  double result;
-  MPI_Status status;
-
-  for (int i = rank; i < X; i = i + size) {  // divide the task in multiple processes
-    for (int j = 0; j < Y; j++) {
-      sum = 0;
-      for (int k = 0; k < N; k++) {
-        sum = sum + matrix1[i][k] * matrix2[k][j];
-      }
-      mat_res[i][j] = sum;
-    }
-  }
-
-  if (rank != 0) {
-    for (int i = rank; i < X; i = i + size)
-      MPI_Send(&mat_res[i][0], Y, MPI_INT, 0, 10 + i,
-               MPI_COMM_WORLD);  // send calculated rows to process with rank 0
-  }
+  CalculateSynchronized<MATRIX_SIZE>(A, B, C, size, to, from);
 
   if (rank == 0) {
-    for (int j = 1; j < size; j++) {
-      for (int i = j; i < X; i = i + size) {
-        MPI_Recv(&mat_res[i][0], Y, MPI_INT, j, 10 + i, MPI_COMM_WORLD,
-                 &status);  // receive calculated rows from respective process
-      }
-    }
-  }
-  MPI_Barrier(MPI_COMM_WORLD);
-}
-
-template <typename Func>
-constexpr void Calculate(Func calcMethod, int size, int rank, int* const* matrix1,
-                             int* const* matrix2, int** mat_res) {
-  calcMethod(size, rank, matrix1, matrix2, mat_res);
-}
-
-int main(int argc, char** argv) {
-  int size, rank;
-
-  int** matrix1;
-  int** matrix2;
-  int** mat_res;
-
-  AllocateMatrix(matrix1, X, N);
-  AllocateMatrix(matrix2, N, Y);
-  AllocateMatrix(mat_res, X, Y);
-
-  FillRandom(matrix1, X, N);
-  FillRandom(matrix2, N, Y);
-
-  AssertMPISuccess(MPI_Init(&argc, &argv));
-  AssertMPISuccess(MPI_Comm_size(MPI_COMM_WORLD, &size));
-  AssertMPISuccess(MPI_Comm_rank(MPI_COMM_WORLD, &rank));
-
-  // BARRIER USAGE
-  double t1;
-  AssertMPISuccess(MPI_Barrier(MPI_COMM_WORLD));
-  if (rank == 0) t1 = MPI_Wtime();
-
-  Calculate(CalculateSynchronized, size, rank, matrix1, matrix2, mat_res);
-
-  if (rank == 0) {
-    const auto t2 = MPI_Wtime();
-    const auto result = t2 - t1;
-
-    PrintMatrix(mat_res, X, Y);
-    std::cout << "Time taken = " << result << " seconds\n";
+    std::cout << "Result:\n";
+    C.Print();
+    std::cout << "\n\n";
   }
 
-  AssertMPISuccess(MPI_Finalize());
-
-  DeallocateMatrix(matrix1, X);
-  DeallocateMatrix(mat_res, X);
-  DeallocateMatrix(matrix2, N);
+  MPI_Finalize();
 
   return 0;
 }
