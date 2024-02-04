@@ -10,17 +10,23 @@ constexpr double PerformMatrixMultiplication(const Matrix<Size>& A, const Matrix
                                              Matrix<Size>& C, const int rank,
                                              const int processors,
                                              const bool synchronous) {
+  // Calculate the range of rows to be processed by this rank
   const int from = rank * Size / processors;
   const int to = (rank + 1) * Size / processors;
   constexpr auto SizeSquare = Size * Size;
 
+  // Measure the start time
   const auto start = MPI_Wtime();
 
+  // Perform matrix multiplication
   if (synchronous) {
+    // Synchronous mode: broadcast matrix B from process 0 and scatter matrix A to all
+    // processes
     MPI_Bcast(B.PlainArray(), SizeSquare, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Scatter(A.PlainArray(), SizeSquare / processors, MPI_INT, A[from],
                 SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD);
   } else {
+    // Asynchronous mode: non-blocking broadcast of matrix B and scatter of matrix A
     MPI_Request request[2];
     MPI_Status status[2];
 
@@ -28,9 +34,11 @@ constexpr double PerformMatrixMultiplication(const Matrix<Size>& A, const Matrix
     MPI_Iscatter(A.PlainArray(), SizeSquare / processors, MPI_INT, A[from],
                  SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD, &request[1]);
 
+    // Wait for the communication operations to complete
     MPI_Waitall(2, request, status);
   }
 
+  // Perform the actual matrix multiplication for the assigned rows
   for (int i = from; i < to; i++) {
     for (size_t j = 0; j < Size; j++) {
       C[i][j] = 0;
@@ -40,10 +48,12 @@ constexpr double PerformMatrixMultiplication(const Matrix<Size>& A, const Matrix
     }
   }
 
+  // Gather the results from all processes to process 0
   MPI_Gather(C.PlainArray()[from], SizeSquare / processors, MPI_INT, C.PlainArray(),
              SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD);
 
   double totalTime = 0.0;
+  // Measure the total time and print the result only in process 0
   if (rank == 0) {
     totalTime = MPI_Wtime() - start;
     std::cout << "Result:\n";
@@ -77,6 +87,7 @@ int main(int argc, char* argv[]) {
     B.Print();
   }
 
+  // Check if matrix size is divisible by the number of processes
   if (MATRIX_SIZE % size != 0) {
     if (rank == 0) printf("Matrix size not divisible by number of size\n");
     MPI_Finalize();
@@ -84,15 +95,14 @@ int main(int argc, char* argv[]) {
   }
 
   // Calculate synchronized matrix multiplication
-  double timeSync =
-      PerformMatrixMultiplication<MATRIX_SIZE>(A, B, C_sync, rank, size, true);
+  double timeSync = PerformMatrixMultiplication(A, B, C_sync, rank, size, true);
 
   // Calculate asynchronous matrix multiplication
-  double timeAsync =
-      PerformMatrixMultiplication<MATRIX_SIZE>(A, B, C_async, rank, size, false);
+  double timeAsync = PerformMatrixMultiplication(A, B, C_async, rank, size, false);
 
   MPI_Finalize();
 
+  // Print the total time and comparison result
   if (rank == 0) {
     std::cout << "\nTotal time (CalculateSynchronized): " << std::fixed
               << std::setprecision(6) << timeSync << " (sec)\n";
