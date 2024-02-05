@@ -3,5 +3,13 @@
 source /etc/profile.d/modules.sh
 module load mpi/openmpi-x86_64
 
-mpic++ -std=c++20 -Wall main.cpp -o ${2}.out
-mpirun -n ${1} ./${2}.out
+executable="${2}.out"
+
+# Check if the executable file already exists and is up-to-date
+if [ ! -f "$executable" ] || [ "main.cpp" -nt "$executable" ]; then
+    echo "Compiling..."
+    mpic++ -std=c++23 -Wall -Wpedantic main.cpp -o "$executable"
+fi
+
+echo "Running..."
+mpirun -n "$1" ./"$executable"

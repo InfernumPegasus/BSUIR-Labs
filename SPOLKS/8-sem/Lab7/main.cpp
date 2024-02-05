@@ -2,8 +2,23 @@
 
 #include <iomanip>
 #include <iostream>
+#include <source_location>
 
 #include "Matrix.h"
+
+#define MPI_CHECK(call)                                                            \
+  do {                                                                             \
+    const int result = call;                                                       \
+    if (result != MPI_SUCCESS) {                                                   \
+      static std::string error_string;                                             \
+      static int length;                                                           \
+      MPI_Error_string(result, error_string.data(), &length);                      \
+      const auto loc = std::source_location::current();                            \
+      std::cerr << "MPI error at " << loc.file_name() << ":" << loc.line() << ": " \
+                << error_string << std::endl;                                      \
+      MPI_Abort(MPI_COMM_WORLD, result);                                           \
+    }                                                                              \
+  } while (0)
 
 template <size_t Size>
 constexpr double PerformMatrixMultiplication(const Matrix<Size>& A, const Matrix<Size>& B,
@@ -22,20 +37,22 @@ constexpr double PerformMatrixMultiplication(const Matrix<Size>& A, const Matrix
   if (synchronous) {
     // Synchronous mode: broadcast matrix B from process 0 and scatter matrix A to all
     // processes
-    MPI_Bcast(B.PlainArray(), SizeSquare, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Scatter(A.PlainArray(), SizeSquare / processors, MPI_INT, A[from],
-                SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_CHECK(MPI_Bcast(B.PlainArray(), SizeSquare, MPI_INT, 0, MPI_COMM_WORLD));
+    MPI_CHECK(MPI_Scatter(A.PlainArray(), SizeSquare / processors, MPI_INT, A[from],
+                          SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD));
   } else {
     // Asynchronous mode: non-blocking broadcast of matrix B and scatter of matrix A
     MPI_Request request[2];
     MPI_Status status[2];
 
-    MPI_Ibcast(B.PlainArray(), SizeSquare, MPI_INT, 0, MPI_COMM_WORLD, &request[0]);
-    MPI_Iscatter(A.PlainArray(), SizeSquare / processors, MPI_INT, A[from],
-                 SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD, &request[1]);
+    MPI_CHECK(
+        MPI_Ibcast(B.PlainArray(), SizeSquare, MPI_INT, 0, MPI_COMM_WORLD, &request[0]));
+    MPI_CHECK(MPI_Iscatter(A.PlainArray(), SizeSquare / processors, MPI_INT, A[from],
+                           SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD,
+                           &request[1]));
 
     // Wait for the communication operations to complete
-    MPI_Waitall(2, request, status);
+    MPI_CHECK(MPI_Waitall(2, request, status));
   }
 
   // Perform the actual matrix multiplication for the assigned rows
@@ -49,8 +66,9 @@ constexpr double PerformMatrixMultiplication(const Matrix<Size>& A, const Matrix
   }
 
   // Gather the results from all processes to process 0
-  MPI_Gather(C.PlainArray()[from], SizeSquare / processors, MPI_INT, C.PlainArray(),
-             SizeSquare / processors, MPI_INT, 0, MPI_COMM_WORLD);
+  MPI_CHECK(MPI_Gather(C.PlainArray()[from], SizeSquare / processors, MPI_INT,
+                       C.PlainArray(), SizeSquare / processors, MPI_INT, 0,
+                       MPI_COMM_WORLD));
 
   double totalTime = 0.0;
   // Measure the total time and print the result only in process 0
@@ -74,11 +92,11 @@ int main(int argc, char* argv[]) {
   A.Randomize();
   B.Randomize();
 
-  int rank, size;
+  int rank{}, size{};
 
-  MPI_Init(&argc, &argv);
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank); /* who am i */
-  MPI_Comm_size(MPI_COMM_WORLD, &size); /* number of processors */
+  MPI_CHECK(MPI_Init(&argc, &argv));
+  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &rank)); /* who am i */
+  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &size)); /* number of processors */
 
   if (rank == 0) {
     std::cout << "A:\n";
@@ -89,9 +107,9 @@ int main(int argc, char* argv[]) {
 
   // Check if matrix size is divisible by the number of processes
   if (MATRIX_SIZE % size != 0) {
-    if (rank == 0) printf("Matrix size not divisible by number of size\n");
-    MPI_Finalize();
-    MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+    if (rank == 0) std::cout << "Matrix size not divisible by number of size\n";
+    MPI_CHECK(MPI_Finalize());
+    MPI_CHECK(MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE));
   }
 
   // Calculate synchronized matrix multiplication
@@ -100,7 +118,7 @@ int main(int argc, char* argv[]) {
   // Calculate asynchronous matrix multiplication
   double timeAsync = PerformMatrixMultiplication(A, B, C_async, rank, size, false);
 
-  MPI_Finalize();
+  MPI_CHECK(MPI_Finalize());
 
   // Print the total time and comparison result
   if (rank == 0) {
